@@ -6,7 +6,7 @@ class Reflector():
 
     """Represent reflector of machine with two ways dictionary"""
 
-    def __init__(self, reflector: List[Tuple(str, str)]) -> None:
+    def __init__(self, reflector) -> None:
         reflector_dict = {}
         for pair in reflector:
             first_letter, second_leter = pair
