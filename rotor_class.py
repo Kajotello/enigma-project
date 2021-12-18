@@ -49,7 +49,7 @@ class Rotor:
         """Simulate rotation of rotor"""
 
         if number_of_rotation != 0:
-            self._position = (self._position+1) % 26
+            self._position = (self._position+number_of_rotation) % 26
         for i in range(number_of_rotation):
             first_to_last(self.code_table_in)
             first_to_last(self.code_table_out)

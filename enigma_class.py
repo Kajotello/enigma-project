@@ -58,5 +58,6 @@ class Enigma():
             if (rotor.position == rotor.indentation) and \
                (i != len(self.rotors)):
                 self.rotors[-i-1].rotate()
+            print(rotor.position)
 
         return chr(cipher_letter+65)
