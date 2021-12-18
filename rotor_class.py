@@ -25,8 +25,9 @@ class Rotor:
     def turnover(self):
         return self._turnover
 
-    def rotate(self):
-        moved_elemnt = self.code_table_in.pop(0)
-        self.code_table_in.append(moved_elemnt)
-        moved_elemnt = self.code_table_out.pop(0)
-        self.code_table_out.append(moved_elemnt)
+    def rotate(self, number_of_rotation=1):
+        for i in range(number_of_rotation):
+            moved_elemnt = self.code_table_in.pop(0)
+            self.code_table_in.append(moved_elemnt)
+            moved_elemnt = self.code_table_out.pop(0)
+            self.code_table_out.append(moved_elemnt)

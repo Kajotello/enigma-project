@@ -4,9 +4,18 @@ class Enigma():
         self._rotors = rotors
         self._reflector = reflector
         start_positions = [ord(position)-65 for position in start_positions]
+        rings = [ord(ring)-65 for ring in rings]
+        for i, ring in enumerate(rings):
+            print(self.rotors[i].code_table_in)
+            for number in range(ring):
+                moved_elemnt = self.rotors[i]._code_table_in.pop()
+                self.rotors[i]._code_table_in.insert(0, moved_elemnt)
+            print(self.rotors[i].code_table_in)
+            for number in range(ring):
+                moved_elemnt = self.rotors[i]._code_table_out.pop() 
+                self.rotors[i]._code_table_out.insert(0, moved_elemnt)
         for i, position in enumerate(start_positions):
-            for rotate in range(position):
-                self.rotors[i].rotate()
+            self.rotors[i].rotate(position)
 
     @property
     def rotors(self):

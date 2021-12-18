@@ -9,7 +9,7 @@ rotor_2nd = Rotor(rotorII, "O")
 rotor_3rd = Rotor(rotorIII, "S")
 rotors = [rotor_1st,  rotor_2nd, rotor_3rd]
 reflector = Reflector(reflectorUKWB)
-enigma = Enigma(rotors, reflector, ("Z", "F", "P"))
+enigma = Enigma(rotors, reflector, ("C", "C", "C"), ("I", "Q", "B"))
 
 list = []
 while True:
