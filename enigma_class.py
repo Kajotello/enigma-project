@@ -6,14 +6,7 @@ class Enigma():
         start_positions = [ord(position)-65 for position in start_positions]
         rings = [ord(ring)-65 for ring in rings]
         for i, ring in enumerate(rings):
-            print(self.rotors[i].code_table_in)
-            for number in range(ring):
-                moved_elemnt = self.rotors[i]._code_table_in.pop()
-                self.rotors[i]._code_table_in.insert(0, moved_elemnt)
-            print(self.rotors[i].code_table_in)
-            for number in range(ring):
-                moved_elemnt = self.rotors[i]._code_table_out.pop() 
-                self.rotors[i]._code_table_out.insert(0, moved_elemnt)
+            self.rotors[i].reverse_rotate(ring)
         for i, position in enumerate(start_positions):
             self.rotors[i].rotate(position)
 
@@ -30,19 +23,24 @@ class Enigma():
         return self._start_positions
 
     def code_letter(self, plain_letter):
+        self.rotors[-1].rotate()
         cipher_letter = ord(plain_letter) - 65
         for rotor in reversed(self.rotors):
             cipher_letter += rotor.code_table_in[cipher_letter]
             if cipher_letter < 0:
                 cipher_letter += 26
             cipher_letter = cipher_letter % 26
-            print(chr(cipher_letter+65))  # to remove
         cipher_letter = self.reflector.reflector_dict[cipher_letter]
-        print(chr(cipher_letter+65))
+
         for rotor in self.rotors:
             cipher_letter += rotor.code_table_out[cipher_letter]
             if cipher_letter < 0:
                 cipher_letter += 26
             cipher_letter = cipher_letter % 26
-            print(chr(cipher_letter+65))  # to remove
+
+        for i, rotor in enumerate(reversed(self.rotors), start=1):
+            print(rotor.position, rotor.indentation)
+            if (rotor.position == rotor.indentation) and (i != len(self.rotors)):
+                self.rotors[-i-1].rotate()
+
         return chr(cipher_letter+65)
