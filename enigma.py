@@ -1,7 +1,8 @@
-from rotors import rotorI, rotorII, rotorIII
+from default_elements import (rotorI, rotorII, rotorIII, rotorIV, rotorV,
+                              rotorVI, rotorVII, rotorVIII, rotorBeta,
+                              rotorGamma, reflectorUKWB, reflectorUKWC)
 from rotor_class import Rotor
-from reflectors import reflectorUKWB
-from reflectors import Reflector
+from reflector_class import Reflector
 from enigma_class import Enigma
 
 rotor_1st = Rotor(rotorI, "Q")
