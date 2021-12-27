@@ -1,11 +1,14 @@
+from reflector_class import Reflector
+from rotor_class import Rotor
+
 
 # Default rotors from original Enigma machine
 
-rotorI = "EKMFLGDQVZNTOWYHXUSPAIBRCJ"
-rotorII = "AJDKSIRUXBLHWTMCQGZNPYFVOE"
-rotorIII = "BDFHJLCPRTXVZNYEIWGAKMUSQO"
-rotorIV = "ESOVPZJAYQUIRHXLNFTGKDCMWB"
-rotorV = "VZBRGITYUPSDNHLXAWMJQOFECK"
+rotorI = Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", "Q")
+rotorII = Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", "E")
+rotorIII = Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", "V")
+rotorIV = Rotor("ESOVPZJAYQUIRHXLNFTGKDCMWB", "J")
+rotorV = Rotor("VZBRGITYUPSDNHLXAWMJQOFECK", "K")
 rotorVI = "JPGVOUMFYQBENHZRDKASXLICTW"
 rotorVII = "NZJHGRCXMYSWBOUFAIVLPEKQDT"
 rotorVIII = "FKQHTLXOCBJSPDZRAMEWNIUYGV"
@@ -14,7 +17,7 @@ rotorGamma = "FSOKANUERHMBTIYCWLQPZXVGJD"
 
 # Default reflectors from original Enigma machine
 
-reflectorUKWB = [
+reflectorUKWB = Reflector([
     ("A", "Y"),
     ("B", "R"),
     ("C", "U"),
@@ -28,8 +31,9 @@ reflectorUKWB = [
     ("M", "O"),
     ("T", "Z"),
     ("V", "W")
-]
-reflectorUKWC = [
+])
+
+reflectorUKWC = Reflector([
     ("A", "R"),
     ("B", "D"),
     ("C", "O"),
@@ -43,4 +47,4 @@ reflectorUKWC = [
     ("Q", "Z"),
     ("S", "X"),
     ("U", "Y")
-]
+])

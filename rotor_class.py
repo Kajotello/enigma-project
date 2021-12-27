@@ -63,3 +63,11 @@ class Rotor:
         for i in range(number_of_rotation):
             last_to_first(self.code_table_in)
             last_to_first(self.code_table_out)
+
+    def code_in(self, ASCII_letter):
+        ASCII_letter += self.code_table_in[ASCII_letter]
+        return ASCII_letter % 26
+
+    def code_out(self, ASCII_letter):
+        ASCII_letter += self.code_table_out[ASCII_letter]
+        return ASCII_letter % 26

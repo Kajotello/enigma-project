@@ -1,5 +1,4 @@
 from functions import to_number
-from typing import List, Tuple
 
 
 class Reflector():
@@ -19,3 +18,6 @@ class Reflector():
     @property
     def reflector_dict(self):
         return self._reflector_dict
+
+    def code(self, ASCII_letter):
+        return self.reflector_dict[ASCII_letter]

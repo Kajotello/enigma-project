@@ -2,6 +2,7 @@ from functions import to_number
 from typing import List
 from rotor_class import Rotor
 from reflector_class import Reflector
+from plugboard_class import Plugboard
 
 
 class Enigma():
@@ -10,10 +11,12 @@ class Enigma():
     starting configuration - start positions of rotors and rings"""
 
     def __init__(self, rotors: List[Rotor], reflector: Reflector,
-                 start_positions: List[str], rings: List[str]) -> None:
+                 plugboard: Plugboard, start_positions: List[str],
+                 rings: List[str]) -> None:
         self._start_positions = start_positions
         self._rotors = rotors
         self._reflector = reflector
+        self._plugboard = plugboard
         start_positions = [to_number(position) for position in start_positions]
         rings = [to_number(ring) for ring in rings]
         for i, ring in enumerate(rings):
@@ -33,25 +36,33 @@ class Enigma():
     def start_positions(self):
         return self._start_positions
 
+    @property
+    def plugboard(self):
+        return self._plugboard
+
     def code_letter(self, plain_letter: str):
 
         """Code one letter with current Enigma configuration """
 
         self.rotors[-1].rotate()                 # rotation of last rotor
-        cipher_letter = to_number(plain_letter)
+        ASCII_letter = to_number(plain_letter)
+
+        # letter "goes" throught plugboard (first time)
+        ASCII_letter = self.plugboard.code(ASCII_letter)
 
         # letter "goes" throught all rotors from last to first
         for rotor in reversed(self.rotors):
-            cipher_letter += rotor.code_table_in[cipher_letter]
-            cipher_letter = cipher_letter % 26
+            ASCII_letter = rotor.code_in(ASCII_letter)
 
-        # letter "goes" thorught reflector
-        cipher_letter = self.reflector.reflector_dict[cipher_letter]
+        # letter "goes" throught reflector
+        ASCII_letter = self.reflector.code(ASCII_letter)
 
         # letter "goes" thorught all rotors once again, from first to last
         for rotor in self.rotors:
-            cipher_letter += rotor.code_table_out[cipher_letter]
-            cipher_letter = cipher_letter % 26
+            ASCII_letter = rotor.code_out(ASCII_letter)
+
+        # letter "goes" throught plugboard (second time)
+        ASCII_letter = self.plugboard.code(ASCII_letter)
 
         # check, is further rotors should be rotate
         for i, rotor in enumerate(reversed(self.rotors), start=1):
@@ -60,4 +71,4 @@ class Enigma():
                 self.rotors[-i-1].rotate()
             print(rotor.position)
 
-        return chr(cipher_letter+65)
+        return chr(ASCII_letter+65)
