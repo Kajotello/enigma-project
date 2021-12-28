@@ -5,7 +5,9 @@ class Rotor:
 
     """Represent one rotor of machine with its wiring and turnover"""
 
-    def __init__(self, rotor: str, indentation: str) -> None:
+    def __init__(self, name: str, wiring: str, indentation: str) -> None:
+
+        self._name = name
 
         # declare auxiliary variables
         code_table_in = []
@@ -14,7 +16,7 @@ class Rotor:
 
         # calculate the "jump" for each position in rotor - in "in" direction
         # prepare dictionary for calculation in oposite direction
-        for i, letter in enumerate(rotor):
+        for i, letter in enumerate(wiring):
             result_letter_ASCII = to_number(letter)
             code_table_in.append(result_letter_ASCII - i)
             temp_code_dict[result_letter_ASCII] = i
@@ -27,6 +29,10 @@ class Rotor:
         self._code_table_out = code_table_out
         self._indentation = to_number(indentation)
         self._position = 0
+
+    @property
+    def name(self):
+        return self._name
 
     @property
     def code_table_in(self):

@@ -1,0 +1,65 @@
+{
+    "rotors":[
+
+        {
+            "name": "rotorI",
+            "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+            "indentation": "Q"
+        },
+
+        {
+            "name": "rotorII",
+            "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
+            "indentation": "E"
+        },
+
+        {
+            "name": "rotorIII",
+            "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
+            "indentation": "V"
+        },
+
+        {
+            "name": "rotorIV",
+            "wiring": "ESOVPZJAYQUIRHXLNFTGKDCMWB",
+            "indentation": "J"
+        },
+
+        {
+            "name": "rotorV",
+            "wiring": "VZBRGITYUPSDNHLXAWMJQOFECK",
+            "indentation": "Z"
+        },
+
+        {
+            "name": "rotorVI",
+            "wiring": "JPGVOUMFYQBENHZRDKASXLICTW",
+            "indentation": "Z"
+        },
+
+        {
+            "name": "rotorVII",
+            "wiring": "NZJHGRCXMYSWBOUFAIVLPEKQDT",
+            "indentation": "Z"
+        },
+
+        {
+            "name": "rotorVIII",
+            "wiring": "FKQHTLXOCBJSPDZRAMEWNIUYGV",
+            "indentation": "Z"
+        }
+    ],
+
+    "reflectors":[
+
+        {
+            "name": "reflectorUKWB",
+            "wiring": ["AY", "BR", "CU", "DH", "EQ", "FS", "GL", "IP", "JX", "KN", "MO", "TZ", "VW"]
+        },
+
+        {
+            "name": "reflectorUKWC",
+            "wiring": ["AF", "BV", "CP", "DJ", "EI", "GO", "HY", "KR", "LZ", "MX", "NW", "QT", "SU"]
+        }
+    ]
+}

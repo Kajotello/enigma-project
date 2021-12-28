@@ -1,0 +1,11 @@
+{
+    "rotors": [
+        "rotorI",
+        "rotorII",
+        "rotorIII"
+    ],
+    "reflector": "reflectorUKWC",
+    "plugboard": [],
+    "start_positions": "HMS",
+    "rings": "WAO"
+}

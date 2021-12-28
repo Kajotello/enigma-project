@@ -69,6 +69,18 @@ class Enigma():
             if (rotor.position == rotor.indentation) and \
                (i != len(self.rotors)):
                 self.rotors[-i-1].rotate()
-            print(rotor.position)
 
         return chr(ASCII_letter+65)
+
+    # probably have to be implemented in future
+    def change_ring(self, order, new_ring):
+        pass
+
+    def change_position(self, order, new_position):
+        pass
+
+    def change_reflector(self, new_reflector):
+        pass
+
+    def add_rotor(self, new_rotor, order):
+        pass

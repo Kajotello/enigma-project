@@ -1,0 +1,15 @@
+{
+    "rotors": [
+        {
+            "name": "Gamma",
+            "wiring": "ABCDEFGHIJKLMNOPQRTSUVWXYZ",
+            "indentation": "Z"
+        },
+        {
+            "name": "Beta",
+            "wiring": "ABCDEFGHIJKLMNOPQRTSUVWXYZ",
+            "indentation": "Z"
+        }
+    ],
+    "reflectors": []
+}
