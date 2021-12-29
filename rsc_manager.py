@@ -1,8 +1,9 @@
-from functions import read_from_json, write_to_json
-from enigma_class import Enigma
-from plugboard_class import Plugboard
-from reflector_class import Reflector
-from rotor_class import Rotor
+from enigma_classes.functions import str_change, swap, str_swap_down
+from enigma_gui.functions import read_from_json, write_to_json, str_swap_up
+from enigma_classes.enigma_class import Enigma
+from enigma_classes.plugboard_class import Plugboard
+from enigma_classes.reflector_class import Reflector
+from enigma_classes.rotor_class import Rotor
 
 
 def load_to_database(data):
@@ -44,6 +45,76 @@ class ElementsDatabase():
         return self._reflectors
 
 
+class Configuration():
+    def __init__(self, conf_data) -> None:
+        self._rotors = conf_data["rotors"]
+        self._reflector = conf_data["reflector"]
+        self._positions = conf_data["start_positions"]
+        self._rings = conf_data["rings"]
+        self._plugboard = conf_data["plugboard"]
+
+    @property
+    def rotors(self):
+        return self._rotors
+
+    @property
+    def reflector(self):
+        return self._reflector
+
+    @property
+    def positions(self):
+        return self._positions
+
+    @property
+    def rings(self):
+        return self._rings
+
+    @property
+    def plugboard(self):
+        return self._plugboard
+
+    def add_rotor(self, new_rotor):
+        self._rotors.append(new_rotor)
+        self._rings += "A"
+        self._positions += "A"
+
+    def remove_rotor(self, index):
+        self._rotors.pop(index)
+        self._rings = str_change(self.rings, index, "")
+        self._positions = str_change(self.positions, index, "")
+
+    def change_reflector(self, new_reflector):
+        self._reflector = new_reflector
+
+    def change_position(self, index, new_pos):
+        self._positions = str_change(self.positions, index, new_pos)
+
+    def change_ring(self, index, new_ring):
+        self._rings = str_change(self.positions, index, new_ring)
+
+    def set_plugboard(self, new_plugboard):
+        self._plugboard = new_plugboard
+
+    def move_rotor_up(self, index):
+        if index != 0:
+            self._rotors = swap(self.rotors, index, index-1)
+        self._positions = str_swap_up(self.positions, index)
+        self._rings = str_swap_up(self.rings, index)
+
+    def move_rotor_down(self, index):
+        if index != len(self.rotors)-1:
+            self._rotors = swap(self.rotors, index, index+1)
+        self._positions = str_swap_down(self.positions, index)
+        self._rings = str_swap_down(self.rings, index)
+
+    def save_conf(self, confman):
+        confman.set_rotor_positions(self.positions)
+        confman.set_rotor_rings(self.rings)
+        confman.change_reflector(self.reflector)
+        confman.set_new_rotors(self.rotors)
+        confman.set_new_plugboard(self.plugboard)
+
+
 class ConfigManager():
 
     """Resposible for handling json configuration file -
@@ -68,25 +139,21 @@ class ConfigManager():
         self._data["reflector"] = new_reflector
         write_to_json(self.path, self.data)
 
-    def add_rotor(self, new_rotor, order):
-
-        """Add rotor on specific position (order) in configuration file"""
-
-        self._data["rotors"].insert(order, new_rotor)
+    def set_rotor_rings(self, new_rings):
+        self._data["rings"] = new_rings
         write_to_json(self.path, self.data)
 
-    def remove_rotor(self, order):
-
-        """Remove rotor on specific position (order) in configuration file"""
-
-        self._data["rotors"].pop(order)
+    def set_rotor_positions(self, new_positions):
+        self._data["start_positions"] = new_positions
         write_to_json(self.path, self.data)
 
-    def set_rotor_ring(self, order, new_ring):
-        pass
+    def set_new_rotors(self, new_rotors):
+        self._data["rotors"] = new_rotors
+        write_to_json(self.path, self.data)
 
-    def set_rotor_position(self, order, new_position):
-        pass
+    def set_new_plugboard(self, new_plugboard):
+        self._data["plugboard"] = new_plugboard
+        write_to_json(self.path, self.data)
 
     def set_config_form_file(self, path):
 
@@ -195,6 +262,7 @@ class ResourcesManager():
         config files"""
 
         elements = self.load_elements()
+        self.elements = elements
         rotors = [elements.rotors[rotor] for rotor in self.conf.data["rotors"]]
         reflector = elements.reflectors[self.conf.data["reflector"]]
         plugboard = Plugboard(self.conf.data["plugboard"])

@@ -1,8 +1,9 @@
-from functions import to_number
+from enigma_classes.functions import to_number
 from typing import List
-from rotor_class import Rotor
-from reflector_class import Reflector
-from plugboard_class import Plugboard
+from enigma_classes.rotor_class import Rotor
+from enigma_classes.reflector_class import Reflector
+from enigma_classes.plugboard_class import Plugboard
+from enigma_classes.functions import to_letter
 
 
 class Enigma():
@@ -21,6 +22,7 @@ class Enigma():
         rings = [to_number(ring) for ring in rings]
         for i, ring in enumerate(rings):
             self.rotors[i].reverse_rotate(ring)
+            self.rotors[i].set_ring(ring)
         for i, position in enumerate(start_positions):
             self.rotors[i].rotate(position)
 
@@ -46,31 +48,55 @@ class Enigma():
 
         self.rotors[-1].rotate()                 # rotation of last rotor
         ASCII_letter = to_number(plain_letter)
+        steps = [ASCII_letter]
 
         # letter "goes" throught plugboard (first time)
         ASCII_letter = self.plugboard.code(ASCII_letter)
+        steps.append(ASCII_letter)
 
         # letter "goes" throught all rotors from last to first
         for rotor in reversed(self.rotors):
             ASCII_letter = rotor.code_in(ASCII_letter)
+            steps.append(ASCII_letter)
 
         # letter "goes" throught reflector
         ASCII_letter = self.reflector.code(ASCII_letter)
+        steps.append(ASCII_letter)
 
         # letter "goes" thorught all rotors once again, from first to last
         for rotor in self.rotors:
             ASCII_letter = rotor.code_out(ASCII_letter)
+            steps.append(ASCII_letter)
 
         # letter "goes" throught plugboard (second time)
         ASCII_letter = self.plugboard.code(ASCII_letter)
+        steps.append(ASCII_letter)
 
         # check, is further rotors should be rotate
         for i, rotor in enumerate(reversed(self.rotors), start=1):
-            if (rotor.position == rotor.indentation) and \
-               (i != len(self.rotors)):
+            # flag condition prevent from multiple rotate of further rotors
+            # when previous is on intendent position
+            if(rotor.position == rotor.indentation) and \
+              (i != len(self.rotors)) and \
+              (rotor.rotate_flag is True):
+                self.rotors[-i-1].set_rotate_flag(False)
+                self.rotors[-i].set_rotate_flag(True)
                 self.rotors[-i-1].rotate()
 
-        return chr(ASCII_letter+65)
+        return (to_letter(ASCII_letter), [to_letter(step) for step in steps])
+
+    def code_file(self, input_file, output_file):
+        result = ""
+        space_dist = 5
+        with open(input_file, "r") as file_handle:
+            for line in file_handle:
+                for i, letter in enumerate(line):
+                    result += self.code_letter(letter)[0]
+                    if i % space_dist == space_dist - 1:
+                        result += " "
+
+        with open(output_file, "w") as file_handle:
+            file_handle.write(result)
 
     # probably have to be implemented in future
     def change_ring(self, order, new_ring):

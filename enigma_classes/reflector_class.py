@@ -1,4 +1,4 @@
-from functions import to_number
+from enigma_classes.functions import to_number
 
 
 class Reflector():

@@ -1,4 +1,5 @@
-from functions import to_number, first_to_last, last_to_first
+from enigma_classes.functions import to_number, to_letter, first_to_last
+from enigma_classes.functions import last_to_first
 
 
 class Rotor:
@@ -8,7 +9,7 @@ class Rotor:
     def __init__(self, name: str, wiring: str, indentation: str) -> None:
 
         self._name = name
-
+        self._ring = None
         # declare auxiliary variables
         code_table_in = []
         temp_code_dict = {}
@@ -29,10 +30,15 @@ class Rotor:
         self._code_table_out = code_table_out
         self._indentation = to_number(indentation)
         self._position = 0
+        self._rotate_flag = True
 
     @property
     def name(self):
         return self._name
+
+    @property
+    def ring(self):
+        return self._ring
 
     @property
     def code_table_in(self):
@@ -49,6 +55,16 @@ class Rotor:
     @property
     def position(self):
         return self._position
+
+    @property
+    def rotate_flag(self):
+        return self._rotate_flag
+
+    def set_ring(self, new_ring):
+        self._ring = to_letter(new_ring)
+
+    def set_rotate_flag(self, state):
+        self._rotate_flag = state
 
     def rotate(self, number_of_rotation=1):
 
