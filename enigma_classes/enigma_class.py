@@ -13,7 +13,7 @@ class Enigma():
 
     def __init__(self, rotors: List[Rotor], reflector: Reflector,
                  plugboard: Plugboard, start_positions: List[str],
-                 rings: List[str], double_step=False) -> None:
+                 rings: List[str], double_step=0) -> None:
         self._start_positions = start_positions
         self._rotors = rotors
         self._reflector = reflector
@@ -58,12 +58,17 @@ class Enigma():
     def zero_coded_letters_number(self):
         self._coded_letters_number = 0
 
-    def change_double_step(self):
-        self._double_step = not self._double_step
+    def change_double_step(self, new_double_step):
+        self._double_step = new_double_step
 
     def code_letter(self, plain_letter: str):
 
         """Code one letter with current Enigma configuration """
+
+        if self.double_step == 2:
+            self.rotors[-2].rotate()
+            self.rotors[-3].rotate()
+            self.change_double_step(1)
 
         # check, is further rotors should be rotate
         for i, rotor in enumerate(reversed(self.rotors), start=1):
@@ -72,10 +77,10 @@ class Enigma():
             if(rotor.position == rotor.indentation) and \
               (i != len(self.rotors)) and \
               (rotor.rotate_flag is True):
-                if self.double_step is True and i == 1:
-                    self.rotors[-2].rotate()
-                    self.rotors[-2].rotate()
-                    self.rotors[-3].rotate()
+                if self.double_step == 1 and i == 1:
+                    self.rotors[-i-1].rotate()
+                    self.change_double_step(2)
+                    break
                 else:
                     self.rotors[-i-1].set_rotate_flag(False)
                     self.rotors[-i].set_rotate_flag(True)

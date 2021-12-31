@@ -32,7 +32,7 @@ class EnigmaWindow(QMainWindow):
         self.temp = deepcopy(self.run_conf)
         self.enigma = self.rsc.initialize_enigma()
         self.space_info = 5
-        self.double_step = False
+        self.double_step = 0
 
         data = [[rotor.name, chr(rotor.position+65), rotor.ring]
                 for rotor in self.enigma.rotors]
@@ -203,20 +203,27 @@ class EnigmaWindow(QMainWindow):
         pass
 
     def change_double_step(self):
-        self.enigma.change_double_step()
-        self.double_step = True
+        if self.enigma.double_step == 0:
+            self.enigma.change_double_step(1)
+            self.double_step = 1
+        else:
+            self.enigma.change_double_step(0)
+            self.double_step = 0
+            self.ui.is_double_step.setChecked(0)
 
     def change_space(self):
         self.space_info = self.ui.space_info.value()
 
     def change_pg(self, page_number):
-        self.enigma = self.rsc.initialize_enigma(self.run_conf)
+        self.enigma = self.rsc.initialize_enigma(self.run_conf, self.double_step)
         plugboard_text = plugboard_to_str(self.run_conf.plugboard)
         data = [[rotor.name, chr(rotor.position+65), rotor.ring]
                 for rotor in self.enigma.rotors]
         self.set_page(page_number)
         self.temp = deepcopy(self.run_conf)
         if len(self.enigma.rotors) != 3:
+            if self.ui.is_double_step.isChecked():
+                self.change_double_step()
             self.ui.is_double_step.setEnabled(False)
         if len(self.enigma.rotors) == 3:
             self.ui.is_double_step.setEnabled(True)
