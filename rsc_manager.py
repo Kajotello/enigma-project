@@ -223,7 +223,8 @@ class CustomManager():
 
         """Remove reflector model from custom json database"""
 
-        pass
+        self._data["reflectors"].pop(position)
+        write_to_json(self.path, self.data)
 
 
 class ResourcesManager():
@@ -256,7 +257,7 @@ class ResourcesManager():
                      load_to_database(self.default))
         return full_data
 
-    def initialize_enigma(self):
+    def initialize_enigma(self, double_step=False):
 
         """Initialize an instance of enigma class with configuration specified in
         config files"""
@@ -268,5 +269,6 @@ class ResourcesManager():
         plugboard = Plugboard(self.conf.data["plugboard"])
         start_positions = self.conf.data["start_positions"]
         rings = self.conf.data["rings"]
-        enigma = Enigma(rotors, reflector, plugboard, start_positions, rings)
+        enigma = Enigma(rotors, reflector, plugboard,
+                        start_positions, rings, double_step)
         return enigma

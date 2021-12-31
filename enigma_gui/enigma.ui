@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>691</width>
-    <height>496</height>
+    <height>490</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout">
@@ -578,22 +578,6 @@
          <string>Settings</string>
         </property>
        </widget>
-       <widget class="QSpinBox" name="space_info">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>90</y>
-          <width>47</width>
-          <height>24</height>
-         </rect>
-        </property>
-        <property name="prefix">
-         <string/>
-        </property>
-        <property name="value">
-         <number>5</number>
-        </property>
-       </widget>
        <widget class="QLabel" name="label_13">
         <property name="geometry">
          <rect>
@@ -605,6 +589,32 @@
         </property>
         <property name="text">
          <string>Space in encrypt text after                 signs</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="space_info">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>90</y>
+          <width>47</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="value">
+         <number>5</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_31">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>120</y>
+          <width>301</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>(if 0 encrypt text will be generate witout spaces)</string>
         </property>
        </widget>
       </widget>
@@ -799,7 +809,7 @@
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>191</width>
+          <width>261</width>
           <height>41</height>
          </rect>
         </property>
@@ -811,7 +821,538 @@
          </font>
         </property>
         <property name="text">
-         <string>Elements manager</string>
+         <string>Available Custom Rotors</string>
+        </property>
+       </widget>
+       <widget class="QListWidget" name="rotors_list_2">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>110</y>
+          <width>221</width>
+          <height>311</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="toolButton">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>70</y>
+          <width>28</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>+</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="toolButton_2">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>70</y>
+          <width>28</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>-</string>
+        </property>
+       </widget>
+       <widget class="QStackedWidget" name="stack3">
+        <property name="geometry">
+         <rect>
+          <x>330</x>
+          <y>30</y>
+          <width>321</width>
+          <height>391</height>
+         </rect>
+        </property>
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
+        <widget class="QWidget" name="page_9"/>
+        <widget class="QWidget" name="page_11">
+         <widget class="QLineEdit" name="rotor_name">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>150</y>
+            <width>271</width>
+            <height>23</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="rotor_wiring">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>220</y>
+            <width>271</width>
+            <height>23</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="rotor_indentation">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>290</y>
+            <width>271</width>
+            <height>23</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_5">
+          <property name="geometry">
+           <rect>
+            <x>60</x>
+            <y>360</y>
+            <width>80</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_16">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>130</y>
+            <width>59</width>
+            <height>15</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_22">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>200</y>
+            <width>59</width>
+            <height>15</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Wiring</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_23">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>270</y>
+            <width>111</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Indentation(s)</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_24">
+          <property name="geometry">
+           <rect>
+            <x>120</x>
+            <y>90</y>
+            <width>91</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Add Rotor</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_7">
+          <property name="geometry">
+           <rect>
+            <x>180</x>
+            <y>360</y>
+            <width>80</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Cancel</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="page_12">
+         <widget class="QLabel" name="label_25">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>130</y>
+            <width>59</width>
+            <height>15</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_6">
+          <property name="geometry">
+           <rect>
+            <x>120</x>
+            <y>360</y>
+            <width>80</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Modify</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="rotor_name_2">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>150</y>
+            <width>271</width>
+            <height>23</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_26">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>270</y>
+            <width>111</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Indentation(s)</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="rotor_wiring_2">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>220</y>
+            <width>271</width>
+            <height>23</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_27">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>200</y>
+            <width>59</width>
+            <height>15</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Wiring</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_28">
+          <property name="geometry">
+           <rect>
+            <x>110</x>
+            <y>90</y>
+            <width>91</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Modify Rotor</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="rotor_indentation_2">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>290</y>
+            <width>271</width>
+            <height>23</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
+       </widget>
+       <zorder>stack3</zorder>
+       <zorder>label_6</zorder>
+       <zorder>rotors_list_2</zorder>
+       <zorder>toolButton</zorder>
+       <zorder>toolButton_2</zorder>
+      </widget>
+      <widget class="QWidget" name="page_8">
+       <widget class="QLabel" name="label_15">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>271</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Available Custom Reflectors</string>
+        </property>
+       </widget>
+       <widget class="QStackedWidget" name="stack4">
+        <property name="geometry">
+         <rect>
+          <x>310</x>
+          <y>30</y>
+          <width>321</width>
+          <height>391</height>
+         </rect>
+        </property>
+        <property name="currentIndex">
+         <number>2</number>
+        </property>
+        <widget class="QWidget" name="page_10"/>
+        <widget class="QWidget" name="page_14">
+         <widget class="QLabel" name="label_33">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>130</y>
+            <width>59</width>
+            <height>15</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="modify_ref_button">
+          <property name="geometry">
+           <rect>
+            <x>120</x>
+            <y>290</y>
+            <width>80</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Modify</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="reflector_mod_name">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>150</y>
+            <width>271</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="placeholderText">
+           <string>Unique reflector name</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="reflector_mod_wiring">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>220</y>
+            <width>271</width>
+            <height>23</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_35">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>200</y>
+            <width>59</width>
+            <height>15</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Wiring</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_36">
+          <property name="geometry">
+           <rect>
+            <x>110</x>
+            <y>90</y>
+            <width>121</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Modify Reflector</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="page_13">
+         <widget class="QLineEdit" name="reflector_mod_name_2">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>150</y>
+            <width>271</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="placeholderText">
+           <string>Unique reflector name</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="reflector_mod_wiring_2">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>220</y>
+            <width>271</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="placeholderText">
+           <string>Connection between letters (ex. AB)</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="add_mod_ref">
+          <property name="geometry">
+           <rect>
+            <x>60</x>
+            <y>310</y>
+            <width>80</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_29">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>130</y>
+            <width>59</width>
+            <height>15</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_30">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>200</y>
+            <width>59</width>
+            <height>15</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Wiring</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_32">
+          <property name="geometry">
+           <rect>
+            <x>120</x>
+            <y>90</y>
+            <width>91</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Add Reflector</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="cancel_add_ref">
+          <property name="geometry">
+           <rect>
+            <x>180</x>
+            <y>310</y>
+            <width>80</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Cancel</string>
+          </property>
+         </widget>
+        </widget>
+       </widget>
+       <widget class="QToolButton" name="add_ref_mod_butt">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>60</y>
+          <width>28</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>+</string>
+        </property>
+       </widget>
+       <widget class="QToolButton" name="rem_ref_mod_button">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>60</y>
+          <width>28</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>-</string>
+        </property>
+       </widget>
+       <widget class="QListWidget" name="reflectors_list">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>100</y>
+          <width>221</width>
+          <height>311</height>
+         </rect>
         </property>
        </widget>
       </widget>
@@ -841,7 +1382,7 @@
     </property>
     <widget class="QMenu" name="menuAdd_Remove_elements">
      <property name="title">
-      <string>Add/Remove elements</string>
+      <string>Custom Elements Manager</string>
      </property>
      <addaction name="a_r_rotor_act"/>
      <addaction name="a_r_reflector_act"/>
@@ -856,7 +1397,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="change_config_act">
    <property name="text">
-    <string>Change machine configuration</string>
+    <string>Change Machine Configuration</string>
    </property>
   </action>
   <action name="settings_act">

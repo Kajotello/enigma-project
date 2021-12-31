@@ -32,9 +32,14 @@ class ConifgTableModel(QAbstractTableModel):
 
 
 class StepsTableModel(QAbstractTableModel):
-    def __init__(self, data=None) -> None:
+    def __init__(self, labels, data=None) -> None:
         super(StepsTableModel, self).__init__()
         self._data = data
+        self._labels = labels
+
+    @property
+    def labels(self):
+        return self._labels
 
     def data(self, index, role):
         if role == Qt.DisplayRole:
@@ -56,8 +61,4 @@ class StepsTableModel(QAbstractTableModel):
         if role != Qt.DisplayRole:
             return None
         if orientation == Qt.Vertical:
-            return ("Input", "Plugboard Encryption", "3rd Rotor Encryption",
-                    "2nd Rotor Encryption", "1st Rotor Encryption",
-                    "reflector Encryption", "1st Rotor Encryption",
-                    "2nd Rotor Encryption", "3rd Rotor Encryption",
-                    "Plugboard Encryption", "Output")[section]
+            return self.labels[section]

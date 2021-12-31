@@ -1,0 +1,2 @@
+- zmiana rotora na dalszej pozycji powoduje przyspieszona zmianę na wyświetlaczu (obrór rotorów odbywa się na koniec kodowania)
+- podwójny krok nie działa poprawnie (aktualnie jest to krok potrójny - trzy zmiany)

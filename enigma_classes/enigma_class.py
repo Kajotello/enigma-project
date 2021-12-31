@@ -13,11 +13,13 @@ class Enigma():
 
     def __init__(self, rotors: List[Rotor], reflector: Reflector,
                  plugboard: Plugboard, start_positions: List[str],
-                 rings: List[str]) -> None:
+                 rings: List[str], double_step=False) -> None:
         self._start_positions = start_positions
         self._rotors = rotors
         self._reflector = reflector
         self._plugboard = plugboard
+        self._coded_letters_number = 0
+        self._double_step = double_step
         start_positions = [to_number(position) for position in start_positions]
         rings = [to_number(ring) for ring in rings]
         for i, ring in enumerate(rings):
@@ -41,6 +43,23 @@ class Enigma():
     @property
     def plugboard(self):
         return self._plugboard
+
+    @property
+    def coded_letters_number(self):
+        return self._coded_letters_number
+
+    @property
+    def double_step(self):
+        return self._double_step
+
+    def increment_coded_letters_number(self):
+        self._coded_letters_number += 1
+
+    def zero_coded_letters_number(self):
+        self._coded_letters_number = 0
+
+    def change_double_step(self):
+        self._double_step = not self._double_step
 
     def code_letter(self, plain_letter: str):
 
@@ -72,6 +91,9 @@ class Enigma():
         ASCII_letter = self.plugboard.code(ASCII_letter)
         steps.append(ASCII_letter)
 
+        # Add letter as output
+        steps.append(ASCII_letter)
+
         # check, is further rotors should be rotate
         for i, rotor in enumerate(reversed(self.rotors), start=1):
             # flag condition prevent from multiple rotate of further rotors
@@ -79,20 +101,27 @@ class Enigma():
             if(rotor.position == rotor.indentation) and \
               (i != len(self.rotors)) and \
               (rotor.rotate_flag is True):
-                self.rotors[-i-1].set_rotate_flag(False)
-                self.rotors[-i].set_rotate_flag(True)
-                self.rotors[-i-1].rotate()
+                if self.double_step is True and i == 1:
+                    self.rotors[-2].rotate()
+                    self.rotors[-2].rotate()
+                    self.rotors[-3].rotate()
+                else:
+                    self.rotors[-i-1].set_rotate_flag(False)
+                    self.rotors[-i].set_rotate_flag(True)
+                    self.rotors[-i-1].rotate()
+
+        self.increment_coded_letters_number()
 
         return (to_letter(ASCII_letter), [to_letter(step) for step in steps])
 
-    def code_file(self, input_file, output_file):
+    def code_file(self, input_file, output_file, space_dist):
         result = ""
-        space_dist = 5
         with open(input_file, "r") as file_handle:
             for line in file_handle:
                 for i, letter in enumerate(line):
                     result += self.code_letter(letter)[0]
-                    if i % space_dist == space_dist - 1:
+                    if self.coded_letters_number == space_dist:
+                        self.zero_coded_letters_number()
                         result += " "
 
         with open(output_file, "w") as file_handle:
