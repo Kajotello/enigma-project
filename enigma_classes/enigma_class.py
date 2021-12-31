@@ -65,6 +65,22 @@ class Enigma():
 
         """Code one letter with current Enigma configuration """
 
+        # check, is further rotors should be rotate
+        for i, rotor in enumerate(reversed(self.rotors), start=1):
+            # flag condition prevent from multiple rotate of further rotors
+            # when previous is on intendent position
+            if(rotor.position == rotor.indentation) and \
+              (i != len(self.rotors)) and \
+              (rotor.rotate_flag is True):
+                if self.double_step is True and i == 1:
+                    self.rotors[-2].rotate()
+                    self.rotors[-2].rotate()
+                    self.rotors[-3].rotate()
+                else:
+                    self.rotors[-i-1].set_rotate_flag(False)
+                    self.rotors[-i].set_rotate_flag(True)
+                    self.rotors[-i-1].rotate()
+
         self.rotors[-1].rotate()                 # rotation of last rotor
         ASCII_letter = to_number(plain_letter)
         steps = [ASCII_letter]
@@ -93,22 +109,6 @@ class Enigma():
 
         # Add letter as output
         steps.append(ASCII_letter)
-
-        # check, is further rotors should be rotate
-        for i, rotor in enumerate(reversed(self.rotors), start=1):
-            # flag condition prevent from multiple rotate of further rotors
-            # when previous is on intendent position
-            if(rotor.position == rotor.indentation) and \
-              (i != len(self.rotors)) and \
-              (rotor.rotate_flag is True):
-                if self.double_step is True and i == 1:
-                    self.rotors[-2].rotate()
-                    self.rotors[-2].rotate()
-                    self.rotors[-3].rotate()
-                else:
-                    self.rotors[-i-1].set_rotate_flag(False)
-                    self.rotors[-i].set_rotate_flag(True)
-                    self.rotors[-i-1].rotate()
 
         self.increment_coded_letters_number()
 

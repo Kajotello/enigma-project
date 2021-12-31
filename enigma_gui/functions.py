@@ -84,4 +84,5 @@ def str_to_plugboard(str_plugboard):
             pair = ""
         else:
             pair += char
+    result.append(pair)
     return result

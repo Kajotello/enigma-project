@@ -28,6 +28,7 @@ class Rotor:
 
         self._code_table_in = code_table_in
         self._code_table_out = code_table_out
+
         self._indentation = to_number(indentation)
         self._position = 0
         self._rotate_flag = True

@@ -217,13 +217,26 @@ class CustomManager():
 
         """Remove rotor model from custom json database"""
 
-        pass
+        self._data["rotors"].pop(position)
+        write_to_json(self.path, self.data)
 
     def remove_reflector(self, position):
 
         """Remove reflector model from custom json database"""
 
         self._data["reflectors"].pop(position)
+        write_to_json(self.path, self.data)
+
+    def modify_reflector(self, positon, name, wiring):
+
+        self._data["reflectors"][positon]["name"] = name
+        self._data["reflectors"][positon]["wiring"] = wiring
+        write_to_json(self.path, self.data)
+
+    def modify_rotor(self, position, name, wiring, indentation):
+        self._data["rotors"][position]["name"] = name
+        self._data["rotors"][position]["wiring"] = wiring
+        self._data["rotors"][position]["indentation"] = indentation
         write_to_json(self.path, self.data)
 
 
@@ -257,18 +270,29 @@ class ResourcesManager():
                      load_to_database(self.default))
         return full_data
 
-    def initialize_enigma(self, double_step=False):
+    def initialize_enigma(self, config=None, double_step=False):
 
         """Initialize an instance of enigma class with configuration specified in
         config files"""
 
-        elements = self.load_elements()
-        self.elements = elements
-        rotors = [elements.rotors[rotor] for rotor in self.conf.data["rotors"]]
-        reflector = elements.reflectors[self.conf.data["reflector"]]
-        plugboard = Plugboard(self.conf.data["plugboard"])
-        start_positions = self.conf.data["start_positions"]
-        rings = self.conf.data["rings"]
-        enigma = Enigma(rotors, reflector, plugboard,
-                        start_positions, rings, double_step)
+        if config == None:
+            elements = self.load_elements()
+            self.elements = elements
+            rotors = [elements.rotors[rotor] for rotor in self.conf.data["rotors"]]
+            reflector = elements.reflectors[self.conf.data["reflector"]]
+            plugboard = Plugboard(self.conf.data["plugboard"])
+            start_positions = self.conf.data["start_positions"]
+            rings = self.conf.data["rings"]
+            enigma = Enigma(rotors, reflector, plugboard,
+                            start_positions, rings, double_step)
+        else:
+            elements = self.load_elements()
+            self.elements = elements
+            rotors = [elements.rotors[rotor] for rotor in config.rotors]
+            reflector = elements.reflectors[config.reflector]
+            plugboard = Plugboard(config.plugboard)
+            start_positions = config.positions
+            rings = config.rings
+            enigma = Enigma(rotors, reflector, plugboard,
+                            start_positions, rings, double_step)
         return enigma

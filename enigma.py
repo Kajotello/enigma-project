@@ -1,6 +1,8 @@
 from rsc_manager import ResourcesManager
+from enigma_gui.gui import gui_main
 import argparse
 import os
+import sys
 
 
 def main():
@@ -9,27 +11,30 @@ def main():
     rsc = ResourcesManager(rsc_path)
     parser = argparse.ArgumentParser(description="Simulate Enigma machine.")
 
-    parser.add_argument('--cmd', default="result.txt",
-                        help='use programme in command line',
+    parser.add_argument('-m', '--mode', default="gui",
+                        help='define the mode in wich programme should be run\
+                        (default: %(default)s)',
+                        choices=["gui", "cmd"],
                         metavar="")
-    parser.add_argument('--gui', default="result.txt",
-                        help='use programme with GUI',
-                        metavar="")
-    parser.add_argument('--input_file',
+    parser.add_argument('-i', '--input_file',
                         help='file with plain text to encode, required\
-                        with --cmd flag', metavar="")
-    parser.add_argument('--output_file', default="result.txt",
+                        in cmd mode', metavar="")
+    parser.add_argument('-o', '--output_file', default="result.txt",
                         help='file with result (default: %(default)s)',
                         metavar="")
-    parser.add_argument('--configuration',
+    parser.add_argument('-c', '--config',
                         default=f"{rsc_path}/config.json",
                         help='json file with initial configuration of machine\
-                        (default %(default)s)', metavar="")
+                        (default: %(default)s)', metavar="")
 
     args = parser.parse_args()
-    rsc.conf.get_temp_config_from_file(args.configuration)
-    enigma = rsc.initialize_enigma()
-    enigma.code_file(args.input, args.output)
+    mode = args.mode
+    if mode == "cmd":
+        rsc.conf.get_temp_config_from_file(args.configuration)
+        enigma = rsc.initialize_enigma()
+        enigma.code_file(args.input_file, args.output_file, 5)
+    if mode == "gui":
+        gui_main(sys.argv)
 
 
 if __name__ == "__main__":
