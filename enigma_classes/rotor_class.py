@@ -2,6 +2,23 @@ from enigma_classes.functions import to_number, to_letter, first_to_last
 from enigma_classes.functions import last_to_first
 
 
+def generate_in_out_tables(wiring):
+    code_table_in = []
+    temp_code_dict = {}
+    code_table_out = []
+    # calculate the "jump" for each position in rotor - in "in" direction
+    # prepare dictionary for calculation in oposite direction
+    for i, letter in enumerate(wiring):
+        result_letter_ASCII = to_number(letter)
+        code_table_in.append(result_letter_ASCII - i)
+        temp_code_dict[result_letter_ASCII] = i
+
+    # calculate the "jump" for each position in rotor - in "out" direction
+    for letter in sorted(temp_code_dict):
+        code_table_out.append(temp_code_dict[letter] - letter)
+    return code_table_in, code_table_out
+
+
 class Rotor:
 
     """Represent one rotor of machine with its wiring and turnover"""
@@ -10,22 +27,9 @@ class Rotor:
 
         self._name = name
         self._ring = None
-        # declare auxiliary variables
-        code_table_in = []
-        temp_code_dict = {}
-        code_table_out = []
+        self._wiring = wiring
 
-        # calculate the "jump" for each position in rotor - in "in" direction
-        # prepare dictionary for calculation in oposite direction
-        for i, letter in enumerate(wiring):
-            result_letter_ASCII = to_number(letter)
-            code_table_in.append(result_letter_ASCII - i)
-            temp_code_dict[result_letter_ASCII] = i
-
-        # calculate the "jump" for each position in rotor - in "out" direction
-        for letter in sorted(temp_code_dict):
-            code_table_out.append(temp_code_dict[letter] - letter)
-
+        code_table_in, code_table_out = generate_in_out_tables(wiring)
         self._code_table_in = code_table_in
         self._code_table_out = code_table_out
 
@@ -60,6 +64,22 @@ class Rotor:
     @property
     def rotate_flag(self):
         return self._rotate_flag
+
+    @property
+    def wiring(self):
+        return self._wiring
+
+    def set_name(self, new_name):
+        self._name = new_name
+
+    def set_wiring(self, new_wiring):
+        code_table_in, code_table_out = generate_in_out_tables(new_wiring)
+        self._code_table_in = code_table_in
+        self._code_table_out = code_table_out
+        self._wiring = new_wiring
+
+    def set_indentation(self, indentation):
+        self._indentation = indentation
 
     def set_ring(self, new_ring):
         self._ring = to_letter(new_ring)

@@ -31,6 +31,9 @@ def write_to_json(path, data):
 
 
 def str_change(str, index, new_char):
+
+    """Change string's char with given index to new_char"""
+
     result = ""
     for i, char in enumerate(str):
         if i == index:
@@ -46,6 +49,10 @@ def swap(list, index1, index2):
 
 
 def str_swap_up(str, index):
+
+    """Swap two chars in string (char with given index and one before).
+    Char with given index go 'up' in string"""
+
     if index == 0:
         return str
     str_table = [char for char in str]
@@ -57,6 +64,10 @@ def str_swap_up(str, index):
 
 
 def str_swap_down(str, index):
+
+    """Swap two chars in string (char with given index and one after).
+    Char with given index go 'down' in string"""
+
     if index == len(str) - 1:
         return str
     str_table = [char for char in str]

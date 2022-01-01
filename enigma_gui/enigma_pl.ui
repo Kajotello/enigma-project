@@ -30,7 +30,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout">
@@ -54,7 +54,7 @@
              <cursorShape>IBeamCursor</cursorShape>
             </property>
             <property name="placeholderText">
-             <string>Letter to encrypt</string>
+             <string>Litera do zakodowania</string>
             </property>
            </widget>
           </item>
@@ -70,7 +70,7 @@
              <enum>Qt::LeftToRight</enum>
             </property>
             <property name="text">
-             <string>Encrypt</string>
+             <string>Koduj</string>
             </property>
            </widget>
           </item>
@@ -173,14 +173,14 @@
              </font>
             </property>
             <property name="text">
-             <string>Current Configuration:</string>
+             <string>Obecna Konfiguracja:</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Rotors:</string>
+             <string>Wirniki:</string>
             </property>
            </widget>
           </item>
@@ -270,265 +270,6 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_3">
-       <widget class="QLabel" name="label_5">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>191</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Encrypt from file</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="brow_input_butt">
-        <property name="geometry">
-         <rect>
-          <x>240</x>
-          <y>100</y>
-          <width>80</width>
-          <height>23</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Browse</string>
-        </property>
-        <property name="shortcut">
-         <string>Ctrl+S</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="input_file_name">
-        <property name="geometry">
-         <rect>
-          <x>220</x>
-          <y>70</y>
-          <width>391</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Hasn't selected file yet</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="output_file_name">
-        <property name="geometry">
-         <rect>
-          <x>220</x>
-          <y>150</y>
-          <width>391</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Hasn't selected file yet (by default result.txt)</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="brow_output_butt">
-        <property name="geometry">
-         <rect>
-          <x>240</x>
-          <y>180</y>
-          <width>80</width>
-          <height>23</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Browse</string>
-        </property>
-        <property name="shortcut">
-         <string>Ctrl+S</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="brow_config_butt">
-        <property name="geometry">
-         <rect>
-          <x>240</x>
-          <y>260</y>
-          <width>80</width>
-          <height>23</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Browse</string>
-        </property>
-        <property name="shortcut">
-         <string>Ctrl+S</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="config_file_name">
-        <property name="geometry">
-         <rect>
-          <x>220</x>
-          <y>230</y>
-          <width>391</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Hasn't selected file yet (by default .../rsc/config.json)</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_7">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>70</y>
-          <width>131</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>10</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Input file:</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_8">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>160</y>
-          <width>141</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>10</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Output file:</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_9">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>240</y>
-          <width>161</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>10</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Configuration file:</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="encrypt_file_button">
-        <property name="geometry">
-         <rect>
-          <x>150</x>
-          <y>340</y>
-          <width>171</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Encrypt</string>
-        </property>
-        <property name="shortcut">
-         <string>Ctrl+S</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="page_2">
-       <widget class="QCheckBox" name="is_double_step">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>50</y>
-          <width>411</width>
-          <height>21</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Double step (only available with three rotors)</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_3">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>0</y>
-          <width>101</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Settings</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_13">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>90</y>
-          <width>301</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Space in encrypt text after                 signs</string>
-        </property>
-       </widget>
-       <widget class="QSpinBox" name="space_info">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>90</y>
-          <width>47</width>
-          <height>24</height>
-         </rect>
-        </property>
-        <property name="value">
-         <number>5</number>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_31">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>120</y>
-          <width>301</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>(if 0 encrypt text will be generate witout spaces)</string>
-        </property>
-       </widget>
-      </widget>
       <widget class="QWidget" name="page_4">
        <widget class="QLabel" name="label_4">
         <property name="geometry">
@@ -547,7 +288,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Change configuration</string>
+         <string>Zmień Konfigurację</string>
         </property>
        </widget>
        <widget class="QToolButton" name="up_button">
@@ -579,7 +320,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Rotors:</string>
+         <string>Wirniki:</string>
         </property>
        </widget>
        <widget class="QToolButton" name="down_button">
@@ -598,14 +339,14 @@
        <widget class="QPushButton" name="save_init_conf_button">
         <property name="geometry">
          <rect>
-          <x>190</x>
+          <x>140</x>
           <y>380</y>
-          <width>121</width>
+          <width>171</width>
           <height>31</height>
          </rect>
         </property>
         <property name="text">
-         <string>Save as initial</string>
+         <string>Zapisz jako początkowa</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_17">
@@ -613,7 +354,7 @@
          <rect>
           <x>50</x>
           <y>280</y>
-          <width>91</width>
+          <width>141</width>
           <height>16</height>
          </rect>
         </property>
@@ -624,7 +365,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Reflector:</string>
+         <string>Bęben odwracający:</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_21">
@@ -632,7 +373,7 @@
          <rect>
           <x>50</x>
           <y>340</y>
-          <width>91</width>
+          <width>131</width>
           <height>16</height>
          </rect>
         </property>
@@ -643,7 +384,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Plugboard: </string>
+         <string>Łącznica kablowa:</string>
         </property>
        </widget>
        <widget class="QToolButton" name="add_button">
@@ -675,7 +416,7 @@
        <widget class="QLineEdit" name="plugboard_line">
         <property name="geometry">
          <rect>
-          <x>160</x>
+          <x>180</x>
           <y>340</y>
           <width>301</width>
           <height>23</height>
@@ -685,7 +426,7 @@
        <widget class="QComboBox" name="reflector_comboBox">
         <property name="geometry">
          <rect>
-          <x>160</x>
+          <x>210</x>
           <y>280</y>
           <width>151</width>
           <height>23</height>
@@ -722,7 +463,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Position:</string>
+           <string>Pozycja:</string>
           </property>
          </widget>
          <widget class="QComboBox" name="pos_comboBox">
@@ -750,8 +491,8 @@
            <rect>
             <x>120</x>
             <y>40</y>
-            <width>59</width>
-            <height>15</height>
+            <width>71</width>
+            <height>16</height>
            </rect>
           </property>
           <property name="font">
@@ -761,7 +502,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Ring:</string>
+           <string>Pierścień:</string>
           </property>
          </widget>
         </widget>
@@ -786,30 +527,43 @@
          </rect>
         </property>
         <property name="text">
-         <string>Save</string>
+         <string>Zastosuj</string>
         </property>
        </widget>
        <widget class="QPushButton" name="set_plugboard_button">
         <property name="geometry">
          <rect>
-          <x>470</x>
+          <x>500</x>
           <y>340</y>
           <width>61</width>
           <height>20</height>
          </rect>
         </property>
         <property name="text">
-         <string>Set</string>
+         <string>Ustaw</string>
         </property>
        </widget>
       </widget>
-      <widget class="QWidget" name="page_5">
-       <widget class="QLabel" name="label_6">
+      <widget class="QWidget" name="page_2">
+       <widget class="QCheckBox" name="is_double_step">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>261</width>
+          <x>20</x>
+          <y>50</y>
+          <width>411</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Podwójny krok (dostępny tylko przy trzech wirnikach)</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_3">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>0</y>
+          <width>101</width>
           <height>41</height>
          </rect>
         </property>
@@ -821,7 +575,253 @@
          </font>
         </property>
         <property name="text">
-         <string>Available Custom Rotors</string>
+         <string>Ustawienia</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_13">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>90</y>
+          <width>371</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Spacja w kodowanym tekście po                    znakach</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="space_info">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>90</y>
+          <width>47</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="value">
+         <number>5</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_31">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>120</y>
+          <width>301</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>(jeśli 0 tekst generowany jest bez spacji)</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_3">
+       <widget class="QLabel" name="label_5">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>191</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Koduj z pliku</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="brow_input_butt">
+        <property name="geometry">
+         <rect>
+          <x>240</x>
+          <y>100</y>
+          <width>80</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Wybierz...</string>
+        </property>
+        <property name="shortcut">
+         <string>Ctrl+S</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="input_file_name">
+        <property name="geometry">
+         <rect>
+          <x>220</x>
+          <y>70</y>
+          <width>391</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Hasn't selected file yet</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="output_file_name">
+        <property name="geometry">
+         <rect>
+          <x>220</x>
+          <y>150</y>
+          <width>391</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="brow_output_butt">
+        <property name="geometry">
+         <rect>
+          <x>240</x>
+          <y>180</y>
+          <width>80</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Wybierz....</string>
+        </property>
+        <property name="shortcut">
+         <string>Ctrl+S</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="brow_config_butt">
+        <property name="geometry">
+         <rect>
+          <x>240</x>
+          <y>260</y>
+          <width>80</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Wybierz...</string>
+        </property>
+        <property name="shortcut">
+         <string>Ctrl+S</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="config_file_name">
+        <property name="geometry">
+         <rect>
+          <x>220</x>
+          <y>230</y>
+          <width>391</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_7">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>70</y>
+          <width>131</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Plik Wejściowy:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_8">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>160</y>
+          <width>141</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Plik Wynikowy:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_9">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>240</y>
+          <width>161</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Plik Konfiguracyjny:</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="encrypt_file_button">
+        <property name="geometry">
+         <rect>
+          <x>150</x>
+          <y>340</y>
+          <width>171</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Koduj</string>
+        </property>
+        <property name="shortcut">
+         <string>Ctrl+S</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_5">
+       <widget class="QLabel" name="label_6">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>411</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Dostępne Spersonalizowane Wirniki</string>
         </property>
        </widget>
        <widget class="QListWidget" name="rotors_list_2">
@@ -884,7 +884,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Name</string>
+           <string>Nazwa</string>
           </property>
          </widget>
          <widget class="QPushButton" name="mod_rotor_butt">
@@ -897,7 +897,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Modify</string>
+           <string>Modyfikuj</string>
           </property>
          </widget>
          <widget class="QLineEdit" name="rotor_name_2">
@@ -920,7 +920,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Indentation(s)</string>
+           <string>Wcięcie</string>
           </property>
          </widget>
          <widget class="QLineEdit" name="rotor_wiring_2">
@@ -938,12 +938,12 @@
            <rect>
             <x>30</x>
             <y>200</y>
-            <width>59</width>
-            <height>15</height>
+            <width>91</width>
+            <height>16</height>
            </rect>
           </property>
           <property name="text">
-           <string>Wiring</string>
+           <string>Okablowanie</string>
           </property>
          </widget>
          <widget class="QLabel" name="label_28">
@@ -951,7 +951,7 @@
            <rect>
             <x>110</x>
             <y>90</y>
-            <width>91</width>
+            <width>131</width>
             <height>16</height>
            </rect>
           </property>
@@ -962,7 +962,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Modify Rotor</string>
+           <string>Modyfikuj Wirnik</string>
           </property>
          </widget>
          <widget class="QLineEdit" name="rotor_indentation_2">
@@ -1017,7 +1017,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Add</string>
+           <string>Dodaj</string>
           </property>
          </widget>
          <widget class="QLabel" name="label_16">
@@ -1030,7 +1030,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Name</string>
+           <string>Nazwa</string>
           </property>
          </widget>
          <widget class="QLabel" name="label_22">
@@ -1038,12 +1038,12 @@
            <rect>
             <x>30</x>
             <y>200</y>
-            <width>59</width>
-            <height>15</height>
+            <width>161</width>
+            <height>16</height>
            </rect>
           </property>
           <property name="text">
-           <string>Wiring</string>
+           <string>Okablowanie</string>
           </property>
          </widget>
          <widget class="QLabel" name="label_23">
@@ -1056,7 +1056,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Indentation(s)</string>
+           <string>Wcięcie</string>
           </property>
          </widget>
          <widget class="QLabel" name="label_24">
@@ -1075,7 +1075,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Add Rotor</string>
+           <string>Dodaj Wirnik</string>
           </property>
          </widget>
          <widget class="QPushButton" name="cancel_add_rotor">
@@ -1088,7 +1088,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Cancel</string>
+           <string>Anuluj</string>
           </property>
          </widget>
         </widget>
@@ -1105,7 +1105,7 @@
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>271</width>
+          <width>491</width>
           <height>41</height>
          </rect>
         </property>
@@ -1117,20 +1117,20 @@
          </font>
         </property>
         <property name="text">
-         <string>Available Custom Reflectors</string>
+         <string>Dostępne Spersonalizowane Bębny Odbijające</string>
         </property>
        </widget>
        <widget class="QStackedWidget" name="stack4">
         <property name="geometry">
          <rect>
           <x>310</x>
-          <y>30</y>
+          <y>60</y>
           <width>321</width>
-          <height>391</height>
+          <height>361</height>
          </rect>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="page_10"/>
         <widget class="QWidget" name="page_14">
@@ -1144,7 +1144,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Name</string>
+           <string>Nazwa</string>
           </property>
          </widget>
          <widget class="QPushButton" name="modify_ref_button">
@@ -1157,7 +1157,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Modify</string>
+           <string>Modyfikuj</string>
           </property>
          </widget>
          <widget class="QLineEdit" name="reflector_mod_name">
@@ -1188,20 +1188,20 @@
            <rect>
             <x>30</x>
             <y>200</y>
-            <width>59</width>
-            <height>15</height>
+            <width>91</width>
+            <height>16</height>
            </rect>
           </property>
           <property name="text">
-           <string>Wiring</string>
+           <string>Okablowanie</string>
           </property>
          </widget>
          <widget class="QLabel" name="label_36">
           <property name="geometry">
            <rect>
-            <x>110</x>
+            <x>80</x>
             <y>90</y>
-            <width>121</width>
+            <width>211</width>
             <height>16</height>
            </rect>
           </property>
@@ -1212,7 +1212,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Modify Reflector</string>
+           <string>Modyfikuj Bęben Odbijający</string>
           </property>
          </widget>
         </widget>
@@ -1230,7 +1230,7 @@
            <string/>
           </property>
           <property name="placeholderText">
-           <string>Unique reflector name</string>
+           <string>Unikalna nazwa bębna</string>
           </property>
          </widget>
          <widget class="QLineEdit" name="reflector_mod_wiring_2">
@@ -1243,7 +1243,7 @@
            </rect>
           </property>
           <property name="placeholderText">
-           <string>Connection between letters (ex. AB)</string>
+           <string>Połączenia między literami (np. AB)</string>
           </property>
          </widget>
          <widget class="QPushButton" name="add_mod_ref">
@@ -1256,7 +1256,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Add</string>
+           <string>Dodaj</string>
           </property>
          </widget>
          <widget class="QLabel" name="label_29">
@@ -1269,7 +1269,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Name</string>
+           <string>Nazwa</string>
           </property>
          </widget>
          <widget class="QLabel" name="label_30">
@@ -1277,21 +1277,21 @@
            <rect>
             <x>30</x>
             <y>200</y>
-            <width>59</width>
-            <height>15</height>
+            <width>101</width>
+            <height>16</height>
            </rect>
           </property>
           <property name="text">
-           <string>Wiring</string>
+           <string>Okablowanie</string>
           </property>
          </widget>
          <widget class="QLabel" name="label_32">
           <property name="geometry">
            <rect>
-            <x>120</x>
+            <x>80</x>
             <y>90</y>
-            <width>91</width>
-            <height>16</height>
+            <width>171</width>
+            <height>20</height>
            </rect>
           </property>
           <property name="font">
@@ -1301,7 +1301,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Add Reflector</string>
+           <string>Dodaj Bęben Odbijający</string>
           </property>
          </widget>
          <widget class="QPushButton" name="cancel_add_ref">
@@ -1314,7 +1314,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Cancel</string>
+           <string>Anuluj</string>
           </property>
          </widget>
         </widget>
@@ -1382,7 +1382,7 @@
     </property>
     <widget class="QMenu" name="menuAdd_Remove_elements">
      <property name="title">
-      <string>Custom Elements Manager</string>
+      <string>Manager Elementów Własnych</string>
      </property>
      <addaction name="a_r_rotor_act"/>
      <addaction name="a_r_reflector_act"/>
@@ -1397,22 +1397,22 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="change_config_act">
    <property name="text">
-    <string>Change Machine Configuration</string>
+    <string>Zmień Konfigurację Maszyny</string>
    </property>
   </action>
   <action name="settings_act">
    <property name="text">
-    <string>Settings</string>
+    <string>Ustawienia</string>
    </property>
   </action>
   <action name="enc_by_letter_act">
    <property name="text">
-    <string>Encrypt letter by letter</string>
+    <string>Koduj litera po literze</string>
    </property>
   </action>
   <action name="en_from_file_act">
    <property name="text">
-    <string>Encrypt from file</string>
+    <string>Koduj z pliku</string>
    </property>
   </action>
   <action name="a_r_rotor_act">
@@ -1422,7 +1422,7 @@
   </action>
   <action name="a_r_reflector_act">
    <property name="text">
-    <string>Reflector</string>
+    <string>Bębny odbijające</string>
    </property>
   </action>
  </widget>

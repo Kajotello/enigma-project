@@ -119,7 +119,11 @@ class Enigma():
 
         return (to_letter(ASCII_letter), [to_letter(step) for step in steps])
 
-    def code_file(self, input_file, output_file, space_dist):
+    def code_file(self, input_file, output_file, space_dist=5):
+
+        """Code given file with current configuration as start
+        As result another file is generated"""
+
         result = ""
         with open(input_file, "r") as file_handle:
             for line in file_handle:
@@ -131,16 +135,3 @@ class Enigma():
 
         with open(output_file, "w") as file_handle:
             file_handle.write(result)
-
-    # probably have to be implemented in future
-    def change_ring(self, order, new_ring):
-        pass
-
-    def change_position(self, order, new_position):
-        pass
-
-    def change_reflector(self, new_reflector):
-        pass
-
-    def add_rotor(self, new_rotor, order):
-        pass

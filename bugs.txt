@@ -1,2 +1,5 @@
 - zmiana rotora na dalszej pozycji powoduje przyspieszona zmianę na wyświetlaczu (obrór rotorów odbywa się na koniec kodowania) /SOLVED
-- podwójny krok nie działa poprawnie (aktualnie jest to krok potrójny - trzy zmiany)
+- podwójny krok nie działa poprawnie (aktualnie jest to krok potrójny - trzy zmiany) / SOLVED
+- przy powrocie z tworzenie modelu rotora/reflektora przy braku wybranego wczesniej obiektu pojawia sie puste pole modify (index stackWidget 1)
+- usuwanie rotorów będących w obecnej konfiguracji (i ogólniej zmiana indeksów elementów w maszynie)
+- ilość zakodowanych znaków jest przekazywana w enigmie, która jest reinicjalizowana za każdym razem
