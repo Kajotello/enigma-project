@@ -1,9 +1,11 @@
-from enigma_classes.functions import str_change, swap, str_swap_down
-from enigma_gui.functions import read_from_json, write_to_json, str_swap_up
+from types import new_class
+from enigma_classes.functions import str_change, swap, str_swap_down, to_letter
+from enigma_gui.functions import read_from_json, str_to_plugboard, write_to_json, str_swap_up
 from enigma_classes.enigma_class import Enigma
 from enigma_classes.plugboard_class import Plugboard
 from enigma_classes.reflector_class import Reflector
 from enigma_classes.rotor_class import Rotor
+from copy import deepcopy
 
 
 class ElementsDatabase():
@@ -11,22 +13,25 @@ class ElementsDatabase():
     """Represents database of available rotors and
     reflectors for the machine"""
 
-    def __init__(self, elements_data) -> None:
-        rotors = {}
-        reflectors = {}
-        for rotor in elements_data["rotors"]:
-            element = Rotor(rotor["name"], rotor["wiring"], rotor["indentation"])
-            rotors[element.name] = element
-        for reflector in elements_data["reflectors"]:
-            element = Reflector(reflector["name"], reflector["wiring"])
-            reflectors[element.name] = element
-        self._rotors = rotors
-        self._reflectors = reflectors
+    def __init__(self, elements_data=None) -> None:
+        if elements_data is not None:
+            rotors = {}
+            reflectors = {}
+            for rotor in elements_data["rotors"]:
+                element = Rotor(rotor["name"], rotor["wiring"],
+                                rotor["indentation"])
+                rotors[element.name] = element
+            for reflector in elements_data["reflectors"]:
+                element = Reflector(reflector["name"], reflector["wiring"])
+                reflectors[element.name] = element
+            self._rotors = rotors
+            self._reflectors = reflectors
 
     def __add__(self, other):
-        self._rotors = {**self.rotors, **other.rotors}
-        self._reflectors = {**self.reflectors, **other.reflectors}
-        return self
+        result = ElementsDatabase()
+        result._rotors = {**self.rotors, **other.rotors}
+        result._reflectors = {**self.reflectors, **other.reflectors}
+        return result
 
     @property
     def rotors(self):
@@ -41,46 +46,46 @@ class ElementsDatabase():
         """Add new rotor model to custom json database"""
 
         new_element = Rotor(name, wiring, indentation)
-        self.rotors.append(new_element)
+        self.rotors[name] = new_element
 
     def add_reflector(self, name, wiring):
 
         """Add new reflector model to custom json database"""
 
         new_element = Reflector(name, wiring)
-        self.reflectors.append(new_element)
+        self.reflectors[name] = new_element
 
-    def remove_rotor(self, position):
+    def remove_rotor(self, name):
 
         """Remove rotor model from custom json database"""
 
-        self.rotors.pop(position)
+        self.rotors.pop(name)
 
-    def remove_reflector(self, position):
+    def remove_reflector(self, name):
 
         """Remove reflector model from custom json database"""
 
-        self.reflectors.pop(position)
+        self.reflectors.pop(name)
 
-    def modify_reflector(self, positon, name, wiring):
-        self.reflectors[positon].set_name(name)
-        self.reflectors[positon].set_wiring(wiring)
+    def modify_reflector(self, old_name, name, wiring):
+        wiring = str_to_plugboard(wiring)
+        new_ref = Reflector(name, wiring)
+        self.reflectors.pop(old_name)
+        self.reflectors[name] = new_ref
 
-    def modify_rotor(self, position, name, wiring, indentation):
-        self.rotors[position].set_name(name)
-        self.rotors[position].set_wiring(wiring)
-        self.rotors[position].set_indentation(indentation)
+    def modify_rotor(self, old_name, name, wiring, indentation):
+        new_rotor = Rotor(name, wiring, indentation)
+        self.rotors.pop(old_name)
+        self.rotors[name] = new_rotor
 
 
-class Configuration():
-    def __init__(self, conf_data) -> None:
-        self._rotors = conf_data["machine"]["rotors"]
-        self._reflector = conf_data["machine"]["reflector"]
-        self._positions = conf_data["machine"]["start_positions"]
-        self._rings = conf_data["machine"]["rings"]
-        self._plugboard = conf_data["machine"]["plugboard"]
-        self._double_step = conf_data["settings"]["double_step"]
-        self._space_dist = conf_data["settings"]["space_dist"]
+class MachineConfiguration():
+    def __init__(self, machine_conf) -> None:
+        self._rotors = machine_conf["rotors"]
+        self._reflector = machine_conf["reflector"]
+        self._positions = machine_conf["start_positions"]
+        self._rings = machine_conf["rings"]
+        self._plugboard = machine_conf["plugboard"]
 
     @property
     def rotors(self):
@@ -102,14 +107,6 @@ class Configuration():
     def plugboard(self):
         return self._plugboard
 
-    @property
-    def double_step(self):
-        return self._double_step
-
-    @property
-    def space_dist(self):
-        return self._space_dist
-
     def add_rotor(self, new_rotor):
         self._rotors.append(new_rotor)
         self._rings += "A"
@@ -127,7 +124,7 @@ class Configuration():
         self._positions = str_change(self.positions, index, new_pos)
 
     def change_ring(self, index, new_ring):
-        self._rings = str_change(self.positions, index, new_ring)
+        self._rings = str_change(self.rings, index, new_ring)
 
     def set_plugboard(self, new_plugboard):
         self._plugboard = new_plugboard
@@ -144,20 +141,52 @@ class Configuration():
         self._positions = str_swap_down(self.positions, index)
         self._rings = str_swap_down(self.rings, index)
 
+    def update_positions(self, enigma: Enigma):
+        position = ""
+        for rotor in enigma.rotors:
+            position += to_letter(rotor.position)
+        self._positions = position
+
+
+class Configuration():
+    def __init__(self, conf_data) -> None:
+        self._machine = MachineConfiguration(conf_data["machine"])
+        self._double_step = conf_data["settings"]["double_step"]
+        self._space_dist = conf_data["settings"]["space_dist"]
+
+    @property
+    def double_step(self):
+        return self._double_step
+
+    @property
+    def space_dist(self):
+        return self._space_dist
+
+    @property
+    def machine(self):
+        return self._machine
+
+    def change_machine_conf(self, new_machine_conf):
+        self._machine = new_machine_conf
+
     def initialize_enigma(self, database: ElementsDatabase):
 
         """Initialize an instance of enigma class
          with specified  configuration """
 
-        rotors = [database.rotors[rotor] for rotor in self.rotors]
-        reflector = database.reflectors[self.reflector]
-        plugboard = Plugboard(self.plugboard)
-        start_positions = self.positions
-        rings = self.rings
+        rotors = [deepcopy(database.rotors[rotor])
+                  for rotor in self.machine.rotors]
+        reflector = database.reflectors[self.machine.reflector]
+        plugboard = Plugboard(self.machine.plugboard)
+        start_positions = self.machine.positions
+        rings = self.machine.rings
         double_step = self.double_step
         enigma = Enigma(rotors, reflector, plugboard,
                         start_positions, rings, double_step)
         return enigma
+
+    def change_space_dist(self, new_space_dist):
+        self._space_dist = new_space_dist
 
 
 class ResourcesManager():
@@ -170,7 +199,6 @@ class ResourcesManager():
         self._custom = self.get_custom_database()
         self._conf = self.setup_config()
         self._elements = self.connect_data()
-        print(self._elements.rotors)
 
     @property
     def default(self):
@@ -196,13 +224,19 @@ class ResourcesManager():
 
     def set_config(self, configuration: Configuration):
         conf_data = {}
-        conf_data["machine"]["rotors"] = configuration.rotors
-        conf_data["machine"]["reflector"] = configuration.reflector
-        conf_data["machine"]["start_positions"] = configuration.positions
-        conf_data["machine"]["rings"] = configuration.rings
-        conf_data["machine"]["plugboard"] = configuration.plugboard
-        conf_data["settings"]["double_step"] = configuration.double_step
-        conf_data["settings"]["space_dist"] = configuration.space_dist
+        machine = {}
+        settings = {}
+        machine["rotors"] = configuration.machine.rotors
+        machine["reflector"] = configuration.machine.reflector
+        machine["start_positions"] = configuration.machine.positions
+        machine["rings"] = configuration.machine.rings
+        machine["plugboard"] = configuration.machine.plugboard
+        settings["double_step"] = configuration.double_step
+        settings["space_dist"] = configuration.space_dist
+
+        conf_data["machine"] = machine
+        conf_data["settings"] = settings
+
         config_path = f"{self.rsc_path}/config.json"
         write_to_json(config_path, conf_data)
         self._conf = self.setup_config()
@@ -220,10 +254,10 @@ class ResourcesManager():
         data["rotors"] = [{"name": rotor.name,
                            "wiring": rotor.wiring,
                            "indentation": rotor.indentation}
-                          for rotor in self.custom.rotors]
+                          for rotor in self.custom.rotors.values()]
         data["reflectors"] = [{"name": reflector.name,
                                "wiring": reflector.wiring}
-                              for reflector in self.custom.reflectors]
+                              for reflector in self.custom.reflectors.values()]
         custom_path = f"{self.rsc_path}/custom.json"
         write_to_json(custom_path, data)
         self._elements = self.connect_data()

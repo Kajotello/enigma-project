@@ -12,8 +12,8 @@ class Enigma():
     starting configuration - start positions of rotors and rings"""
 
     def __init__(self, rotors: List[Rotor], reflector: Reflector,
-                 plugboard: Plugboard, start_positions: List[str],
-                 rings: List[str], double_step=0) -> None:
+                 plugboard: Plugboard, start_positions: str,
+                 rings: str, double_step=0) -> None:
         self._start_positions = start_positions
         self._rotors = rotors
         self._reflector = reflector

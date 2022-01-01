@@ -77,6 +77,8 @@ def plugboard_to_str(plugboard):
 
 def str_to_plugboard(str_plugboard):
     result = []
+    if len(str_plugboard) == 0:
+        return result
     pair = ""
     for char in str_plugboard:
         if char == " ":

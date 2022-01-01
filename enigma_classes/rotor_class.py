@@ -1,4 +1,4 @@
-from enigma_classes.functions import to_number, to_letter, first_to_last
+from enigma_classes.functions import to_number, first_to_last
 from enigma_classes.functions import last_to_first
 
 
@@ -33,7 +33,7 @@ class Rotor:
         self._code_table_in = code_table_in
         self._code_table_out = code_table_out
 
-        self._indentation = to_number(indentation)
+        self._indentation = indentation
         self._position = 0
         self._rotate_flag = True
 
@@ -82,7 +82,7 @@ class Rotor:
         self._indentation = indentation
 
     def set_ring(self, new_ring):
-        self._ring = to_letter(new_ring)
+        self._ring = new_ring
 
     def set_rotate_flag(self, state):
         self._rotate_flag = state
