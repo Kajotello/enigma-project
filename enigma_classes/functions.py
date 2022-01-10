@@ -76,3 +76,28 @@ def str_swap_down(str, index):
     for element in str_table:
         result += element
     return result
+
+
+def dict_from_str_with_pairs(str):
+
+    """Change string with pairs of letter seperated with space
+    to two way dictionary"""
+
+    result_dict = {}
+    pair = []
+    for letter in str:
+        if letter == ' ':
+            first_letter, second_leter = pair
+            first_letter = to_number(first_letter)
+            second_leter = to_number(second_leter)
+            result_dict[first_letter] = second_leter
+            result_dict[second_leter] = first_letter
+            pair = []
+        else:
+            pair.append(letter)
+    first_letter, second_leter = pair
+    first_letter = to_number(first_letter)
+    second_leter = to_number(second_leter)
+    result_dict[first_letter] = second_leter
+    result_dict[second_leter] = first_letter
+    return result_dict

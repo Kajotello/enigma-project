@@ -1,6 +1,5 @@
-from types import new_class
 from enigma_classes.functions import str_change, swap, str_swap_down, to_letter
-from enigma_gui.functions import read_from_json, str_to_plugboard, write_to_json, str_swap_up
+from enigma_classes.functions import read_from_json, write_to_json, str_swap_up
 from enigma_classes.enigma_class import Enigma
 from enigma_classes.plugboard_class import Plugboard
 from enigma_classes.reflector_class import Reflector
@@ -68,7 +67,6 @@ class ElementsDatabase():
         self.reflectors.pop(name)
 
     def modify_reflector(self, old_name, name, wiring):
-        wiring = str_to_plugboard(wiring)
         new_ref = Reflector(name, wiring)
         self.reflectors.pop(old_name)
         self.reflectors[name] = new_ref
@@ -166,27 +164,30 @@ class Configuration():
     def machine(self):
         return self._machine
 
+    def change_double_step(self):
+        self._double_step = not self.double_step
+
+    def change_space_dist(self, new_space_dist):
+        self._space_dist = new_space_dist
+
     def change_machine_conf(self, new_machine_conf):
         self._machine = new_machine_conf
 
     def initialize_enigma(self, database: ElementsDatabase):
 
         """Initialize an instance of enigma class
-         with specified  configuration """
+         with specified configuration """
 
         rotors = [deepcopy(database.rotors[rotor])
                   for rotor in self.machine.rotors]
         reflector = database.reflectors[self.machine.reflector]
         plugboard = Plugboard(self.machine.plugboard)
-        start_positions = self.machine.positions
+        positions = self.machine.positions
         rings = self.machine.rings
         double_step = self.double_step
         enigma = Enigma(rotors, reflector, plugboard,
-                        start_positions, rings, double_step)
+                        positions, rings, double_step)
         return enigma
-
-    def change_space_dist(self, new_space_dist):
-        self._space_dist = new_space_dist
 
 
 class ResourcesManager():
@@ -195,10 +196,12 @@ class ResourcesManager():
 
     def __init__(self, rsc_path) -> None:
         self.rsc_path = rsc_path
-        self._default = self.get_default_database()
-        self._custom = self.get_custom_database()
-        self._conf = self.setup_config()
+        custom_path = f"{self.rsc_path}/custom.json"
+        default_path = f"{self.rsc_path}/default.json"
+        self._default = ElementsDatabase(read_from_json(default_path))
+        self._custom = ElementsDatabase(read_from_json(custom_path))
         self._elements = self.connect_data()
+        self._conf = self.setup_config()
 
     @property
     def default(self):
@@ -240,14 +243,6 @@ class ResourcesManager():
         config_path = f"{self.rsc_path}/config.json"
         write_to_json(config_path, conf_data)
         self._conf = self.setup_config()
-
-    def get_custom_database(self):
-        custom_path = f"{self.rsc_path}/custom.json"
-        return ElementsDatabase(read_from_json(custom_path))
-
-    def get_default_database(self):
-        default_path = f"{self.rsc_path}/default.json"
-        return ElementsDatabase(read_from_json(default_path))
 
     def set_custom_database(self):
         data = {}

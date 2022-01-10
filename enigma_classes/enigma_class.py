@@ -1,31 +1,30 @@
 from enigma_classes.functions import to_number
-from typing import List
+from enigma_classes.functions import to_letter
 from enigma_classes.rotor_class import Rotor
 from enigma_classes.reflector_class import Reflector
 from enigma_classes.plugboard_class import Plugboard
-from enigma_classes.functions import to_letter
+from typing import List
 
 
 class Enigma():
 
     """Represent Enigma machine with combination of rotors and reflector, and with
-    starting configuration - start positions of rotors and rings"""
+    configuration - positions of rotors and rings"""
 
     def __init__(self, rotors: List[Rotor], reflector: Reflector,
-                 plugboard: Plugboard, start_positions: str,
-                 rings: str, double_step=0) -> None:
-        self._start_positions = start_positions
+                 plugboard: Plugboard, positions: str,
+                 rings: str, double_step: bool) -> None:
+        self._positions = positions
         self._rotors = rotors
         self._reflector = reflector
         self._plugboard = plugboard
-        self._coded_letters_number = 0
         self._double_step = double_step
-        start_positions = [to_number(position) for position in start_positions]
+        positions = [to_number(position) for position in positions]
         rings = [to_number(ring) for ring in rings]
         for i, ring in enumerate(rings):
             self.rotors[i].reverse_rotate(ring)
             self.rotors[i].set_ring(ring)
-        for i, position in enumerate(start_positions):
+        for i, position in enumerate(positions):
             self.rotors[i].rotate(position)
 
     @property
@@ -37,26 +36,16 @@ class Enigma():
         return self._reflector
 
     @property
-    def start_positions(self):
-        return self._start_positions
+    def positions(self):
+        return self._positions
 
     @property
     def plugboard(self):
         return self._plugboard
 
     @property
-    def coded_letters_number(self):
-        return self._coded_letters_number
-
-    @property
     def double_step(self):
         return self._double_step
-
-    def increment_coded_letters_number(self):
-        self._coded_letters_number += 1
-
-    def zero_coded_letters_number(self):
-        self._coded_letters_number = 0
 
     def change_double_step(self, new_double_step):
         self._double_step = new_double_step
@@ -65,25 +54,25 @@ class Enigma():
 
         """Code one letter with current Enigma configuration """
 
-        if self.double_step == 2:
-            self.rotors[-2].rotate()
-            self.rotors[-3].rotate()
-            self.change_double_step(1)
-
         # check, is further rotors should be rotate
         for i, rotor in enumerate(reversed(self.rotors), start=1):
-            # flag condition prevent from multiple rotate of further rotors
-            # when previous is on intendent position
+
+            # should_rotate condition prevent from multiple rotate
+            # of further rotors when previous is on intendent position
+            # but wasn't moved recently
+            should_roatate = True
+            if i > 1:
+                if (self.rotors[-i+1].position !=
+                   ((self.rotors[-i+1].indentation + 1) % 26)):
+                    should_roatate = False
             if(rotor.position == rotor.indentation) and \
               (i != len(self.rotors)) and \
-              (rotor.rotate_flag is True):
-                if self.double_step == 1 and i == 1:
+              (should_roatate is True):
+                if self.double_step is True and i == 2:
+                    self.rotors[-i].rotate()
                     self.rotors[-i-1].rotate()
-                    self.change_double_step(2)
                     break
                 else:
-                    self.rotors[-i-1].set_rotate_flag(False)
-                    self.rotors[-i].set_rotate_flag(True)
                     self.rotors[-i-1].rotate()
 
         self.rotors[-1].rotate()                 # rotation of last rotor
@@ -115,8 +104,6 @@ class Enigma():
         # Add letter as output
         steps.append(ASCII_letter)
 
-        self.increment_coded_letters_number()
-
         return (to_letter(ASCII_letter), [to_letter(step) for step in steps])
 
     def code_file(self, input_file, output_file, space_dist=5):
@@ -125,12 +112,14 @@ class Enigma():
         As result another file is generated"""
 
         result = ""
+        coded_letter = 0
         with open(input_file, "r") as file_handle:
             for line in file_handle:
                 for i, letter in enumerate(line):
                     result += self.code_letter(letter)[0]
-                    if self.coded_letters_number == space_dist:
-                        self.zero_coded_letters_number()
+                    coded_letter += 1
+                    if coded_letter == space_dist:
+                        coded_letter = 0
                         result += " "
 
         with open(output_file, "w") as file_handle:

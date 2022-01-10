@@ -42,3 +42,5 @@ class CustomDialog(QDialog):
 
     def my_done(self):
         self.done(self.rotor_pos)
+
+

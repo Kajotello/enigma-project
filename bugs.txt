@@ -1,6 +1,8 @@
 - zmiana rotora na dalszej pozycji powoduje przyspieszona zmianę na wyświetlaczu (obrór rotorów odbywa się na koniec kodowania) /SOLVED
 - podwójny krok nie działa poprawnie (aktualnie jest to krok potrójny - trzy zmiany) / SOLVED
-- przy powrocie z tworzenie modelu rotora/reflektora przy braku wybranego wczesniej obiektu pojawia sie puste pole modify (index stackWidget 1)
+- przy powrocie z tworzenie modelu rotora/reflektora przy braku wybranego wczesniej obiektu pojawia sie puste pole modify (index stackWidget 1) /SOLVED
 - usuwanie rotorów będących w obecnej konfiguracji (i ogólniej zmiana indeksów elementów w maszynie)
-- ilość zakodowanych znaków jest przekazywana w enigmie, która jest reinicjalizowana za każdym razem
-- problem z flagą blokowania obotu rotoru, gdy poprzedni juz wszedl na pozycje z zazabiebiem
+- ilość zakodowanych znaków jest przekazywana w enigmie, która jest reinicjalizowana za każdym razem / SOLVED
+- problem z flagą blokowania obotu rotoru, gdy poprzedni juz wszedl na pozycje z zazabiebiem /SOLVED
+- usuwanie rotora/reflektora gdy nie wybrany /SOLVED
+- POWIĄZANE - zapamiętywanie indexu po zmiane kart - można usuńąc wczesniej wybrany element, chociaż nie jest podświetlony /SOLVED

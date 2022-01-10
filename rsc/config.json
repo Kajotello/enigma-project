@@ -1,11 +1,17 @@
 {
-    "rotors": [
-        "rotorI",
-        "rotorII",
-        "rotorIII"
-    ],
-    "reflector": "reflectorUKWC",
-    "plugboard": [],
-    "start_positions": "HMS",
-    "rings": "WAO"
+    "machine": {
+        "rotors": [
+            "rotorI",
+            "rotorII",
+            "rotorIII"
+        ],
+        "reflector": "reflectorUKWB",
+        "start_positions": "BDR",
+        "rings": "MBN",
+        "plugboard": "AS DF"
+    },
+    "settings": {
+        "double_step": 0,
+        "space_dist": 5
+    }
 }

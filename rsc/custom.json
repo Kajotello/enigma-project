@@ -1,15 +1,20 @@
 {
     "rotors": [
         {
-            "name": "Gamma",
-            "wiring": "ABCDEFGHIJKLMNOPQRTSUVWXYZ",
-            "indentation": "Z"
+            "name": "sdd",
+            "wiring": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            "indentation": "F"
         },
         {
-            "name": "Beta",
-            "wiring": "ABCDEFGHIJKLMNOPQRTSUVWXYZ",
-            "indentation": "Z"
+            "name": "AS",
+            "wiring": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            "indentation": "E"
         }
     ],
-    "reflectors": []
+    "reflectors": [
+        {
+            "name": "tef",
+            "wiring": "AB CD EF GH IJ KL MN OP QR ST UV WX ZY"
+        }
+    ]
 }

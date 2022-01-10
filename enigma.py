@@ -30,10 +30,10 @@ def main():
     args = parser.parse_args()
     mode = args.mode
     if mode == "cmd":
-        rsc.conf.get_temp_config_from_file(args.configuration)
-        enigma = rsc.initialize_enigma()
+        configuration = rsc.setup_config(args.config)
+        enigma = configuration.initialize_enigma(rsc.elements)
         enigma.code_file(args.input_file, args.output_file, 5)
-    if mode == "gui":
+    elif mode == "gui":
         gui_main(sys.argv)
 
 

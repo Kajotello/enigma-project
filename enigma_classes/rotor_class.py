@@ -1,8 +1,13 @@
+from attr import s
 from enigma_classes.functions import to_number, first_to_last
 from enigma_classes.functions import last_to_first
+from enigma_gui.validators import validate_new_rotor
 
 
 def generate_in_out_tables(wiring):
+
+    """Generate code table in both directions with given wiring"""
+
     code_table_in = []
     temp_code_dict = {}
     code_table_out = []
@@ -33,7 +38,7 @@ class Rotor:
         self._code_table_in = code_table_in
         self._code_table_out = code_table_out
 
-        self._indentation = indentation
+        self._indentation = to_number(indentation)
         self._position = 0
         self._rotate_flag = True
 
@@ -70,15 +75,19 @@ class Rotor:
         return self._wiring
 
     def set_name(self, new_name):
+        validate_rotor(new_name, self.wiring, self.indentation)
         self._name = new_name
 
     def set_wiring(self, new_wiring):
+        validate_rotor(self.name, new_wiring, self.indentation)
         code_table_in, code_table_out = generate_in_out_tables(new_wiring)
         self._code_table_in = code_table_in
         self._code_table_out = code_table_out
         self._wiring = new_wiring
 
+    # need to be fixed - indentation is a str
     def set_indentation(self, indentation):
+        validate_rotor(self.name, self.wiring, indentation)
         self._indentation = indentation
 
     def set_ring(self, new_ring):
@@ -114,3 +123,48 @@ class Rotor:
     def code_out(self, ASCII_letter):
         ASCII_letter += self.code_table_out[ASCII_letter]
         return ASCII_letter % 26
+
+
+def validate_rotor(name, wiring, indentation):
+
+    alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+                'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
+                'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+    # need to add indentation check
+
+    check_table = []
+
+    if len(wiring) != 26:
+        raise NotAllLettersError
+
+    for letter in wiring:
+        if letter not in alphabet:
+            raise InvalidSignEroor
+        if letter in check_table:
+            raise DuplicatedLetterError
+        else:
+            check_table.append(letter)
+
+    if len(name) == 0:
+        raise EmptyNameError
+
+
+class InvalidRotorWiringError(Exception):
+    pass
+
+
+class InvalidSignEroor(Exception):
+    pass
+
+
+class EmptyNameError(Exception):
+    pass
+
+
+class NotAllLettersError(Exception):
+    pass
+
+
+class DuplicatedLetterError(Exception):
+    pass

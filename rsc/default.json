@@ -54,12 +54,12 @@
 
         {
             "name": "reflectorUKWB",
-            "wiring": ["AY", "BR", "CU", "DH", "EQ", "FS", "GL", "IP", "JX", "KN", "MO", "TZ", "VW"]
+            "wiring": "AY BR CU DH EQ FS GL IP JX KN MO TZ VW"
         },
 
         {
             "name": "reflectorUKWC",
-            "wiring": ["AF", "BV", "CP", "DJ", "EI", "GO", "HY", "KR", "LZ", "MX", "NW", "QT", "SU"]
+            "wiring": "AF BV CP DJ EI GO HY KR LZ MX NW QT SU"
         }
     ]
 }

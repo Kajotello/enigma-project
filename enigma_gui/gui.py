@@ -4,11 +4,21 @@ from enigma_classes.enigma_class import Enigma
 from enigma_gui.dialog_windows import CustomDialog
 from enigma_gui.table_models import StepsTableModel, ConifgTableModel
 from enigma_gui.main_window import Ui_MainWindow
-from enigma_gui.functions import plugboard_to_str, str_to_plugboard, to_number, to_letter
-from rsc_manager import Configuration, MachineConfiguration, ResourcesManager
+from enigma_gui.functions import to_number, to_letter
+from rsc_manager import Configuration, ResourcesManager
 from copy import deepcopy
 import os
 from functools import partial
+from enigma_gui.error_msgs import show_empty_name, show_invalid_sign_error
+from enigma_gui.error_msgs import show_duplciated_letter_error
+from enigma_gui.error_msgs import show_invalid_name
+from enigma_gui.error_msgs import show_invalid_input_error
+from enigma_gui.error_msgs import show_invalid_plugboard_format
+from enigma_gui.error_msgs import show_invalid_rotor_wiring
+from enigma_gui.error_msgs import show_invalid_reflector_wiring
+from enigma_gui.error_msgs import show_current_use_error
+from enigma_gui.validators import validate_plugboard, validate_new_rotor
+from enigma_gui.validators import validate_input, validate_new_reflector
 
 
 alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
@@ -109,12 +119,15 @@ class EnigmaWindow(QMainWindow):
 
         """Reload dynamic widgets on all pages of EnigmaWindow"""
 
+        # reset selected item
+        self.selected_id = None
+
         # initialize new enigma with running configurtaion
         self.enigma = self.run_conf.initialize_enigma(self.rsc.elements)
         # remove existing change in temporary configuration
         self.temp: Configuration = deepcopy(self.run_conf)
 
-        plugboard_text = plugboard_to_str(self.run_conf.machine.plugboard)
+        plugboard_text = self.run_conf.machine.plugboard
         # generate data about rotors in machine for display in table
         data = [[rotor.name, to_letter(rotor.position), to_letter(rotor.ring)]
                 for rotor in self.enigma.rotors]
@@ -144,7 +157,8 @@ class EnigmaWindow(QMainWindow):
         self.setupRotors()
         self.ui.reflector_comboBox.clear()
         self.ui.reflector_comboBox.addItems(self.rsc.elements.reflectors)
-        self.ui.reflector_comboBox.setCurrentText(self.run_conf.machine.reflector)
+        self.ui.reflector_comboBox\
+            .setCurrentText(self.run_conf.machine.reflector)
         self.ui.plugboard_line.setText(plugboard_text)
 
         #   page 4 - manage custom rotors
@@ -167,21 +181,29 @@ class EnigmaWindow(QMainWindow):
         self.ui.letter_input.clear()
         cipher_text = self.ui.cipher_text.text()
 
-        if self.coded_letter >= self.run_conf.space_dist:
-            self.coded_letter = 0
-            cipher_text += " "
-        self.coded_letter += 1
+        validation = validate_input(letter)
 
-        # code letter and add it to cipher_text
-        cipher_letter, steps_data = self.enigma.code_letter(letter)
-        cipher_text += cipher_letter
+        if validation == 0:
+            if (self.coded_letter >= self.run_conf.space_dist and
+               self.coded_letter != 0):
+                self.coded_letter = 0
+                cipher_text += " "
+            self.coded_letter += 1
 
-        # reload dynamic widgets on page
-        self.ui.steps_table.setModel(StepsTableModel(self.generate_labels(), steps_data))
-        self.ui.steps_table.horizontalHeader().hide()
-        self.ui.cipher_text.setText(cipher_text)
-        self.run_conf.machine.update_positions(self.enigma)
-        self.reload()
+            # code letter and add it to cipher_text
+            cipher_letter, steps_data = self.enigma.code_letter(letter)
+            cipher_text += cipher_letter
+
+            # reload dynamic widgets on page
+            self.ui.steps_table\
+                .setModel(StepsTableModel(self.generate_labels(), steps_data))
+            self.ui.steps_table.horizontalHeader().hide()
+            self.ui.cipher_text.setText(cipher_text)
+            self.run_conf.machine.update_positions(self.enigma)
+            self.reload()
+        else:
+            self.enigma = self.run_conf.initialize_enigma(self.rsc.elements)
+            show_invalid_input_error()
 
     #   page 1 - encrypt from file
     def brow_file(self, type):
@@ -207,18 +229,17 @@ class EnigmaWindow(QMainWindow):
     def encrypt_file(self):
 
         file_encrypt_conf = self.rsc.setup_config(self.config)
-        sub_enigma: Enigma = file_encrypt_conf.initialize_enigma(self.rsc.elements)
+        sub_enigma: Enigma =\
+            file_encrypt_conf.initialize_enigma(self.rsc.elements)
         sub_enigma.code_file(self.input, self.output, self.rsc.conf.space_dist)
         show_compleated_dialog()
 
     #   page 2 - settings
     def change_double_step(self):
-        if self.enigma.double_step == 0:
-            self.enigma.change_double_step(1)
-            self.double_step = 1
+        if self.enigma.double_step is False:
+            self.rsc.conf.change_double_step()
         else:
-            self.enigma.change_double_step(0)
-            self.double_step = 0
+            self.rsc.conf.change_double_step()
             self.ui.is_double_step.setChecked(0)
 
     def change_space(self):
@@ -232,7 +253,7 @@ class EnigmaWindow(QMainWindow):
         self.clear_rotors()
         self.setupRotors()
 
-        # probably it wil be googd idea to connect it with display_rotors_info
+        # probably it wil be good idea to connect it with display_rotors_info
         if self.selected_id != 0:
             self.ui.rotors_list.setCurrentRow(self.selected_id-1)
             self.selected_id -= 1
@@ -268,9 +289,20 @@ class EnigmaWindow(QMainWindow):
         self.setupRotors()
 
     def set_plugboard(self):
-        str_plugboard = self.ui.plugboard_line.text()
-        plugboard = str_to_plugboard(str_plugboard)
-        self.temp.machine.set_plugboard(plugboard)
+        plugboard = self.ui.plugboard_line.text()
+        plugboard = plugboard.strip()
+        validation, error_sign = validate_plugboard(plugboard)
+        if validation == 0:
+            self.temp.machine.set_plugboard(plugboard)
+            self.ui.plugboard_line.setText(plugboard)
+        elif validation == 1:
+            show_invalid_plugboard_format()
+        elif validation == 2:
+            show_invalid_sign_error(error_sign)
+        elif validation == 3:
+            show_invalid_plugboard_format()
+        elif validation == 4:
+            show_duplciated_letter_error(error_sign)
 
     def save_conf(self):
         self.run_conf = deepcopy(self.temp)
@@ -298,11 +330,23 @@ class EnigmaWindow(QMainWindow):
         wiring = self.ui.rotor_wiring_2.text()
         indentation = self.ui.rotor_indentation_2.text()
         old_name = self.selected_id
-        self.rsc.custom.modify_rotor(old_name, name, wiring, indentation)
-        # TO CHANGE IN THE FUTURE
-        self.ui.stack3.setCurrentIndex(0)
-        self.rsc.set_custom_database()
-        self.setup_rotors_models()
+        validation, error_sign = validate_new_rotor(wiring, name, self.rsc.elements, old_name)
+        if validation == 0:
+            self.rsc.custom.modify_rotor(old_name, name, wiring, indentation)
+            # TO CHANGE IN THE FUTURE
+            self.ui.stack3.setCurrentIndex(0)
+            self.rsc.set_custom_database()
+            self.setup_rotors_models()
+        elif validation == 1:
+            show_invalid_rotor_wiring()
+        elif validation == 2:
+            show_invalid_sign_error(error_sign)
+        elif validation == 3:
+            show_duplciated_letter_error(error_sign)
+        elif validation == 4:
+            show_invalid_name()
+        elif validation == 5:
+            show_empty_name()
 
     def add_rotor_model(self):
         self.ui.stack3.setCurrentIndex(2)
@@ -311,13 +355,25 @@ class EnigmaWindow(QMainWindow):
         name = self.ui.rotor_name.text()
         wiring = self.ui.rotor_wiring.text()
         indentation = self.ui.rotor_indentation.text()
-        self.rsc.custom.add_rotor(name, wiring, indentation)
-        self.rsc.set_custom_database()
-        self.ui.stack3.setCurrentIndex(0)
-        self.setup_rotors_models()
-        self.ui.rotor_name.clear()
-        self.ui.rotor_wiring.clear()
-        self.ui.rotor_indentation.clear()
+        validation, error_sign = validate_new_rotor(wiring, name, self.rsc.elements)
+        if validation == 0:
+            self.rsc.custom.add_rotor(name, wiring, indentation)
+            self.rsc.set_custom_database()
+            self.ui.stack3.setCurrentIndex(0)
+            self.setup_rotors_models()
+            self.ui.rotor_name.clear()
+            self.ui.rotor_wiring.clear()
+            self.ui.rotor_indentation.clear()
+        elif validation == 1:
+            show_invalid_rotor_wiring()
+        elif validation == 2:
+            show_invalid_sign_error(error_sign)
+        elif validation == 3:
+            show_duplciated_letter_error(error_sign)
+        elif validation == 4:
+            show_invalid_name()
+        elif validation == 5:
+            show_empty_name()
 
     def cancel_rotor_add(self):
         self.ui.stack3.setCurrentIndex(0)
@@ -326,46 +382,92 @@ class EnigmaWindow(QMainWindow):
         self.ui.rotor_indentation.clear()
 
     def remove_rotor_model(self):
-        self.rsc.custom.remove_rotor(self.selected_id)
-        self.rsc.set_custom_database()
-        self.setup_rotors_models()
-        self.ui.stack3.setCurrentIndex(0)
+        if self.selected_id is None:
+            pass
+        elif (self.selected_id not in self.run_conf.machine.rotors and
+              self.selected_id not in self.rsc.conf.machine.rotors):
+            self.rsc.custom.remove_rotor(self.selected_id)
+            self.rsc.set_custom_database()
+            self.setup_rotors_models()
+            self.ui.stack3.setCurrentIndex(0)
+        else:
+            show_current_use_error()
 
     #   page 5 - manage custom reflectors
     def modify_reflector(self):
         name = self.ui.reflector_mod_name.text()
-        wiring = str_to_plugboard(self.ui.reflector_mod_wiring.text())
-        index = self.selected_id
-        self.rsc.custom.modify_reflector(index, name, wiring)
-        self.ui.stack4.setCurrentIndex(0)
-        self.rsc.set_custom_database()
-        self.setup_reflectors_models()
+        wiring = self.ui.reflector_mod_wiring.text()
+        old_name = self.selected_id
+        validation, error_sign = validate_new_reflector(wiring, name, self.rsc.elements, old_name)
+        if validation == 0:
+            self.rsc.custom.modify_reflector(old_name, name, wiring)
+            self.ui.stack4.setCurrentIndex(0)
+            self.rsc.set_custom_database()
+            self.setup_reflectors_models()
+            # to change
+        elif validation == 1:
+            show_invalid_reflector_wiring()
+        elif validation == 2:
+            show_invalid_reflector_wiring()
+        elif validation == 3:
+            show_invalid_sign_error(error_sign)
+        elif validation == 4:
+            show_invalid_reflector_wiring()
+        elif validation == 5:
+            show_invalid_reflector_wiring()
+        elif validation == 6:
+            show_invalid_name()
+        elif validation == 7:
+            show_empty_name()
 
     def add_ref_model(self):
         self.ui.stack4.setCurrentIndex(2)
 
     def add_mod_ref(self):
         name = self.ui.reflector_mod_name_2.text()
-        wiring = str_to_plugboard(self.ui.reflector_mod_wiring_2.text())
-        self.rsc.custom.add_reflector(name, wiring)
-        self.ui.stack4.setCurrentIndex(0)
-        self.rsc.set_custom_database()
-        self.setup_reflectors_models()
-        self.ui.reflector_mod_name_2.clear()
-        self.ui.reflector_mod_wiring_2.clear()
+        wiring = self.ui.reflector_mod_wiring_2.text()
+        validation, error_sign = validate_new_reflector(wiring, name, self.rsc.elements)
+
+        if validation == 0:
+            self.rsc.custom.add_reflector(name, wiring)
+            self.ui.stack4.setCurrentIndex(0)
+            self.rsc.set_custom_database()
+            self.setup_reflectors_models()
+            self.ui.reflector_mod_name_2.clear()
+            self.ui.reflector_mod_wiring_2.clear()
+        elif validation == 1:
+            show_invalid_reflector_wiring()
+        elif validation == 2:
+            show_invalid_reflector_wiring()
+        elif validation == 3:
+            show_invalid_sign_error(error_sign)
+        elif validation == 4:
+            show_invalid_reflector_wiring()
+        elif validation == 5:
+            show_invalid_reflector_wiring()
+        elif validation == 6:
+            show_invalid_name()
+        elif validation == 7:
+            show_empty_name()
 
     def cancel_ref_add(self):
-        self.ui.stack4.setCurrentIndex(1)
+        self.ui.stack4.setCurrentIndex(0)
         self.ui.reflector_mod_name_2.clear()
         self.ui.reflector_mod_wiring_2.clear()
 
     def rem_mod_ref(self):
-        self.rsc.custom.remove_reflector(self.selected_id)
-        self.setup_reflectors_models()
-        self.rsc.set_custom_database()
-        self.ui.stack4.setCurrentIndex(0)
-        self.ui.reflector_mod_name.clear()
-        self.ui.reflector_mod_wiring.clear()
+        if self.selected_id is None:
+            pass
+        elif (self.selected_id != self.run_conf.machine.reflector and
+              self.selected_id != self.rsc.conf.machine.reflector):
+            self.rsc.custom.remove_reflector(self.selected_id)
+            self.setup_reflectors_models()
+            self.rsc.set_custom_database()
+            self.ui.stack4.setCurrentIndex(0)
+            self.ui.reflector_mod_name.clear()
+            self.ui.reflector_mod_wiring.clear()
+        else:
+            show_current_use_error()
 
     def setup_rotors_models(self):
         self.ui.rotors_list_2.clear()
@@ -396,8 +498,7 @@ class EnigmaWindow(QMainWindow):
         self.selected_id = item.text()
         self.ui.stack4.setCurrentIndex(1)
         self.ui.reflector_mod_name.setText(item.text())
-        # it works because plugboard has the same format like reflectro wiring
-        self.ui.reflector_mod_wiring.setText(plugboard_to_str(self.rsc.custom.reflectors[self.selected_id].wiring))
+        self.ui.reflector_mod_wiring.setText(self.rsc.custom.reflectors[self.selected_id].wiring)
 
     def change_pg(self, page_number):
         self.reload()
