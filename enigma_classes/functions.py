@@ -3,82 +3,61 @@ import json
 
 
 def to_number(char: str) -> int:
-    return ord(char) - 65
+    if len(char) != 1:
+        raise InvalidLengthError('Char should be a str with length of 1')
+    result = ord(char) - 65
+    if result < 0 or result > 25:
+        raise LetterCodeOutOfRange('This char cannot be changed into proper number')
+    return result
 
 
 def to_letter(int: int) -> str:
+    if int < 0 or int > 25:
+        raise LetterCodeOutOfRange('This number cannot be changed into letter')
     return chr(int+65)
 
 
-def first_to_last(list: List):
+def first_to_last(list: List) -> List:
+    if len(list) == 0:
+        raise EmptyListError('List to transform cannot be empty')
     element = list.pop(0)
     list.append(element)
 
 
-def last_to_first(list: List):
+def last_to_first(list: List) -> List:
+    if len(list) == 0:
+        raise EmptyListError('List to transform cannot be empty')
     element = list.pop()
     list.insert(0, element)
 
 
-def read_from_json(path):
-    with open(path) as file:
-        return json.load(file)
+def read_from_json(path: str):
+    try:
+        with open(path) as file:
+            return json.load(file)
+    except FileNotFoundError:
+        raise WrongPathError
+    except IsADirectoryError:
+        raise WrongPathError
 
 
-def write_to_json(path, data):
-    with open(path, "w") as file:
-        json.dump(data, file, indent=4)
+def write_to_json(path: str, data) -> None:
+    try:
+        with open(path, "w") as file:
+            json.dump(data, file, indent=4)
+    except IsADirectoryError:
+        raise WrongPathError
 
 
-def str_change(str, index, new_char):
+def swap(list: List, index1: int, index2: int) -> List:
 
-    """Change string's char with given index to new_char"""
+    """Swap two elements in list"""
 
-    result = ""
-    for i, char in enumerate(str):
-        if i == index:
-            result += new_char
-        else:
-            result += char
-    return result
-
-
-def swap(list, index1, index2):
     list[index1], list[index2] = list[index2], list[index1]
     return list
 
 
-def str_swap_up(str, index):
-
-    """Swap two chars in string (char with given index and one before).
-    Char with given index go 'up' in string"""
-
-    if index == 0:
-        return str
-    str_table = [char for char in str]
-    str_table = swap(str_table, index, index-1)
-    result = ""
-    for element in str_table:
-        result += element
-    return result
-
-
-def str_swap_down(str, index):
-
-    """Swap two chars in string (char with given index and one after).
-    Char with given index go 'down' in string"""
-
-    if index == len(str) - 1:
-        return str
-    str_table = [char for char in str]
-    str_table = swap(str_table, index, index+1)
-    result = ""
-    for element in str_table:
-        result += element
-    return result
-
-
-def dict_from_str_with_pairs(str):
+def dict_from_str_with_pairs(str: str) -> dict:
 
     """Change string with pairs of letter seperated with space
     to two way dictionary"""
@@ -101,3 +80,23 @@ def dict_from_str_with_pairs(str):
     result_dict[first_letter] = second_leter
     result_dict[second_leter] = first_letter
     return result_dict
+
+
+class LetterCodeOutOfRange(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+
+class EmptyListError(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+
+class InvalidLengthError(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+
+class WrongPathError(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)

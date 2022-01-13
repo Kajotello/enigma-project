@@ -39,27 +39,27 @@ class ElementsDatabase():
 
     def add_rotor(self, name, wiring, indentation):
 
-        """Add new rotor model to custom json database"""
+        """Add new rotor model to custom database"""
 
         new_element = Rotor(name, wiring, indentation)
         self.rotors[name] = new_element
 
     def add_reflector(self, name, wiring):
 
-        """Add new reflector model to custom json database"""
+        """Add new reflector model to custom database"""
 
         new_element = Reflector(name, wiring)
         self.reflectors[name] = new_element
 
     def remove_rotor(self, name):
 
-        """Remove rotor model from custom json database"""
+        """Remove rotor model from custom database"""
 
         self.rotors.pop(name)
 
     def remove_reflector(self, name):
 
-        """Remove reflector model from custom json database"""
+        """Remove reflector model from custom database"""
 
         self.reflectors.pop(name)
 

@@ -1,9 +1,8 @@
 from PySide2.QtWidgets import QApplication, QFileDialog, QDialog
 from PySide2.QtWidgets import QMainWindow, QListWidgetItem, QMessageBox
 from enigma_gui.dialog_windows import CustomDialog
-from enigma_gui.table_models import StepsTableModel, ConifgTableModel
+from enigma_gui.table_models import StepsTableModel, RotorsTableModel
 from enigma_gui.main_window import Ui_MainWindow
-from enigma_gui.functions import to_letter
 from rsc_manager import ResourcesManager
 from copy import deepcopy
 import os
@@ -18,7 +17,6 @@ from enigma_gui.error_msgs import show_invalid_reflector_wiring
 from enigma_gui.error_msgs import show_current_use_error
 from enigma_gui.validators import validate_plugboard, validate_new_rotor
 from enigma_gui.validators import validate_input, validate_new_reflector
-
 
 alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
             'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
@@ -141,7 +139,7 @@ class EnigmaWindow(QMainWindow):
         # set dynamic widgets
 
         #   page 0 - encrypt letter by letter
-        self.ui.current_config.setModel(ConifgTableModel(data))
+        self.ui.current_config.setModel(RotorsTableModel(data))
         self.ui.reflector_name.setText(self.enigma.reflector.name)
         self.ui.plugboard_connections.setText(plugboard_text)
 
@@ -613,6 +611,10 @@ def generate_colored_alphabet(text):
         else:
             result += f'<span style=" font-weight:600; color:#d02222 ;">{letter}</span> '
     return result
+
+
+def to_letter(int: int) -> str:
+    return chr(int+65)
 
 
 def gui_main(args):

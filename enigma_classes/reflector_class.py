@@ -39,7 +39,7 @@ class Reflector():
         return self.reflector_dict[ASCII_letter]
 
 
-def validate_reflector(name: str, wiring: str):
+def validate_reflector(name: str, wiring: str) -> None:
 
     alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',

@@ -1,9 +1,9 @@
 from PySide2.QtCore import QAbstractTableModel, Qt
 
 
-class ConifgTableModel(QAbstractTableModel):
+class RotorsTableModel(QAbstractTableModel):
     def __init__(self, data=None) -> None:
-        super(ConifgTableModel, self).__init__()
+        super(RotorsTableModel, self).__init__()
         self._data = data
 
     def data(self, index, role):

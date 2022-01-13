@@ -1,4 +1,5 @@
-# from typing import List, Tuple
+from typing import List
+from enigma_classes.rotor_class import Rotor
 from enigma_classes.functions import to_number, to_letter, swap
 from enigma_classes.plugboard_class import Plugboard
 from copy import deepcopy
@@ -6,12 +7,18 @@ from copy import deepcopy
 
 class Enigma():
 
-    def __init__(self, conf_data, database) -> None:
+    """Represent Enigma machine with set of rotors, reflector and plugboard"""
+
+    def __init__(self, conf_data: dict, database) -> None:
+
+        # enigma is initalized with configuration from config file
+
         rotors = conf_data["machine"]["rotors"]
         positions = conf_data["machine"]["start_positions"]
         reflector = conf_data["machine"]["reflector"]
         plugboard = conf_data["machine"]["plugboard"]
         rings = conf_data["machine"]["rings"]
+
         self._rotors = []
         for i, rotor in enumerate(rotors):
             rotor = deepcopy(database.rotors[rotor])
@@ -27,7 +34,7 @@ class Enigma():
         self._database = database
 
     @property
-    def rotors(self):
+    def rotors(self) -> List[Rotor]:
         return self._rotors
 
     @property
@@ -54,43 +61,79 @@ class Enigma():
     def database(self):
         return self._database
 
-    def update_database(self, new_database):
+    def update_database(self, new_database) -> None:
         self._database = new_database
 
-    def set_plugboard(self, new_plugboard):
+    def set_plugboard(self, new_plugboard: str) -> None:
+
+        """Set new plugboard with given connections to machine"""
+
         self._plugboard = Plugboard(new_plugboard)
 
-    def change_double_step(self):
+    def change_double_step(self) -> None:
+
+        "Negate current state of double step property"
+
         self._double_step = not self.double_step
 
-    def change_space_dist(self, new_space_dist):
+    def change_space_dist(self, new_space_dist: int) -> None:
+
+        """Change distance between spaces in encrypted text"""
+
         self._space_dist = new_space_dist
 
-    def change_reflector(self, new_reflector):
+    def change_reflector(self, new_reflector: str) -> None:
+
+        """Change machine reflector to one with given name from database"""
+
         self._reflector = self.database.reflectors[new_reflector]
 
-    def change_position(self, index, new_pos):
+    def change_position(self, index: int, new_pos: str) -> None:
+
+        """Change position of rotor with given index to new_pos """
+
         self.rotors[index].change_position(new_pos)
 
-    def change_ring(self, index, new_ring):
+    def change_ring(self, index: int, new_ring: str) -> None:
+
+        """Change ring of rotor with given index to new_ring """
+
         self.rotors[index].change_ring(new_ring)
 
-    def add_rotor(self, new_rotor):
+    def add_rotor(self, new_rotor: str) -> None:
+
+        """Add new rotor with given name from database to
+        the end of the machine rotors list"""
+
         new_rotor = deepcopy(self.database.rotors[new_rotor])
         self._rotors.append(new_rotor)
 
-    def remove_rotor(self, index):
+    def remove_rotor(self, index: int) -> None:
+
+        """Remove rotor with given index from machine
+        rotors list"""
+
         self._rotors.pop(index)
 
-    def move_rotor_up(self, index):
+    def move_rotor_up(self, index: int) -> None:
+
+        """Move rotor with given index 'up' on the
+        machine rotors list"""
+
         if index != 0:
             self._rotors = swap(self.rotors, index, index-1)
 
-    def move_rotor_down(self, index):
+    def move_rotor_down(self, index: int) -> None:
+
+        """Move rotor with given index 'down' on the
+        machine rotors list"""
+
         if index != len(self.rotors)-1:
             self._rotors = swap(self.rotors, index, index+1)
 
-    def code_letter(self, letter):
+    def code_letter(self, letter: str) -> str:
+
+        """Code one letter with current configuration"""
 
         for i, rotor in enumerate(reversed(self.rotors), start=1):
 
@@ -151,7 +194,10 @@ class Enigma():
 
         return cipher_letter, [to_letter(step) for step in steps]
 
-    def code_file(self, input_file, output_file):
+    def code_file(self, input_file: str, output_file: str) -> None:
+
+        """Code file with given starting configuration"""
+
         self._letter_counter = 0
         result = ""
         with open(input_file, "r") as file_handle:
@@ -161,5 +207,3 @@ class Enigma():
 
         with open(output_file, "w") as file_handle:
             file_handle.write(result)
-
-        self._letter_counter = 0
