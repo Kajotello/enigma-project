@@ -3,18 +3,18 @@
         {
             "name": "sdd",
             "wiring": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            "indentation": "F"
+            "indentation": "A"
         },
         {
-            "name": "AS",
+            "name": "ROTOR",
+            "wiring": "ASMNFQPTUDORVXZCJKBLIGHYEW",
+            "indentation": "P"
+        },
+        {
+            "name": "AST",
             "wiring": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            "indentation": "E"
+            "indentation": "F"
         }
     ],
-    "reflectors": [
-        {
-            "name": "tef",
-            "wiring": "AB CD EF GH IJ KL MN OP QR ST UV WX ZY"
-        }
-    ]
+    "reflectors": []
 }

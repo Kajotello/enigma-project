@@ -1,14 +1,27 @@
 {
     "machine": {
         "rotors": [
+            "rotorIII",
+            "rotorII",
             "rotorI",
             "rotorII",
-            "rotorIII"
+            "rotorI",
+            "rotorVII",
+            "rotorII",
+            "rotorV",
+            "rotorII",
+            "rotorIII",
+            "sdd",
+            "rotorVIII",
+            "rotorVIII",
+            "rotorVI",
+            "ROTOR",
+            "rotorII"
         ],
+        "rings": "HQCAAAAAAAAAAAAA",
+        "start_positions": "NTGEAAEAEEAAAAAE",
         "reflector": "reflectorUKWB",
-        "start_positions": "BDR",
-        "rings": "MBN",
-        "plugboard": "AS DF"
+        "plugboard": "AS DF RY"
     },
     "settings": {
         "double_step": 0,

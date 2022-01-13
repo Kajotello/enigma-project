@@ -2,7 +2,6 @@ from rsc_manager import ResourcesManager
 from enigma_gui.gui import gui_main
 import argparse
 import os
-import sys
 
 
 def main():
@@ -16,7 +15,7 @@ def main():
                         (default: %(default)s)',
                         choices=["gui", "cmd"],
                         metavar="")
-    parser.add_argument('-i', '--input_file',
+    parser.add_argument('-i', '--input_file', default=None,
                         help='file with plain text to encode, required\
                         in cmd mode', metavar="")
     parser.add_argument('-o', '--output_file', default="result.txt",
@@ -30,11 +29,10 @@ def main():
     args = parser.parse_args()
     mode = args.mode
     if mode == "cmd":
-        configuration = rsc.setup_config(args.config)
-        enigma = configuration.initialize_enigma(rsc.elements)
-        enigma.code_file(args.input_file, args.output_file, 5)
+        configuration = rsc.get_config(args.config)
+        configuration.code_file(args.input_file, args.output_file)
     elif mode == "gui":
-        gui_main(sys.argv)
+        gui_main(args)
 
 
 if __name__ == "__main__":

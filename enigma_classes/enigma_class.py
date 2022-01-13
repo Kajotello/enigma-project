@@ -1,31 +1,30 @@
-from enigma_classes.functions import to_number
-from enigma_classes.functions import to_letter
-from enigma_classes.rotor_class import Rotor
-from enigma_classes.reflector_class import Reflector
+# from typing import List, Tuple
+from enigma_classes.functions import to_number, to_letter, swap
 from enigma_classes.plugboard_class import Plugboard
-from typing import List
+from copy import deepcopy
 
 
 class Enigma():
 
-    """Represent Enigma machine with combination of rotors and reflector, and with
-    configuration - positions of rotors and rings"""
+    def __init__(self, conf_data, database) -> None:
+        rotors = conf_data["machine"]["rotors"]
+        positions = conf_data["machine"]["start_positions"]
+        reflector = conf_data["machine"]["reflector"]
+        plugboard = conf_data["machine"]["plugboard"]
+        rings = conf_data["machine"]["rings"]
+        self._rotors = []
+        for i, rotor in enumerate(rotors):
+            rotor = deepcopy(database.rotors[rotor])
+            rotor.change_position(positions[i])
+            rotor.change_ring(rings[i])
+            self._rotors.append(rotor)
 
-    def __init__(self, rotors: List[Rotor], reflector: Reflector,
-                 plugboard: Plugboard, positions: str,
-                 rings: str, double_step: bool) -> None:
-        self._positions = positions
-        self._rotors = rotors
-        self._reflector = reflector
-        self._plugboard = plugboard
-        self._double_step = double_step
-        positions = [to_number(position) for position in positions]
-        rings = [to_number(ring) for ring in rings]
-        for i, ring in enumerate(rings):
-            self.rotors[i].reverse_rotate(ring)
-            self.rotors[i].set_ring(ring)
-        for i, position in enumerate(positions):
-            self.rotors[i].rotate(position)
+        self._reflector = database.reflectors[reflector]
+        self._plugboard = Plugboard(plugboard)
+        self._double_step = conf_data["settings"]["double_step"]
+        self._space_dist = conf_data["settings"]["space_dist"]
+        self._letter_counter = 0
+        self._database = database
 
     @property
     def rotors(self):
@@ -36,10 +35,6 @@ class Enigma():
         return self._reflector
 
     @property
-    def positions(self):
-        return self._positions
-
-    @property
     def plugboard(self):
         return self._plugboard
 
@@ -47,27 +42,67 @@ class Enigma():
     def double_step(self):
         return self._double_step
 
-    def change_double_step(self, new_double_step):
-        self._double_step = new_double_step
+    @property
+    def space_dist(self):
+        return self._space_dist
 
-    def code_letter(self, plain_letter: str):
+    @property
+    def letter_counter(self):
+        return self._letter_counter
 
-        """Code one letter with current Enigma configuration """
+    @property
+    def database(self):
+        return self._database
 
-        # check, is further rotors should be rotate
+    def update_database(self, new_database):
+        self._database = new_database
+
+    def set_plugboard(self, new_plugboard):
+        self._plugboard = Plugboard(new_plugboard)
+
+    def change_double_step(self):
+        self._double_step = not self.double_step
+
+    def change_space_dist(self, new_space_dist):
+        self._space_dist = new_space_dist
+
+    def change_reflector(self, new_reflector):
+        self._reflector = self.database.reflectors[new_reflector]
+
+    def change_position(self, index, new_pos):
+        self.rotors[index].change_position(new_pos)
+
+    def change_ring(self, index, new_ring):
+        self.rotors[index].change_ring(new_ring)
+
+    def add_rotor(self, new_rotor):
+        new_rotor = deepcopy(self.database.rotors[new_rotor])
+        self._rotors.append(new_rotor)
+
+    def remove_rotor(self, index):
+        self._rotors.pop(index)
+
+    def move_rotor_up(self, index):
+        if index != 0:
+            self._rotors = swap(self.rotors, index, index-1)
+
+    def move_rotor_down(self, index):
+        if index != len(self.rotors)-1:
+            self._rotors = swap(self.rotors, index, index+1)
+
+    def code_letter(self, letter):
+
         for i, rotor in enumerate(reversed(self.rotors), start=1):
 
             # should_rotate condition prevent from multiple rotate
             # of further rotors when previous is on intendent position
             # but wasn't moved recently
-            should_roatate = True
             if i > 1:
                 if (self.rotors[-i+1].position !=
                    ((self.rotors[-i+1].indentation + 1) % 26)):
-                    should_roatate = False
+                    break  # not sure about it
             if(rotor.position == rotor.indentation) and \
-              (i != len(self.rotors)) and \
-              (should_roatate is True):
+              (i != len(self.rotors)):
                 if self.double_step is True and i == 2:
                     self.rotors[-i].rotate()
                     self.rotors[-i-1].rotate()
@@ -76,7 +111,15 @@ class Enigma():
                     self.rotors[-i-1].rotate()
 
         self.rotors[-1].rotate()                 # rotation of last rotor
-        ASCII_letter = to_number(plain_letter)
+
+        if self.letter_counter < self.space_dist or self._letter_counter == 0:
+            space = ""
+            self._letter_counter += 1
+        else:
+            space = " "
+            self._letter_counter = 1
+
+        ASCII_letter = to_number(letter)
         steps = [ASCII_letter]
 
         # letter "goes" throught plugboard (first time)
@@ -104,23 +147,19 @@ class Enigma():
         # Add letter as output
         steps.append(ASCII_letter)
 
-        return (to_letter(ASCII_letter), [to_letter(step) for step in steps])
+        cipher_letter = space + to_letter(ASCII_letter)
 
-    def code_file(self, input_file, output_file, space_dist=5):
+        return cipher_letter, [to_letter(step) for step in steps]
 
-        """Code given file with current configuration as start
-        As result another file is generated"""
-
+    def code_file(self, input_file, output_file):
+        self._letter_counter = 0
         result = ""
-        coded_letter = 0
         with open(input_file, "r") as file_handle:
             for line in file_handle:
-                for i, letter in enumerate(line):
+                for letter in line:
                     result += self.code_letter(letter)[0]
-                    coded_letter += 1
-                    if coded_letter == space_dist:
-                        coded_letter = 0
-                        result += " "
 
         with open(output_file, "w") as file_handle:
             file_handle.write(result)
+
+        self._letter_counter = 0

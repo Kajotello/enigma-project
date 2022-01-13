@@ -1,11 +1,10 @@
 from PySide2.QtWidgets import QApplication, QFileDialog, QDialog
 from PySide2.QtWidgets import QMainWindow, QListWidgetItem, QMessageBox
-from enigma_classes.enigma_class import Enigma
 from enigma_gui.dialog_windows import CustomDialog
 from enigma_gui.table_models import StepsTableModel, ConifgTableModel
 from enigma_gui.main_window import Ui_MainWindow
-from enigma_gui.functions import to_number, to_letter
-from rsc_manager import Configuration, ResourcesManager
+from enigma_gui.functions import to_letter
+from rsc_manager import ResourcesManager
 from copy import deepcopy
 import os
 from functools import partial
@@ -27,7 +26,7 @@ alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
 
 
 class EnigmaWindow(QMainWindow):
-    def __init__(self, parent=None) -> None:
+    def __init__(self, args, parent=None) -> None:
         super().__init__(parent)
 
         # get the current directory and set the path to resources directory
@@ -37,13 +36,11 @@ class EnigmaWindow(QMainWindow):
         # define window properities
         self.selected_id = None
         self.ui = Ui_MainWindow()
-        self.input = None
-        self.output = f"{cwd}/result.txt"
-        self.config = f"{cwd}/rsc/config.json"
+        self.input = args.input_file
+        self.output = args.output_file
+        self.config = args.config
         self.rsc = ResourcesManager(rsc_path)
-        self.run_conf: Configuration = self.rsc.conf
-        self.coded_letter = 0
-        self.enigma = self.run_conf.initialize_enigma(self.rsc.elements)
+        self.enigma = self.rsc.conf
 
         # setup UI
         self.ui.setupUi(self)
@@ -88,6 +85,8 @@ class EnigmaWindow(QMainWindow):
         self.ui.ring_comboBox.activated.connect(self.change_ring)
         self.ui.pos_comboBox.activated.connect(self.change_pos)
         self.ui.reflector_comboBox.activated.connect(self.change_reflector)
+        #       line edit
+        self.ui.plugboard_line.textChanged.connect(self.show_colored_alphabet_plugboard)
 
         #   page 4 - manage custom rotors
         #       buttons
@@ -96,6 +95,9 @@ class EnigmaWindow(QMainWindow):
         self.ui.add_mod_rotor.clicked.connect(self.add_this_rotor_model)
         self.ui.cancel_add_rotor.clicked.connect(self.cancel_rotor_add)
         self.ui.rem_rotor_mod.clicked.connect(self.remove_rotor_model)
+        #   line edit
+        self.ui.rotor_wiring.textChanged.connect(self.show_colored_alphabet_new_rotor)
+        self.ui.rotor_wiring_2.textChanged.connect(self.show_colored_alphabet_mod_rotor)
 
         #   page 5 - manage custom reflectors
         #       buttons
@@ -104,6 +106,9 @@ class EnigmaWindow(QMainWindow):
         self.ui.add_mod_ref.clicked.connect(self.add_mod_ref)
         self.ui.cancel_add_ref.clicked.connect(self.cancel_ref_add)
         self.ui.rem_ref_mod_button.clicked.connect(self.rem_mod_ref)
+        # line edit
+        self.ui.reflector_mod_wiring.textChanged.connect(self.show_colored_alphabet_mod_ref)
+        self.ui.reflector_mod_wiring_2.textChanged.connect(self.show_colored_alphabet_add_ref)
 
         # add alphabet letters to comboboxes which need that
         self.ui.pos_comboBox.addItems(alphabet)
@@ -122,21 +127,22 @@ class EnigmaWindow(QMainWindow):
         # reset selected item
         self.selected_id = None
 
-        # initialize new enigma with running configurtaion
-        self.enigma = self.run_conf.initialize_enigma(self.rsc.elements)
-        # remove existing change in temporary configuration
-        self.temp: Configuration = deepcopy(self.run_conf)
+        # update database with available elements
+        self.enigma.update_database(self.rsc.elements)
 
-        plugboard_text = self.run_conf.machine.plugboard
+        # remove existing change in temporary configuration
+        self.temp = deepcopy(self.enigma)
+
+        plugboard_text = self.enigma.plugboard.connections_str
         # generate data about rotors in machine for display in table
-        data = [[rotor.name, to_letter(rotor.position), to_letter(rotor.ring)]
-                for rotor in self.enigma.rotors]
+        data = [[rotor.name, to_letter(rotor.position),
+                to_letter(rotor.ring)] for rotor in self.enigma.rotors]
 
         # set dynamic widgets
 
         #   page 0 - encrypt letter by letter
         self.ui.current_config.setModel(ConifgTableModel(data))
-        self.ui.reflector_name.setText(self.run_conf.machine.reflector)
+        self.ui.reflector_name.setText(self.enigma.reflector.name)
         self.ui.plugboard_connections.setText(plugboard_text)
 
         #   page 1 - encrypt from file
@@ -144,7 +150,7 @@ class EnigmaWindow(QMainWindow):
         self.ui.config_file_name.setText(self.config)
 
         #   page 2 - settings
-        self.ui.space_info.setValue(self.run_conf.space_dist)
+        self.ui.space_info.setValue(self.enigma.space_dist)
         if len(self.enigma.rotors) != 3:
             if self.ui.is_double_step.isChecked():
                 self.change_double_step()
@@ -158,7 +164,7 @@ class EnigmaWindow(QMainWindow):
         self.ui.reflector_comboBox.clear()
         self.ui.reflector_comboBox.addItems(self.rsc.elements.reflectors)
         self.ui.reflector_comboBox\
-            .setCurrentText(self.run_conf.machine.reflector)
+            .setCurrentText(self.enigma.reflector.name)
         self.ui.plugboard_line.setText(plugboard_text)
 
         #   page 4 - manage custom rotors
@@ -184,11 +190,6 @@ class EnigmaWindow(QMainWindow):
         validation = validate_input(letter)
 
         if validation == 0:
-            if (self.coded_letter >= self.run_conf.space_dist and
-               self.coded_letter != 0):
-                self.coded_letter = 0
-                cipher_text += " "
-            self.coded_letter += 1
 
             # code letter and add it to cipher_text
             cipher_letter, steps_data = self.enigma.code_letter(letter)
@@ -199,10 +200,8 @@ class EnigmaWindow(QMainWindow):
                 .setModel(StepsTableModel(self.generate_labels(), steps_data))
             self.ui.steps_table.horizontalHeader().hide()
             self.ui.cipher_text.setText(cipher_text)
-            self.run_conf.machine.update_positions(self.enigma)
             self.reload()
         else:
-            self.enigma = self.run_conf.initialize_enigma(self.rsc.elements)
             show_invalid_input_error()
 
     #   page 1 - encrypt from file
@@ -228,28 +227,26 @@ class EnigmaWindow(QMainWindow):
 
     def encrypt_file(self):
 
-        file_encrypt_conf = self.rsc.setup_config(self.config)
-        sub_enigma: Enigma =\
-            file_encrypt_conf.initialize_enigma(self.rsc.elements)
-        sub_enigma.code_file(self.input, self.output, self.rsc.conf.space_dist)
+        file_encrypt_conf = self.rsc.get_config(self.config)
+        file_encrypt_conf.code_file(self.input, self.output)
         show_compleated_dialog()
 
     #   page 2 - settings
     def change_double_step(self):
         if self.enigma.double_step is False:
-            self.rsc.conf.change_double_step()
+            self.enigma.change_double_step()
         else:
-            self.rsc.conf.change_double_step()
+            self.enigma.change_double_step()
             self.ui.is_double_step.setChecked(0)
 
     def change_space(self):
-        self.run_conf.change_space_dist(self.ui.space_info.value())
+        self.enigma.change_space_dist(self.ui.space_info.value())
 
     #   page 3 - change configuration
     def rotor_swap_up(self):
         if self.selected_id is None:
             return None
-        self.temp.machine.move_rotor_up(self.selected_id)
+        self.temp.move_rotor_up(self.selected_id)
         self.clear_rotors()
         self.setupRotors()
 
@@ -263,17 +260,17 @@ class EnigmaWindow(QMainWindow):
     def rotor_swap_down(self):
         if self.selected_id is None:
             return None
-        self.temp.machine.move_rotor_down(self.selected_id)
+        self.temp.move_rotor_down(self.selected_id)
         self.clear_rotors()
         self.setupRotors()
-        if self.selected_id != len(self.temp.machine.rotors)-1:
+        if self.selected_id != len(self.temp.rotors)-1:
             self.ui.rotors_list.setCurrentRow(self.selected_id+1)
             self.selected_id += 1
         else:
             self.ui.rotors_list.setCurrentRow(self.selected_id)
 
     def remove_rotor(self):
-        self.temp.machine.remove_rotor(self.selected_id)
+        self.temp.remove_rotor(self.selected_id)
         self.selected_id = None
         self.ui.stack2.setCurrentIndex(0)
         self.clear_rotors()
@@ -284,7 +281,7 @@ class EnigmaWindow(QMainWindow):
         if rotor_pos == -1:
             return None
         rotor_name = list(self.rsc.elements.rotors.keys())[rotor_pos]
-        self.temp.machine.add_rotor(rotor_name)
+        self.temp.add_rotor(rotor_name)
         self.clear_rotors()
         self.setupRotors()
 
@@ -293,7 +290,7 @@ class EnigmaWindow(QMainWindow):
         plugboard = plugboard.strip()
         validation, error_sign = validate_plugboard(plugboard)
         if validation == 0:
-            self.temp.machine.set_plugboard(plugboard)
+            self.temp.set_plugboard(plugboard)
             self.ui.plugboard_line.setText(plugboard)
         elif validation == 1:
             show_invalid_plugboard_format()
@@ -305,7 +302,7 @@ class EnigmaWindow(QMainWindow):
             show_duplciated_letter_error(error_sign)
 
     def save_conf(self):
-        self.run_conf = deepcopy(self.temp)
+        self.enigma = deepcopy(self.temp)
         show_config_change_dialog()
 
     def save_init_conf(self):
@@ -314,15 +311,20 @@ class EnigmaWindow(QMainWindow):
 
     def change_ring(self):
         new_ring = str(self.ui.ring_comboBox.currentText())
-        self.temp.machine.change_ring(self.selected_id, new_ring)
+        self.temp.change_ring(self.selected_id, new_ring)
 
     def change_pos(self):
         new_pos = str(self.ui.pos_comboBox.currentText())
-        self.temp.machine.change_position(self.selected_id, new_pos)
+        self.temp.change_position(self.selected_id, new_pos)
 
     def change_reflector(self):
         new_reflector = str(self.ui.reflector_comboBox.currentText())
-        self.temp.machine.change_reflector(new_reflector)
+        self.temp.change_reflector(new_reflector)
+
+    def show_colored_alphabet_plugboard(self):
+        text = self.ui.plugboard_line.text()
+        result = generate_colored_alphabet(text)
+        self.ui.alphabet_label.setText(result)
 
     #   page 4 - manage custom rotors
     def modify_rotor_model(self):
@@ -349,6 +351,8 @@ class EnigmaWindow(QMainWindow):
             show_empty_name()
 
     def add_rotor_model(self):
+        self.ui.rotor_wiring.setText("A")
+        self.ui.rotor_wiring.setText("")
         self.ui.stack3.setCurrentIndex(2)
 
     def add_this_rotor_model(self):
@@ -384,14 +388,24 @@ class EnigmaWindow(QMainWindow):
     def remove_rotor_model(self):
         if self.selected_id is None:
             pass
-        elif (self.selected_id not in self.run_conf.machine.rotors and
-              self.selected_id not in self.rsc.conf.machine.rotors):
+        elif (self.selected_id not in self.enigma.rotors and
+              self.selected_id not in self.rsc.conf.rotors):
             self.rsc.custom.remove_rotor(self.selected_id)
             self.rsc.set_custom_database()
             self.setup_rotors_models()
             self.ui.stack3.setCurrentIndex(0)
         else:
             show_current_use_error()
+
+    def show_colored_alphabet_new_rotor(self):
+        text = self.ui.rotor_wiring.text()
+        result = generate_colored_alphabet(text)
+        self.ui.alphabet_label_2.setText(result)
+
+    def show_colored_alphabet_mod_rotor(self):
+        text = self.ui.rotor_wiring_2.text()
+        result = generate_colored_alphabet(text)
+        self.ui.alphabet_label_3.setText(result)
 
     #   page 5 - manage custom reflectors
     def modify_reflector(self):
@@ -421,6 +435,8 @@ class EnigmaWindow(QMainWindow):
             show_empty_name()
 
     def add_ref_model(self):
+        self.ui.reflector_mod_wiring_2.setText("A")
+        self.ui.reflector_mod_wiring_2.setText("")
         self.ui.stack4.setCurrentIndex(2)
 
     def add_mod_ref(self):
@@ -458,8 +474,8 @@ class EnigmaWindow(QMainWindow):
     def rem_mod_ref(self):
         if self.selected_id is None:
             pass
-        elif (self.selected_id != self.run_conf.machine.reflector and
-              self.selected_id != self.rsc.conf.machine.reflector):
+        elif (self.selected_id != self.enigma.reflector and
+              self.selected_id != self.rsc.conf.reflector):
             self.rsc.custom.remove_reflector(self.selected_id)
             self.setup_reflectors_models()
             self.rsc.set_custom_database()
@@ -468,6 +484,16 @@ class EnigmaWindow(QMainWindow):
             self.ui.reflector_mod_wiring.clear()
         else:
             show_current_use_error()
+
+    def show_colored_alphabet_add_ref(self):
+        text = self.ui.reflector_mod_wiring_2.text()
+        result = generate_colored_alphabet(text)
+        self.ui.alphabet_label_5.setText(result)
+
+    def show_colored_alphabet_mod_ref(self):
+        text = self.ui.reflector_mod_wiring.text()
+        result = generate_colored_alphabet(text)
+        self.ui.alphabet_label_4.setText(result)
 
     def setup_rotors_models(self):
         self.ui.rotors_list_2.clear()
@@ -483,7 +509,7 @@ class EnigmaWindow(QMainWindow):
         self.ui.stack3.setCurrentIndex(1)
         self.ui.rotor_name_2.setText(item.text())
         self.ui.rotor_wiring_2.setText(self.rsc.custom.rotors[self.selected_id].wiring)
-        self.ui.rotor_indentation_2.setText(self.rsc.custom.rotors[self.selected_id].indentation)
+        self.ui.rotor_indentation_2.setText(to_letter(self.rsc.custom.rotors[self.selected_id].indentation))
 
     def setup_reflectors_models(self):
         self.ui.reflectors_list.clear()
@@ -509,9 +535,9 @@ class EnigmaWindow(QMainWindow):
 
     def setupRotors(self):
         self.ui.rotors_list.clear()
-        rotors = self.temp.machine.rotors
+        rotors = self.temp.rotors
         for i, rotor in enumerate(rotors):
-            item = QListWidgetItem(rotor)
+            item = QListWidgetItem(rotor.name)
             self.ui.rotors_list.addItem(item)
             item.position = i
         self.ui.rotors_list.itemClicked.connect(self.display_rotor_info)
@@ -519,8 +545,8 @@ class EnigmaWindow(QMainWindow):
     def display_rotor_info(self, item):
         self.selected_id = int(item.position)
         self.ui.stack2.setCurrentIndex(1)
-        self.ui.ring_comboBox.setCurrentIndex(to_number(self.temp.machine.rings[self.selected_id]))
-        self.ui.pos_comboBox.setCurrentIndex(to_number(self.temp.machine.positions[self.selected_id]))
+        self.ui.ring_comboBox.setCurrentIndex(self.temp.rotors[self.selected_id].ring)
+        self.ui.pos_comboBox.setCurrentIndex(self.temp.rotors[self.selected_id].position)
 
     def set_page(self, index):
         self.ui.stack.setCurrentIndex(index)
@@ -577,8 +603,20 @@ def show_add_rotor_dialog(data):
     return msg.exec_()
 
 
+def generate_colored_alphabet(text):
+    result = ""
+    for letter in alphabet:
+        if text.count(letter) == 0:
+            result += f'<span style=" font-weight:600; color:#32b51e;">{letter}</span> '
+        elif text.count(letter) == 1:
+            result += f'<span style=" font-weight:600; color:#000000;">{letter}</span> '
+        else:
+            result += f'<span style=" font-weight:600; color:#d02222 ;">{letter}</span> '
+    return result
+
+
 def gui_main(args):
-    app = QApplication(args)
-    window = EnigmaWindow()
+    app = QApplication()
+    window = EnigmaWindow(args)
     window.show()
     return app.exec_()
