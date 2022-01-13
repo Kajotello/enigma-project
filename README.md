@@ -68,6 +68,13 @@ oraz trzy pliki w katalogu głównym:
 - README.md - plik z dokumentacją
 
 
+## Format plików konfiguracyjncyh
+
+## Instrukcja użytkownika
+
+## Podsumowanie
+
+
 
 
 
