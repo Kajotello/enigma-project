@@ -1,6 +1,6 @@
 from enigma_classes.plugboard_class import Plugboard
-from enigma_classes.plugboard_class import InvalidSignError
-from enigma_classes.plugboard_class import DuplicatedLetterError
+from enigma_classes.plugboard_class import PlugboardInvalidSignError
+from enigma_classes.plugboard_class import PlugboardDuplicatedLetterError
 from enigma_classes.plugboard_class import InvalidPlugboardFormatError
 import pytest
 
@@ -26,13 +26,13 @@ def test_invalid_connections_at_the_end():
 
 def test_duplicated_letters():
     connections = "AB DF RE QA"
-    with pytest.raises(DuplicatedLetterError):
+    with pytest.raises(PlugboardDuplicatedLetterError):
         Plugboard(connections)
 
 
 def test_invalid_sign():
     connections = "AS Df"
-    with pytest.raises(InvalidSignError):
+    with pytest.raises(PlugboardInvalidSignError):
         Plugboard(connections)
 
 

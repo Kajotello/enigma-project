@@ -3,23 +3,10 @@
         "rotors": [
             "rotorIII",
             "rotorII",
-            "rotorI",
-            "rotorII",
-            "rotorI",
-            "rotorVII",
-            "rotorII",
-            "rotorV",
-            "rotorII",
-            "rotorIII",
-            "sdd",
-            "rotorVIII",
-            "rotorVIII",
-            "rotorVI",
-            "ROTOR",
-            "rotorII"
+            "rotorI"
         ],
-        "rings": "HQCAAAAAAAAAAAAA",
-        "start_positions": "NTGEAAEAEEAAAAAE",
+        "rings": "HQA",
+        "start_positions": "NTA",
         "reflector": "reflectorUKWB",
         "plugboard": "AS DF RY"
     },

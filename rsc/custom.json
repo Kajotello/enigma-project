@@ -1,11 +1,6 @@
 {
     "rotors": [
         {
-            "name": "sdd",
-            "wiring": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            "indentation": "A"
-        },
-        {
             "name": "ROTOR",
             "wiring": "ASMNFQPTUDORVXZCJKBLIGHYEW",
             "indentation": "P"
@@ -14,7 +9,27 @@
             "name": "AST",
             "wiring": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
             "indentation": "F"
+        },
+        {
+            "name": "sdd",
+            "wiring": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            "indentation": "A"
+        },
+        {
+            "name": "frd",
+            "wiring": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            "indentation": "A"
+        },
+        {
+            "name": "ROTOE",
+            "wiring": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            "indentation": "A"
         }
     ],
-    "reflectors": []
+    "reflectors": [
+        {
+            "name": "TES",
+            "wiring": "AB CD EF GH IJ KL MN OP QR ST UV WX YZ"
+        }
+    ]
 }

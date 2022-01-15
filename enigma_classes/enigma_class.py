@@ -113,7 +113,8 @@ class Enigma():
         """Remove rotor with given index from machine
         rotors list"""
 
-        self._rotors.pop(index)
+        if index is not None:
+            self._rotors.pop(index)
 
     def move_rotor_up(self, index: int) -> None:
 
@@ -155,7 +156,7 @@ class Enigma():
 
         self.rotors[-1].rotate()                 # rotation of last rotor
 
-        if self.letter_counter < self.space_dist or self._letter_counter == 0:
+        if self.letter_counter < self.space_dist or self._space_dist == 0:
             space = ""
             self._letter_counter += 1
         else:

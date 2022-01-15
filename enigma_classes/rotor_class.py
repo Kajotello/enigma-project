@@ -9,6 +9,7 @@ class Rotor:
 
     def __init__(self, name: str, wiring: str, indentation: str) -> None:
 
+        validate_rotor(name, wiring, indentation)
         self._name = name
         self._wiring = wiring
         self._indentation = to_number(indentation)
@@ -154,35 +155,35 @@ def validate_rotor(name, wiring, indentation):
     check_table = []
 
     if len(wiring) != 26:
-        raise NotAllLettersError
+        raise RotorNotAllLettersError
 
     for letter in wiring:
         if letter not in alphabet:
-            raise InvalidSignEroor
+            raise RotorInvalidSignEroor
         if letter in check_table:
-            raise DuplicatedLetterError
+            raise RotorDuplicatedLetterError
         else:
             check_table.append(letter)
 
     if len(name) == 0:
-        raise EmptyNameError
+        raise RotorEmptyNameError
 
 
 class InvalidRotorWiringError(Exception):
     pass
 
 
-class InvalidSignEroor(Exception):
+class RotorInvalidSignEroor(Exception):
     pass
 
 
-class EmptyNameError(Exception):
+class RotorEmptyNameError(Exception):
     pass
 
 
-class NotAllLettersError(Exception):
+class RotorNotAllLettersError(Exception):
     pass
 
 
-class DuplicatedLetterError(Exception):
+class RotorDuplicatedLetterError(Exception):
     pass

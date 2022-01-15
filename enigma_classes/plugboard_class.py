@@ -43,7 +43,7 @@ def validate_plugboard(connections: str) -> None:
                 raise InvalidPlugboardFormatError
 
         elif letter not in alphabet:
-            raise InvalidSignError
+            raise PlugboardInvalidSignError
 
         elif letter not in check_table:
             if position == len(connections) and i != 1:
@@ -52,16 +52,19 @@ def validate_plugboard(connections: str) -> None:
             check_table.append(letter)
 
         else:
-            raise DuplicatedLetterError
+            raise PlugboardDuplicatedLetterError
 
 
 class InvalidPlugboardFormatError(Exception):
-    pass
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
 
 
-class InvalidSignError(Exception):
-    pass
+class PlugboardInvalidSignError(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
 
 
-class DuplicatedLetterError(Exception):
-    pass
+class PlugboardDuplicatedLetterError(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)

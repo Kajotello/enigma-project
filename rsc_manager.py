@@ -41,6 +41,8 @@ class ElementsDatabase():
 
         """Add new rotor model to custom database"""
 
+        if name in self.rotors.keys():
+            raise NameInUseError
         new_element = Rotor(name, wiring, indentation)
         self.rotors[name] = new_element
 
@@ -48,6 +50,8 @@ class ElementsDatabase():
 
         """Add new reflector model to custom database"""
 
+        if name in self.reflectors.keys():
+            raise NameInUseError
         new_element = Reflector(name, wiring)
         self.reflectors[name] = new_element
 
@@ -64,11 +68,15 @@ class ElementsDatabase():
         self.reflectors.pop(name)
 
     def modify_reflector(self, old_name, name, wiring):
+        if name in self.reflectors.keys() and name != old_name:
+            raise NameInUseError
         new_ref = Reflector(name, wiring)
         self.reflectors.pop(old_name)
         self.reflectors[name] = new_ref
 
     def modify_rotor(self, old_name, name, wiring, indentation):
+        if name in self.rotors.keys() and name != old_name:
+            raise NameInUseError
         new_rotor = Rotor(name, wiring, indentation)
         self.rotors.pop(old_name)
         self.rotors[name] = new_rotor
@@ -105,12 +113,18 @@ class ResourcesManager():
         return self._elements
 
     def get_config(self, config_path=None) -> Enigma:
+
+        """Initialize Enigma with configuration from file"""
+
         if config_path is None:
             config_path = f"{self.rsc_path}/config.json"
         configuration = read_from_json(config_path)
         return Enigma(configuration, self.elements)
 
     def set_config(self, enigma_machine: Enigma):
+
+        """Write current Enigma configuration to config file"""
+
         conf_data = {}
         machine = {}
         settings = {}
@@ -147,5 +161,13 @@ class ResourcesManager():
         self._elements = self.connect_data()
 
     def connect_data(self):
+
+        """Return database created by connect custom and default
+        database"""
+
         new_data = self.custom + self.default
         return new_data
+
+
+class NameInUseError(Exception):
+    pass

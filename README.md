@@ -70,6 +70,9 @@ oraz trzy pliki w katalogu głównym:
 
 ## Format plików konfiguracyjncyh
 
+- conf.json
+
+
 ## Instrukcja użytkownika
 
 ## Podsumowanie

@@ -1,7 +1,7 @@
 from PySide2.QtWidgets import QMessageBox
 
 
-def show_invalid_input_error():
+def invalid_input():
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Critical)
 
@@ -13,7 +13,7 @@ Make sure you type ONE upper case English Alphabet letter (A-Z)")
     return msg.exec_()
 
 
-def show_invalid_name():
+def name_in_use():
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Critical)
 
@@ -24,7 +24,7 @@ def show_invalid_name():
     return msg.exec_()
 
 
-def show_empty_name():
+def empty_name():
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Critical)
 
@@ -35,11 +35,11 @@ def show_empty_name():
     return msg.exec_()
 
 
-def show_duplciated_letter_error(letter):
+def duplciated_letter():
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Critical)
 
-    msg.setText(f"{letter} is duplicated (each letter should be used\
+    msg.setText("Duplicated letter. Each letter should be used\
 no more than once)")
     msg.setWindowTitle("Duplicated letter")
     msg.setStandardButtons(QMessageBox.Ok)
@@ -47,18 +47,18 @@ no more than once)")
     return msg.exec_()
 
 
-def show_invalid_sign_error(sign):
+def invalid_sign():
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Critical)
 
-    msg.setText(f"{sign} is not a valid sign")
+    msg.setText("One of the sign in input is not valid")
     msg.setWindowTitle("Invalid sign")
     msg.setStandardButtons(QMessageBox.Ok)
 
     return msg.exec_()
 
 
-def show_invalid_plugboard_format():
+def invalid_plugboard_format():
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Critical)
 
@@ -69,7 +69,7 @@ def show_invalid_plugboard_format():
     return msg.exec_()
 
 
-def show_invalid_rotor_wiring():
+def invalid_rotor_wiring():
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Critical)
 
@@ -81,7 +81,7 @@ def show_invalid_rotor_wiring():
     return msg.exec_()
 
 
-def show_invalid_reflector_wiring():
+def invalid_reflector_wiring():
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Critical)
 
@@ -93,12 +93,23 @@ def show_invalid_reflector_wiring():
     return msg.exec_()
 
 
-def show_current_use_error():
+def current_use_error():
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Critical)
 
     msg.setText("Element, that you want to remove is currently in use")
     msg.setWindowTitle("Element in use")
+    msg.setStandardButtons(QMessageBox.Ok)
+
+    return msg.exec_()
+
+
+def encryption():
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Critical)
+
+    msg.setText("Encryption ended with error")
+    msg.setWindowTitle("Encryption Error")
     msg.setStandardButtons(QMessageBox.Ok)
 
     return msg.exec_()

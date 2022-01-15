@@ -57,7 +57,7 @@ def validate_reflector(name: str, wiring: str) -> None:
                 raise InvalidReflectorWiringError
 
         elif letter not in alphabet:
-            raise InvalidSignError
+            raise ReflectorInvalidSignError
 
         elif letter not in check_table:
             if position == len(wiring) and i != 1:
@@ -66,16 +66,16 @@ def validate_reflector(name: str, wiring: str) -> None:
             check_table.append(letter)
 
         else:
-            raise DuplicatedLetterError
+            raise ReflectorDuplicatedLetterError
 
     if len(wiring) != 38:
-        raise NotAllLettersError
+        raise ReflectorNotAllLettersError
 
     if len(name) == 0:
-        raise EmptyNameError
+        raise ReflectorEmptyNameError
 
 
-class NotAllLettersError(Exception):
+class ReflectorNotAllLettersError(Exception):
     pass
 
 
@@ -83,13 +83,13 @@ class InvalidReflectorWiringError(Exception):
     pass
 
 
-class EmptyNameError(Exception):
+class ReflectorEmptyNameError(Exception):
     pass
 
 
-class DuplicatedLetterError(Exception):
+class ReflectorDuplicatedLetterError(Exception):
     pass
 
 
-class InvalidSignError(Exception):
+class ReflectorInvalidSignError(Exception):
     pass

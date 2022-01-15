@@ -1,6 +1,6 @@
 from PySide2.QtWidgets import QLabel, QListWidget, QPushButton, QStyle
 from PySide2.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog
-from PySide2.QtWidgets import QListWidgetItem
+from PySide2.QtWidgets import QListWidgetItem, QMessageBox
 from functools import partial
 
 
@@ -44,3 +44,41 @@ class CustomDialog(QDialog):
         self.done(self.rotor_pos)
 
 
+def compleated():
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Information)
+
+    msg.setText("Your encryption has been successfully ended.")
+    msg.setWindowTitle("Encyryption compleated")
+    msg.setStandardButtons(QMessageBox.Ok)
+
+    return msg.exec_()
+
+
+def init_config_change():
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Information)
+
+    msg.setText("Your initial configuration has been changed.")
+    msg.setWindowTitle("Initial configuration changed")
+    msg.setStandardButtons(QMessageBox.Ok)
+
+    return msg.exec_()
+
+
+def config_change():
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Information)
+
+    msg.setText("Your current configuration has been changed.")
+    msg.setWindowTitle("Configuration changed")
+    msg.setStandardButtons(QMessageBox.Ok)
+
+    return msg.exec_()
+
+
+def add_rotor(data):
+    msg = CustomDialog(data)
+    msg.setWindowTitle("Add rotor")
+
+    return msg.exec_()
