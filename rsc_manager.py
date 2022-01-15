@@ -24,6 +24,12 @@ class ElementsDatabase():
             self._reflectors = reflectors
 
     def __add__(self, other):
+        for key in self.rotors.keys():
+            if key in other.rotors.keys():
+                raise NotUniqueKeyError
+        for key in self.reflectors.keys():
+            if key in other.reflectors.keys():
+                raise NotUniqueKeyError
         result = ElementsDatabase()
         result._rotors = {**self.rotors, **other.rotors}
         result._reflectors = {**self.reflectors, **other.reflectors}
@@ -58,28 +64,31 @@ class ElementsDatabase():
     def remove_rotor(self, name):
 
         """Remove rotor model from custom database"""
-
-        self.rotors.pop(name)
+        try:
+            self.rotors.pop(name)
+        except KeyError:
+            raise InvalidNameError
 
     def remove_reflector(self, name):
 
         """Remove reflector model from custom database"""
 
-        self.reflectors.pop(name)
+        try:
+            self.reflectors.pop(name)
+        except KeyError:
+            raise InvalidNameError
 
     def modify_reflector(self, old_name, name, wiring):
         if name in self.reflectors.keys() and name != old_name:
             raise NameInUseError
-        new_ref = Reflector(name, wiring)
-        self.reflectors.pop(old_name)
-        self.reflectors[name] = new_ref
+        self.remove_reflector(old_name)
+        self.add_reflector(name, wiring)
 
     def modify_rotor(self, old_name, name, wiring, indentation):
         if name in self.rotors.keys() and name != old_name:
             raise NameInUseError
-        new_rotor = Rotor(name, wiring, indentation)
-        self.rotors.pop(old_name)
-        self.rotors[name] = new_rotor
+        self.remove_rotor(old_name)
+        self.add_rotor(name, wiring, indentation)
 
 
 class ResourcesManager():
@@ -170,4 +179,12 @@ class ResourcesManager():
 
 
 class NameInUseError(Exception):
+    pass
+
+
+class InvalidNameError(Exception):
+    pass
+
+
+class NotUniqueKeyError(Exception):
     pass

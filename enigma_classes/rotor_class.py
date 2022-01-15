@@ -9,11 +9,12 @@ class Rotor:
 
     def __init__(self, name: str, wiring: str, indentations: str) -> None:
 
+        indentations = [to_number(indentation)
+                        for indentation in indentations]
         validate_rotor(name, wiring, indentations)
         self._name = name
         self._wiring = wiring
-        self._indentations = [to_number(indentation)
-                              for indentation in indentations]
+        self._indentations = indentations
         code_table_in, code_table_out = generate_in_out_tables(wiring)
         self._code_table_in = code_table_in
         self._code_table_out = code_table_out
@@ -61,9 +62,10 @@ class Rotor:
         self._wiring = new_wiring
 
     def set_indentation(self, indentations: str) -> None:
+        indentations = [to_number(indentation)
+                        for indentation in indentations]
         validate_rotor(self.name, self.wiring, indentations)
-        self._indentation = [to_number(indentation)
-                             for indentation in indentations]
+        self._indentations = indentations
 
     def zero_postion(self) -> None:
         self._position = 0
@@ -144,7 +146,7 @@ def generate_in_out_tables(wiring):
     return code_table_in, code_table_out
 
 
-def validate_rotor(name, wiring, indentations):
+def validate_rotor(name, wiring, indentations: List[int]):
 
     alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
@@ -169,8 +171,8 @@ def validate_rotor(name, wiring, indentations):
     if len(indentations) > 2:
         raise InvalidIndentationFormat
 
-    for letter in indentations:
-        if letter not in alphabet:
+    for position in indentations:
+        if position > 25 or position < 0:
             raise RotorIndentationInvalidSignError
 
     if len(indentations) == 2:

@@ -1,4 +1,4 @@
-from asyncore import read
+from io import StringIO
 from enigma_classes.functions import EmptyListError, WrongPathError, dict_from_str_with_pairs, first_to_last, last_to_first, read_from_json, swap, to_letter, to_number, write_to_json
 from enigma_classes.functions import LetterCodeOutOfRange
 from enigma_classes.functions import InvalidLengthError
@@ -107,8 +107,7 @@ def test_read_from_json_not_file():
 
 
 def test_write_to_json():
-    assert  1 == 0
-    #  @TODO
+    assert 0 == 1
 
 
 def test_write_to_json_dir_error():
