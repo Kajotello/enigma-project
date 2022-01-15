@@ -278,11 +278,12 @@ class EnigmaWindow(QMainWindow):
             self.ui.rotors_list.setCurrentRow(self.selected_id)
 
     def remove_rotor(self):
-        self.temp.remove_rotor(self.selected_id)
-        self.selected_id = None
-        self.ui.stack2.setCurrentIndex(0)
-        self.clear_rotors()
-        self.setup_rotors()
+        if self.selected_id is not None:
+            self.temp.remove_rotor(self.selected_id)
+            self.selected_id = None
+            self.ui.stack2.setCurrentIndex(0)
+            self.clear_rotors()
+            self.setup_rotors()
 
     def add_rotor(self):
         rotor_pos = dialog.add_rotor(self.rsc.elements)
@@ -584,7 +585,7 @@ class EnigmaWindow(QMainWindow):
         result = ""
         open_tag_green = '<span style=" font-weight:600; color:#32b51e;">'
         open_tag_black = '<span style=" font-weight:600; color:#000000;">'
-        open_tag_red = '<span style=" font-weight:600; color:#d02222 ;">'
+        open_tag_red = '<span style=" font-weight:600; color:#d02222;">'
         close_tag = '</span> '
         for letter in self.alphabet:
             if text.count(letter) == 0:
@@ -593,6 +594,8 @@ class EnigmaWindow(QMainWindow):
                 result += f'{open_tag_black}{letter}{close_tag} '
             else:
                 result += f'{open_tag_red}{letter}{close_tag} '
+
+        return result
 
 
 def to_letter(int: int) -> str:

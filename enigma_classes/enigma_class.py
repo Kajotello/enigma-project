@@ -113,8 +113,7 @@ class Enigma():
         """Remove rotor with given index from machine
         rotors list"""
 
-        if index is not None:
-            self._rotors.pop(index)
+        self._rotors.pop(index)
 
     def move_rotor_up(self, index: int) -> None:
 
@@ -142,10 +141,11 @@ class Enigma():
             # of further rotors when previous is on intendent position
             # but wasn't moved recently
             if i > 1:
-                if (self.rotors[-i+1].position !=
-                   ((self.rotors[-i+1].indentation + 1) % 26)):
+                if (self.rotors[-i+1].position not in
+                   [((indentation + 1) % 26) for indentation
+                   in self.rotors[-i+1].indentations]):
                     break  # not sure about it
-            if(rotor.position == rotor.indentation) and \
+            if(rotor.position in rotor.indentations) and \
               (i != len(self.rotors)):
                 if self.double_step is True and i == 2:
                     self.rotors[-i].rotate()

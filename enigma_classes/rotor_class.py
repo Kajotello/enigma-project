@@ -5,15 +5,15 @@ from enigma_classes.functions import last_to_first
 
 class Rotor:
 
-    """Represent one rotor of machine with its wiring and indentation"""
+    """Represent one rotor of machine with its wiring and indentations"""
 
-    def __init__(self, name: str, wiring: str, indentation: str) -> None:
+    def __init__(self, name: str, wiring: str, indentations: str) -> None:
 
-        validate_rotor(name, wiring, indentation)
+        validate_rotor(name, wiring, indentations)
         self._name = name
         self._wiring = wiring
-        self._indentation = to_number(indentation)
-
+        self._indentations = [to_number(indentation)
+                              for indentation in indentations]
         code_table_in, code_table_out = generate_in_out_tables(wiring)
         self._code_table_in = code_table_in
         self._code_table_out = code_table_out
@@ -30,8 +30,8 @@ class Rotor:
         return self._wiring
 
     @property
-    def indentation(self) -> str:
-        return self._indentation
+    def indentations(self) -> List[int]:
+        return self._indentations
 
     @property
     def code_table_in(self) -> List[int]:
@@ -50,20 +50,20 @@ class Rotor:
         return self._position
 
     def set_name(self, new_name: str) -> None:
-        validate_rotor(new_name, self.wiring, self.indentation)
+        validate_rotor(new_name, self.wiring, self.indentations)
         self._name = new_name
 
     def set_wiring(self, new_wiring: str) -> None:
-        validate_rotor(self.name, new_wiring, self.indentation)
+        validate_rotor(self.name, new_wiring, self.indentations)
         code_table_in, code_table_out = generate_in_out_tables(new_wiring)
         self._code_table_in = code_table_in
         self._code_table_out = code_table_out
         self._wiring = new_wiring
 
-    # need to be fixed - indentation is a str
-    def set_indentation(self, indentation: str) -> None:
-        validate_rotor(self.name, self.wiring, indentation)
-        self._indentation = indentation
+    def set_indentation(self, indentations: str) -> None:
+        validate_rotor(self.name, self.wiring, indentations)
+        self._indentation = [to_number(indentation)
+                             for indentation in indentations]
 
     def zero_postion(self) -> None:
         self._position = 0
@@ -144,13 +144,11 @@ def generate_in_out_tables(wiring):
     return code_table_in, code_table_out
 
 
-def validate_rotor(name, wiring, indentation):
+def validate_rotor(name, wiring, indentations):
 
     alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
                 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-
-    # need to add indentation check
 
     check_table = []
 
@@ -168,12 +166,27 @@ def validate_rotor(name, wiring, indentation):
     if len(name) == 0:
         raise RotorEmptyNameError
 
+    if len(indentations) > 2:
+        raise InvalidIndentationFormat
+
+    for letter in indentations:
+        if letter not in alphabet:
+            raise RotorIndentationInvalidSignError
+
+    if len(indentations) == 2:
+        if indentations[0] == indentations[1]:
+            raise RotorIndentationDuplicatedLetterError
+
 
 class InvalidRotorWiringError(Exception):
     pass
 
 
 class RotorInvalidSignEroor(Exception):
+    pass
+
+
+class RotorIndentationInvalidSignError(Exception):
     pass
 
 
@@ -186,4 +199,12 @@ class RotorNotAllLettersError(Exception):
 
 
 class RotorDuplicatedLetterError(Exception):
+    pass
+
+
+class RotorIndentationDuplicatedLetterError(Exception):
+    pass
+
+
+class InvalidIndentationFormat(Exception):
     pass

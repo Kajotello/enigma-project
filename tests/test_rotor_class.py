@@ -1,4 +1,3 @@
-from re import A
 from enigma_classes.rotor_class import Rotor
 
 
@@ -40,7 +39,7 @@ def test_Rotor_indentation():
     wiring = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     indentation = "G"
     rotor = Rotor(name, wiring, indentation)
-    assert rotor.indentation == 6
+    assert rotor.indentations == 6
 
 
 def test_Rotor_code_table_in():
@@ -106,7 +105,7 @@ def test_set_indentation():
     indentation = "G"
     rotor = Rotor(name, wiring, indentation)
     rotor.set_indentation("F")
-    assert rotor.indentation == 'F'
+    assert rotor.indentations == 'F'
 
 
 def test_zero_position():
@@ -126,4 +125,3 @@ def test_set_ring():
     rotor = Rotor(name, wiring, indentation)
     rotor.set_ring(5)
     assert rotor.ring == 5
-
