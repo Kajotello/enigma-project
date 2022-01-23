@@ -1,17 +1,17 @@
 {
     "machine": {
         "rotors": [
-            "rotorIII",
+            "rotorI",
             "rotorII",
-            "rotorI"
+            "rotorIV"
         ],
-        "rings": "HQA",
-        "start_positions": "NTA",
+        "rings": "AAA",
+        "start_positions": "AAC",
         "reflector": "reflectorUKWB",
         "plugboard": "AS DF RY"
     },
     "settings": {
-        "double_step": 0,
-        "space_dist": 5
+        "double_step": true,
+        "space_dist": 8
     }
 }

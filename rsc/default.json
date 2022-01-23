@@ -4,49 +4,49 @@
         {
             "name": "rotorI",
             "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-            "indentation": "Q"
+            "indentations": "Q"
         },
 
         {
             "name": "rotorII",
             "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-            "indentation": "E"
+            "indentations": "E"
         },
 
         {
             "name": "rotorIII",
             "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-            "indentation": "V"
+            "indentations": "V"
         },
 
         {
             "name": "rotorIV",
             "wiring": "ESOVPZJAYQUIRHXLNFTGKDCMWB",
-            "indentation": "J"
+            "indentations": "J"
         },
 
         {
             "name": "rotorV",
             "wiring": "VZBRGITYUPSDNHLXAWMJQOFECK",
-            "indentation": "Z"
+            "indentations": "Z"
         },
 
         {
             "name": "rotorVI",
             "wiring": "JPGVOUMFYQBENHZRDKASXLICTW",
-            "indentation": "Z"
+            "indentations": "AN"
         },
 
         {
             "name": "rotorVII",
             "wiring": "NZJHGRCXMYSWBOUFAIVLPEKQDT",
-            "indentation": "Z"
+            "indentations": "AN"
         },
 
         {
             "name": "rotorVIII",
             "wiring": "FKQHTLXOCBJSPDZRAMEWNIUYGV",
-            "indentation": "Z"
+            "indentations": "AN"
         }
     ],
 

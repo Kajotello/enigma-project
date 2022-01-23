@@ -1,5 +1,8 @@
 from io import StringIO
-from enigma_classes.functions import EmptyListError, WrongPathError, dict_from_str_with_pairs, first_to_last, last_to_first, read_from_json, swap, to_letter, to_number, write_to_json
+from enigma_classes.functions import EmptyListError, WrongPathError
+from enigma_classes.functions import dict_from_str_with_pairs, first_to_last
+from enigma_classes.functions import read_from_json, swap, to_letter, to_number
+from enigma_classes.functions import write_to_json, last_to_first
 from enigma_classes.functions import LetterCodeOutOfRange
 from enigma_classes.functions import InvalidLengthError
 import pytest
@@ -91,9 +94,22 @@ def test_last_to_first_empty():
         last_to_first(list)
 
 
-def test_read_from_json():
-    assert  1 == 0
-    #  @TODO
+def test_read_from_json(monkeypatch):
+
+    def fake_open(a, b):
+        file_handler = StringIO(
+            "{\n"
+            + "'hello': world,\n"
+            + "'list': ['element1', 'element2'],\n"
+            + "'dict': {'key1': 'el1', 'key2':'el2'}\n"
+            + "}"
+        )
+        return file_handler
+
+    monkeypatch.setattr("enigma_classes.functions.open", fake_open)
+    data = read_from_json('')
+    assert data == {'hello': 'world', 'list': ['element1', 'element2'],
+                    'dict': {'key1': 'el1', 'key2': 'el2'}}
 
 
 def test_read_from_json_dir_error():
@@ -132,4 +148,3 @@ def test_dict_from_str_with_pairs():
     dict = dict_from_str_with_pairs(str)
     assert dict == {0: 1, 1: 0, 2: 3, 3: 2,
                     16: 15, 15: 16, 17: 19, 19: 17}
-

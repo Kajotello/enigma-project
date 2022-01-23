@@ -29,7 +29,7 @@ def main():
     args = parser.parse_args()
     mode = args.mode
     if mode == "cmd":
-        configuration = rsc.get_config(args.config)
+        configuration = rsc.initialize_enigma(args.config)
         configuration.code_file(args.input_file, args.output_file)
     elif mode == "gui":
         gui_main(args)

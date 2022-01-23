@@ -1,9 +1,9 @@
-from enigma_classes.reflector_class import Reflector
+from enigma_classes.reflector_class import Reflector, validate_reflector
 from enigma_classes.reflector_class import ReflectorEmptyNameError
 from enigma_classes.reflector_class import ReflectorInvalidSignError
 from enigma_classes.reflector_class import ReflectorNotAllLettersError
 from enigma_classes.reflector_class import ReflectorDuplicatedLetterError
-from enigma_classes.reflector_class import InvalidReflectorWiringError
+from enigma_classes.reflector_class import ReflectorInvalidWiringError
 import pytest
 
 
@@ -21,46 +21,46 @@ def test_reflector_class():
                                          23: 22, 24: 25, 25: 24}
 
 
-def test_NotAllLettersError():
+def test_validate_reflector_NotAllLettersError():
     name = "reflectorI"
     wiring = "AB CD EF GH IJ KL MN OP QR ST UV WX"
     with pytest.raises(ReflectorNotAllLettersError):
-        Reflector(name, wiring)
+        validate_reflector(name, wiring)
 
 
-def test_InvalidSignError():
+def test_validate_reflector_InvalidSignError():
     name = "reflectorI"
     wiring = "AB C] EF GH IJ KL MN OP QR ST UV WX YZ"
     with pytest.raises(ReflectorInvalidSignError):
-        Reflector(name, wiring)
+        validate_reflector(name, wiring)
 
 
-def test_InvalidReflectorWiringError():
+def test_validate_reflector_InvalidReflectorWiringError():
     name = "reflectorI"
     wiring = "AB CD EFGH IJ KL MN OP QR ST UV WX YZ"
-    with pytest.raises(InvalidReflectorWiringError):
-        Reflector(name, wiring)
+    with pytest.raises(ReflectorInvalidWiringError):
+        validate_reflector(name, wiring)
 
 
-def test_InvalidReflectorWiringError_at_the_end():
+def test_validate_reflector_InvalidReflectorWiringError_at_the_end():
     name = "reflectorI"
     wiring = "AB CD EF GH IJ KL MN OP QR ST UV WXYZ"
-    with pytest.raises(InvalidReflectorWiringError):
-        Reflector(name, wiring)
+    with pytest.raises(ReflectorInvalidWiringError):
+        validate_reflector(name, wiring)
 
 
-def test_DuplicatedLetterError():
+def test_validate_reflector_DuplicatedLetterError():
     name = "reflectorI"
     wiring = "AB CD EF GH IJ AL MN OP QR ST UV WX YZ"
     with pytest.raises(ReflectorDuplicatedLetterError):
-        Reflector(name, wiring)
+        validate_reflector(name, wiring)
 
 
-def test_EmptyNameError():
+def test_validate_reflector_EmptyNameError():
     name = ""
     wiring = "AB CD EF GH IJ KL MN OP QR ST UV WX YZ"
     with pytest.raises(ReflectorEmptyNameError):
-        Reflector(name, wiring)
+        validate_reflector(name, wiring)
 
 
 def test_reflector_name():

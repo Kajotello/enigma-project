@@ -1,4 +1,13 @@
 from enigma_classes.rotor_class import Rotor
+from enigma_classes.rotor_class import RotorInvalidWiringFormatError
+from enigma_classes.rotor_class import RotorWiringInvalidSignEroor
+from enigma_classes.rotor_class import RotorIndentationInvalidSignError
+from enigma_classes.rotor_class import RotorEmptyNameError
+from enigma_classes.rotor_class import RotorWiringNotAllLettersError
+from enigma_classes.rotor_class import RotorWiringDuplicatedLetterError
+from enigma_classes.rotor_class import RotorIndentationDuplicatedLetterError
+from enigma_classes.rotor_class import RotorInvalidIndentationFormatError
+from enigma_classes.rotor_class import generate_in_out_tables, validate_rotor
 
 
 def test_Rotor_class():
@@ -125,3 +134,83 @@ def test_set_ring():
     rotor = Rotor(name, wiring, indentation)
     rotor.set_ring(5)
     assert rotor.ring == 5
+
+
+def test_rotate_zero_rotation():
+    pass
+
+
+def test_rotation_one_rotation():
+    pass
+
+
+def test_rotation_n_rotation():
+    pass
+
+
+def test_negative_rotation():
+    pass
+
+
+def test_revrser_rotation():
+    pass
+
+
+def test_change_position():
+    pass
+
+
+def test_change_ring():
+    pass
+
+
+def test_code_in_without_modulo():
+    pass
+
+
+def test_code_in_with_modulo():
+    pass
+
+
+def test_code_out_without_modulo():
+    pass
+
+
+def test_code_out_with_modulo():
+    pass
+
+
+def test_generate_in_out_table():
+    pass
+
+
+def test_validate_rotor_ok():
+    pass
+
+
+def test_validate_rotor_not_all_letters():
+    pass
+
+
+def test_validate_rotor_invalid_sign():
+    pass
+
+
+def test_validate_rotor_duplicated_letter():
+    pass
+
+
+def test_validate_rotor_empty_name():
+    pass
+
+
+def test_validate_rotor_invalid_indentation():
+    pass
+
+
+def test_validation_rotor_invalid_indentation_sign():
+    pass
+
+
+def test_validation_indentation_duplicated_letter():
+    pass

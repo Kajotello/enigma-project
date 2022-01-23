@@ -1,6 +1,6 @@
 from PySide2.QtWidgets import QLabel, QListWidget, QPushButton, QStyle
 from PySide2.QtWidgets import QVBoxLayout, QHBoxLayout, QDialog
-from PySide2.QtWidgets import QListWidgetItem, QMessageBox
+from PySide2.QtWidgets import QListWidgetItem, QMessageBox, QFileDialog
 from functools import partial
 
 
@@ -44,37 +44,36 @@ class CustomDialog(QDialog):
         self.done(self.rotor_pos)
 
 
+def information_dialog(text, title):
+    msg = QMessageBox()
+    msg.setIcon(QMessageBox.Information)
+
+    msg.setText(text)
+    msg.setWindowTitle(title)
+    msg.setStandardButtons(QMessageBox.Ok)
+
+    return msg.exec_()
+
+
 def compleated():
-    msg = QMessageBox()
-    msg.setIcon(QMessageBox.Information)
-
-    msg.setText("Your encryption has been successfully ended.")
-    msg.setWindowTitle("Encyryption compleated")
-    msg.setStandardButtons(QMessageBox.Ok)
-
-    return msg.exec_()
+    information_dialog(
+        text="Your encryption has been successfully ended",
+        title="Encyryption compleated"
+    )
 
 
-def init_config_change():
-    msg = QMessageBox()
-    msg.setIcon(QMessageBox.Information)
-
-    msg.setText("Your initial configuration has been changed.")
-    msg.setWindowTitle("Initial configuration changed")
-    msg.setStandardButtons(QMessageBox.Ok)
-
-    return msg.exec_()
+def def_config_change():
+    information_dialog(
+        text="Your default configuration has been changed",
+        title="Default configuration changed"
+    )
 
 
-def config_change():
-    msg = QMessageBox()
-    msg.setIcon(QMessageBox.Information)
-
-    msg.setText("Your current configuration has been changed.")
-    msg.setWindowTitle("Configuration changed")
-    msg.setStandardButtons(QMessageBox.Ok)
-
-    return msg.exec_()
+def default_setting_change():
+    information_dialog(
+        text="Your default settings configuration has been changed",
+        title="Setiings configuration changed"
+    )
 
 
 def add_rotor(data):
@@ -82,3 +81,21 @@ def add_rotor(data):
     msg.setWindowTitle("Add rotor")
 
     return msg.exec_()
+
+
+def file_dialog(name_filters=None, any_file=False):
+
+    file_dialog = QFileDialog()
+    if any_file is True:
+        file_dialog.setFileMode(QFileDialog.AnyFile)
+    else:
+        file_dialog.setFileMode(QFileDialog.ExistingFile)
+    if name_filters is not None:
+        file_dialog.setNameFilters(name_filters)
+    file_dialog.setViewMode(QFileDialog.Detail)
+    filename = None
+
+    if file_dialog.exec_() == QDialog.Accepted:
+        filename = file_dialog.selectedFiles()
+
+    return filename

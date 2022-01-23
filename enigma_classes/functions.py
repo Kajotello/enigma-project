@@ -7,7 +7,8 @@ def to_number(char: str) -> int:
         raise InvalidLengthError('Char should be a str with length of 1')
     result = ord(char) - 65
     if result < 0 or result > 25:
-        raise LetterCodeOutOfRange('This char cannot be changed into proper number')
+        raise LetterCodeOutOfRange('This char cannot be changed into \
+                                    proper number')
     return result
 
 
@@ -33,7 +34,7 @@ def last_to_first(list: List) -> List:
 
 def read_from_json(path: str):
     try:
-        with open(path) as file:
+        with open(path, 'r') as file:
             return json.load(file)
     except FileNotFoundError:
         raise WrongPathError
@@ -83,20 +84,16 @@ def dict_from_str_with_pairs(str: str) -> dict:
 
 
 class LetterCodeOutOfRange(Exception):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
+    pass
 
 
 class EmptyListError(Exception):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
+    pass
 
 
 class InvalidLengthError(Exception):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
+    pass
 
 
 class WrongPathError(Exception):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
+    pass
