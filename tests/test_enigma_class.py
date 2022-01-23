@@ -1,5 +1,5 @@
 from enigma_classes.enigma_class import Enigma
-from rsc_manager import ElementsDatabase
+from elements_database import ElementsDatabase
 
 
 def test_Enigma_class():
@@ -17,7 +17,7 @@ def test_Enigma_class():
             "plugboard": "AS"
         },
         "settings": {
-            "double_step": 0,
+            "double_step": False,
             "space_dist": 5
         }
     }
@@ -27,19 +27,19 @@ def test_Enigma_class():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -73,7 +73,7 @@ def test_Enigma_class():
     assert enigma._reflector == elements_database.reflectors['reflectorUKWB']
     assert enigma._plugboard.connections == 'AS'
     assert enigma._plugboard.plugboard_dict == {0: 18, 18: 0}
-    assert enigma._double_step == 0
+    assert enigma._double_step is False
     assert enigma._space_dist == 5
     assert enigma._letter_counter == 0
     assert enigma._database == elements_database
@@ -95,7 +95,7 @@ def test_rotors_property():
             "plugboard": "DC"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -105,19 +105,19 @@ def test_rotors_property():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -168,7 +168,7 @@ def test_reflectors_property():
             "plugboard": "DC"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -178,19 +178,19 @@ def test_reflectors_property():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -229,7 +229,7 @@ def test_plugboard_property():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -239,19 +239,19 @@ def test_plugboard_property():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -282,8 +282,7 @@ def test_double_step_property():
             "rotors": [
                 "rotorI",
                 "rotorII",
-                "rotorI",
-                'rotorIII',
+                "rotorI"
             ],
             "rings": "ZSAD",
             "start_positions": "AAAA",
@@ -291,7 +290,7 @@ def test_double_step_property():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -301,19 +300,19 @@ def test_double_step_property():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -334,8 +333,7 @@ def test_double_step_property():
     elemnts_database = ElementsDatabase(database)
     enigma = Enigma(conf_data, elemnts_database)
 
-    assert enigma.double_step == 1
-    assert bool(enigma.double_step) is True
+    assert enigma.double_step is True
 
 
 def test_space_dist_property():
@@ -353,7 +351,7 @@ def test_space_dist_property():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -363,19 +361,19 @@ def test_space_dist_property():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -413,7 +411,7 @@ def test_letter_counter_property():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -423,19 +421,19 @@ def test_letter_counter_property():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -473,7 +471,7 @@ def test_database_property():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -483,19 +481,19 @@ def test_database_property():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -533,7 +531,7 @@ def test_update_database():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -543,19 +541,19 @@ def test_update_database():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -578,7 +576,7 @@ def test_update_database():
             {
                 "name": "torotA",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             }
         ],
 
@@ -611,7 +609,7 @@ def test_set_plugoard():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -621,19 +619,19 @@ def test_set_plugoard():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -663,8 +661,7 @@ def test_change_double_step():
             "rotors": [
                 "rotorI",
                 "rotorII",
-                "rotorI",
-                'rotorIII',
+                "rotorI"
             ],
             "rings": "ZSAD",
             "start_positions": "AAAA",
@@ -672,7 +669,7 @@ def test_change_double_step():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -682,19 +679,19 @@ def test_change_double_step():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -714,7 +711,7 @@ def test_change_double_step():
     elemnts_database = ElementsDatabase(database)
     enigma = Enigma(conf_data, elemnts_database)
     enigma.change_double_step()
-    assert enigma.double_step == 0
+    assert enigma.double_step is False
 
 
 def test_change_reflector():
@@ -732,7 +729,7 @@ def test_change_reflector():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -742,19 +739,19 @@ def test_change_reflector():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -802,19 +799,19 @@ def test_change_position():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -854,7 +851,7 @@ def test_change_ring():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -864,19 +861,19 @@ def test_change_ring():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -914,7 +911,7 @@ def test_add_rotor():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -924,19 +921,19 @@ def test_add_rotor():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -983,7 +980,7 @@ def test_remove_rotor():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -993,19 +990,19 @@ def test_remove_rotor():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -1052,7 +1049,7 @@ def test_move_rotor_up():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -1062,19 +1059,19 @@ def test_move_rotor_up():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -1124,7 +1121,7 @@ def test_move_rotor_up_first_rotor():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -1134,19 +1131,19 @@ def test_move_rotor_up_first_rotor():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -1196,7 +1193,7 @@ def test_move_rotor_down():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -1206,19 +1203,19 @@ def test_move_rotor_down():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -1268,7 +1265,7 @@ def test_move_rotor_down_last_rotor():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -1278,19 +1275,19 @@ def test_move_rotor_down_last_rotor():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 
@@ -1340,7 +1337,7 @@ def test_code_letter_basic_positions_and_rings():
             "plugboard": "",
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -1350,19 +1347,19 @@ def test_code_letter_basic_positions_and_rings():
             {
                 "name": "rotorI",
                 "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
-                "indentation": "Q"
+                "indentations": "Q"
             },
 
             {
                 "name": "rotorII",
                 "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
-                "indentation": "E"
+                "indentations": "E"
             },
 
             {
                 "name": "rotorIII",
                 "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
-                "indentation": "V"
+                "indentations": "V"
             },
                 ],
 

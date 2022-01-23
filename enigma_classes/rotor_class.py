@@ -94,7 +94,7 @@ class Rotor:
 
         """Set new rotor name"""
 
-        validate_rotor(new_name, self.wiring, self.indentations)
+        validate_rotor(new_name, self.wiring, self.indentations_str)
 
         self._name = new_name
 
@@ -102,7 +102,7 @@ class Rotor:
 
         """Set new rotor wiring with generated in/out tables"""
 
-        validate_rotor(self.name, new_wiring, self.indentations)
+        validate_rotor(self.name, new_wiring, self.indentations_str)
 
         code_table_in, code_table_out = generate_in_out_tables(new_wiring)
 
