@@ -79,13 +79,6 @@ def current_use_error():
     )
 
 
-def encryption():
-    error_message(
-        text="Encryption ended with error",
-        title="Encryption Error"
-    )
-
-
 def failed_elements_load_duplicated_name():
     error_message(
         text="Some of the elements you want to load hava the same name as \
@@ -123,4 +116,65 @@ def indenations_invalid_format():
         text="Format of indentations is not valid. It should be\
             one or two letters without any spaces",
         title="Invalid indentation format"
+    )
+
+
+def rotor_not_in_database():
+    error_message(
+        text="One or more rotors from configuration are not found in\
+              database",
+        title="Rotor not in database"
+    )
+
+
+def reflector_not_in_database():
+    error_message(
+        text="Reflector from configuration are not found in\
+              database",
+        title="Reflector not in database"
+    )
+
+
+def not_a_JSON():
+    error_message(
+        text="File must be in JSON (.json) format",
+        title="JSON required"
+    )
+
+
+def invalid_conf_JSON():
+    error_message(
+        text="Format of given JSON file is not compatible.\
+             Check it in documentation",
+        title="Invalid configuration JSON format "
+    )
+
+
+def invalid_db_JSON():
+    error_message(
+        text="Format of given JSON file is not compatible.\
+             Check it in documentation",
+        title="Invalid database JSON format "
+    )
+
+
+def invalid_sign_in_file():
+    error_message(
+        text="Encrytpion failed - file have unsupported sign/s\
+            Only uppercase letters of English alphabet is allowed",
+        title="Invalid sign in file"
+    )
+
+
+def not_file_with_name():
+    error_message(
+        text="File with that name does not exist",
+        title="Invalid file name"
+    )
+
+
+def file_not_selected_yet():
+    error_message(
+        text="File with input hasn't been selected",
+        title="No input file name"
     )

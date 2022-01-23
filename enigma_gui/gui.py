@@ -1,3 +1,4 @@
+
 from PySide2.QtWidgets import QApplication
 from PySide2.QtWidgets import QMainWindow, QListWidgetItem
 from enigma_classes.plugboard_class import PlugboardDuplicatedLetterError
@@ -16,10 +17,14 @@ from enigma_classes.reflector_class import ReflectorInvalidSignError
 from enigma_classes.reflector_class import ReflectorNotAllLettersError
 from enigma_classes.reflector_class import ReflectorDuplicatedLetterError
 from enigma_classes.reflector_class import ReflectorInvalidWiringError
+from enigma_classes.enigma_class import ReflectorNotInDatabaseError
+from enigma_classes.enigma_class import RotorNotInDatabaseError
+from enigma_classes.enigma_class import InvalidSignToCode
 from enigma_gui.table_models import StepsTableModel, RotorsTableModel
 from enigma_gui.main_window import Ui_MainWindow
 from elements_database import NameInUseError, NotUniqueKeyError
-from rsc_manager import ResourcesManager
+from rsc_manager import ResourcesManager, InvalidConfJSONFileFormat
+from rsc_manager import InvalidDatabaseJSONFileFormat, NotAJSONError
 from functools import partial
 import enigma_gui.dialogs as dialog
 import enigma_gui.errors as error
@@ -41,11 +46,8 @@ class EnigmaWindow(QMainWindow):
         self.output = args.output_file
         self.config = args.config
         self.rsc = ResourcesManager(rsc_path)
-        if args.config is not None:
-            self.enigma = self.rsc.initailze_enigma_with_file(
+        self.enigma = self.rsc.initailze_enigma_with_file(
                 args.config)
-        else:
-            self.enigma = self.rsc.initialize_enigma()
         self.alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                          'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
                          'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -204,7 +206,7 @@ class EnigmaWindow(QMainWindow):
         self.ui.letter_input.clear()
         cipher_text = self.ui.cipher_text.text()
 
-        if len(letter) == 1 and letter in self.alphabet:
+        try:
 
             # code letter and add it to cipher_text
             cipher_letter, steps_data = self.enigma.code_letter(letter)
@@ -216,7 +218,7 @@ class EnigmaWindow(QMainWindow):
             self.ui.steps_table.horizontalHeader().hide()
             self.ui.cipher_text.setText(cipher_text)
             self.reload()
-        else:
+        except InvalidSignToCode:
             error.invalid_input()
 
     #   page 1 - encrypt from file
@@ -236,13 +238,17 @@ class EnigmaWindow(QMainWindow):
         try:
             self.enigma.code_file(self.input, self.output)
             dialog.compleated()
-        # to change in future
-        except Exception:
-            error.encryption()
+        except InvalidSignToCode:
+            error.invalid_sign_in_file()
+        except FileNotFoundError:
+            error.not_file_with_name()
+        except TypeError:
+            # TypeErrror occurs when code button is pressed before choosen
+            error.file_not_selected_yet()
 
     #   page 2 - settings
     def save_def_sett(self):
-        self.rsc.set_new_default_config(self.enigma, "settings")
+        self.rsc.save_new_default_config(self.enigma, "settings")
         dialog.default_setting_change()
 
     def change_double_step(self):
@@ -311,15 +317,24 @@ class EnigmaWindow(QMainWindow):
             error.duplciated_letter()
 
     def save_def_conf(self):
-        self.rsc.set_new_default_config(self.enigma, 'machine')
+        self.rsc.save_new_default_config(self.enigma, 'machine')
         dialog.def_config_change()
 
     def load_conf(self):
 
-        filename = dialog.file_dialog(['JSON file (*.json'])
+        filename = dialog.file_dialog(['JSON file (*.json)'])
 
         if filename:
-            self.enigma = self.rsc.initailze_enigma_with_file(filename[0])
+            try:
+                self.enigma = self.rsc.initailze_enigma_with_file(filename[0])
+            except InvalidConfJSONFileFormat:
+                error.invalid_conf_JSON()
+            except NotAJSONError:
+                error.not_a_JSON()
+            except RotorNotInDatabaseError:
+                error.rotor_not_in_database()
+            except ReflectorNotInDatabaseError:
+                error.reflector_not_in_database()
 
         self.reload()
 
@@ -331,7 +346,8 @@ class EnigmaWindow(QMainWindow):
 
         filename = dialog.file_dialog(["JSON files (*.json)"], True)
 
-        self.rsc.export_config_to_file(self.enigma, filename[0])
+        if filename:
+            self.rsc.export_config_to_file(self.enigma, filename[0])
 
     def change_ring(self):
         new_ring = str(self.ui.ring_comboBox.currentText())
@@ -470,11 +486,10 @@ class EnigmaWindow(QMainWindow):
                 self.ui.stack4.setCurrentIndex(0)
                 self.rsc.set_custom_database()
                 self.setup_reflectors_models()
-            # im not sure is all of thah excepta are need
-            except IsADirectoryError:
-                error.failed_elements_load()
-            except FileNotFoundError:
-                error.failed_elements_load()
+            except InvalidDatabaseJSONFileFormat:
+                error.invalid_db_JSON()
+            except NotAJSONError:
+                error.not_a_JSON()
             except NotUniqueKeyError:
                 error.failed_elements_load_duplicated_name()
             except NameInUseError:

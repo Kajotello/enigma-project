@@ -17,27 +17,31 @@ class ElementsDatabase():
 
         if elements_data is not None:
 
-            for rotor in elements_data["rotors"]:
+            try:
+                for rotor in elements_data["rotors"]:
 
-                # create Rotor Object for each data in elements_data
-                element = Rotor(rotor["name"], rotor["wiring"],
-                                rotor["indentations"])
-                self._rotors[element.name] = element
+                    # create Rotor Object for each data in elements_data
+                    element = Rotor(rotor["name"], rotor["wiring"],
+                                    rotor["indentations"])
+                    self._rotors[element.name] = element
 
-            for reflector in elements_data["reflectors"]:
+                for reflector in elements_data["reflectors"]:
 
-                # create Rotor Object for each data in elements_data
-                element = Reflector(reflector["name"], reflector["wiring"])
-                self._reflectors[element.name] = element
+                    # create Rotor Object for each data in elements_data
+                    element = Reflector(reflector["name"], reflector["wiring"])
+                    self._reflectors[element.name] = element
+
+            except KeyError:
+                raise InvalidElementsDataError
 
     def __add__(self, other):
 
-        # check is keys(names) of rotors in dict unique in two databases
+        # check is keys(names) of rotors in dict is unique in two databases
         for key in self.rotors.keys():
             if key in other.rotors.keys():
                 raise NotUniqueKeyError
 
-        # check is keys(names) of reflectors in dict unique in two databases
+        # check is keys(names) of reflectors in dict is unique in two databases
         for key in self.reflectors.keys():
             if key in other.reflectors.keys():
                 raise NotUniqueKeyError
@@ -196,4 +200,8 @@ class InvalidNameError(Exception):
 
 
 class NotUniqueKeyError(Exception):
+    pass
+
+
+class InvalidElementsDataError(Exception):
     pass

@@ -3,6 +3,7 @@ from typing import List, Tuple
 from enigma_classes.reflector_class import Reflector
 from enigma_classes.rotor_class import Rotor
 from enigma_classes.functions import to_number, to_letter, swap
+from enigma_classes.functions import LetterCodeOutOfRange, InvalidLengthError
 from enigma_classes.plugboard_class import Plugboard
 from copy import deepcopy
 
@@ -15,13 +16,16 @@ class Enigma():
 
         # 'unpack' data from conf_data dictionary
         # format is the same as in config.json file
-        rotors = conf_data["machine"]["rotors"]
-        positions = conf_data["machine"]["start_positions"]
-        reflector = conf_data["machine"]["reflector"]
-        plugboard = conf_data["machine"]["plugboard"]
-        rings = conf_data["machine"]["rings"]
-        space_dist = conf_data["settings"]["space_dist"]
-        double_step = conf_data["settings"]["double_step"]
+        try:
+            rotors = conf_data["machine"]["rotors"]
+            positions = conf_data["machine"]["start_positions"]
+            reflector = conf_data["machine"]["reflector"]
+            plugboard = conf_data["machine"]["plugboard"]
+            rings = conf_data["machine"]["rings"]
+            space_dist = conf_data["settings"]["space_dist"]
+            double_step = conf_data["settings"]["double_step"]
+        except KeyError:
+            raise InvalidConfData
 
         # 'Completing' the machine
         self._rotors = []
@@ -32,7 +36,8 @@ class Enigma():
             try:
                 rotor = deepcopy(database.rotors[rotor])
             except KeyError:
-                raise RotorNotInDatabaseError
+                raise RotorNotInDatabaseError(
+                    f'Rotor name {rotor} cannot be solved from database')
             rotor.change_position(positions[i])
             rotor.change_ring(rings[i])
             self._rotors.append(rotor)
@@ -41,7 +46,8 @@ class Enigma():
         try:
             self._reflector = database.reflectors[reflector]
         except KeyError:
-            raise ReflectorNotInDatabaseError
+            raise ReflectorNotInDatabaseError(
+                f'Reflector name {reflector} cannot be solved from database')
 
         # seting plugboard
         self._plugboard = Plugboard(plugboard)
@@ -144,7 +150,7 @@ class Enigma():
         try:
             self._reflector = self.database.reflectors[new_reflector]
         except KeyError:
-            raise ReflectorNotInDatabaseError
+            raise ReflectorNotInDatabaseError()
 
     def change_position(self, index: int, new_pos: str) -> None:
 
@@ -167,7 +173,7 @@ class Enigma():
             new_rotor = deepcopy(self.database.rotors[new_rotor])
             self._rotors.append(new_rotor)
         except KeyError:
-            raise RotorNotInDatabaseError
+            raise RotorNotInDatabaseError()
 
     def remove_rotor(self, index: int) -> None:
 
@@ -196,6 +202,13 @@ class Enigma():
 
         """Code one letter with current configuration"""
 
+        try:
+            letter_as_number = to_number(letter)
+        except InvalidLengthError:
+            raise InvalidSignToCode
+        except LetterCodeOutOfRange:
+            raise InvalidSignToCode
+
         # check if further rotors (other then last one) should rotate
         for i, rotor in enumerate(reversed(self.rotors), start=1):
             if i > 1:
@@ -223,8 +236,6 @@ class Enigma():
             space = " "
             self._letter_counter = 1
 
-        # change letter to number and add it to steps list
-        letter_as_number = to_number(letter)
         steps = [letter_as_number]
 
         # letter "goes" throught plugboard (first time)
@@ -287,4 +298,12 @@ class ReflectorNotInDatabaseError(Exception):
 
 
 class RotorNotInDatabaseError(Exception):
+    pass
+
+
+class InvalidConfData(Exception):
+    pass
+
+
+class InvalidSignToCode(Exception):
     pass

@@ -1,6 +1,8 @@
-from enigma_classes.functions import read_from_json, to_letter, write_to_json
-from enigma_classes.enigma_class import Enigma
+from enigma_classes.functions import to_letter
+import json
+from enigma_classes.enigma_class import Enigma, InvalidConfData
 from elements_database import ElementsDatabase, CustomElementsDatabase
+from elements_database import InvalidElementsDataError
 
 
 class ResourcesManager():
@@ -16,9 +18,19 @@ class ResourcesManager():
         config_path = f"{self.rsc_path}/config.json"
 
         # load databases from resources files
-        self._default = ElementsDatabase(read_from_json(default_path))
-        self._custom = CustomElementsDatabase(self._default,
-                                              read_from_json(custom_path))
+        try:
+            self._default = ElementsDatabase(read_from_json(default_path))
+        except InvalidElementsDataError:
+            raise InvalidDatabaseJSONFileFormat('Default database file (./res/default.json) \
+                have an invalid format')
+
+        try:
+            self._custom = CustomElementsDatabase(
+                self._default, read_from_json(custom_path))
+        except InvalidElementsDataError:
+            raise InvalidDatabaseJSONFileFormat('Custom database file (./res/custom.json) \
+                have an invalid format')
+
         self._elements = self.default + self.custom
         self._conf = read_from_json(config_path)
 
@@ -56,15 +68,22 @@ class ResourcesManager():
 
         """Initialize Enigma with configuration from config file"""
 
-        return Enigma(self.conf, self.elements)
+        try:
+            return Enigma(self.conf, self.elements)
+        except InvalidConfData:
+            raise InvalidConfJSONFileFormat
 
     def initailze_enigma_with_file(self, path):
 
         """Initialize Enigma with configuration
         from another file given as an argument"""
 
-        configuration = read_from_json(path)
-        return Enigma(configuration, self.elements)
+        try:
+            configuration = read_from_json(path)
+            return Enigma(configuration, self.elements)
+
+        except InvalidConfData:
+            raise InvalidConfJSONFileFormat
 
     def export_config_to_file(self, enigma_machine, path):
 
@@ -74,7 +93,7 @@ class ResourcesManager():
         conf_data = self.get_conf_from_enigma(enigma_machine)
         write_to_json(path, conf_data)
 
-    def set_new_default_config(self, enigma_machine: Enigma, type):
+    def save_new_default_config(self, enigma_machine: Enigma, type):
 
         """Save current Enigma configuration to config file"""
 
@@ -155,6 +174,46 @@ class ResourcesManager():
 
         """Add new elements to custom database"""
 
-        new_custom = CustomElementsDatabase(self.default, read_from_json(path))
-        self._custom = new_custom + self.custom
-        self.set_custom_database()
+        try:
+            new_custom = CustomElementsDatabase(
+                self.default, read_from_json(path))
+            self._custom = new_custom + self.custom
+            self.set_custom_database()
+        except InvalidElementsDataError:
+            raise InvalidDatabaseJSONFileFormat
+
+
+def read_from_json(path: str):
+    try:
+        with open(path, 'r') as file:
+            return json.load(file)
+    except json.decoder.JSONDecodeError:
+        raise NotAJSONError
+    except FileNotFoundError:
+        raise WrongPathError
+    except IsADirectoryError:
+        raise WrongPathError
+
+
+def write_to_json(path: str, data) -> None:
+    try:
+        with open(path, "w") as file:
+            json.dump(data, file, indent=4)
+    except IsADirectoryError:
+        raise WrongPathError
+
+
+class InvalidConfJSONFileFormat(Exception):
+    pass
+
+
+class InvalidDatabaseJSONFileFormat(Exception):
+    pass
+
+
+class WrongPathError(Exception):
+    pass
+
+
+class NotAJSONError(Exception):
+    pass

@@ -1,5 +1,4 @@
 from typing import List
-import json
 
 
 def to_number(char: str) -> int:
@@ -30,24 +29,6 @@ def last_to_first(list: List) -> List:
         raise EmptyListError('List to transform cannot be empty')
     element = list.pop()
     list.insert(0, element)
-
-
-def read_from_json(path: str):
-    try:
-        with open(path, 'r') as file:
-            return json.load(file)
-    except FileNotFoundError:
-        raise WrongPathError
-    except IsADirectoryError:
-        raise WrongPathError
-
-
-def write_to_json(path: str, data) -> None:
-    try:
-        with open(path, "w") as file:
-            json.dump(data, file, indent=4)
-    except IsADirectoryError:
-        raise WrongPathError
 
 
 def swap(list: List, index1: int, index2: int) -> List:
@@ -92,8 +73,4 @@ class EmptyListError(Exception):
 
 
 class InvalidLengthError(Exception):
-    pass
-
-
-class WrongPathError(Exception):
     pass
