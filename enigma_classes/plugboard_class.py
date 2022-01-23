@@ -57,7 +57,6 @@ def validate_plugboard(connections: str) -> None:
 
     for position, letter in enumerate(connections, 1):
 
-        # check if letter is a space
         if letter == " ":
 
             # check, if space apear after group of two signs
@@ -75,18 +74,12 @@ def validate_plugboard(connections: str) -> None:
         elif position == len(connections) and letters_in_group != 1:
             raise PlugboardInvalidFormatError
 
-        # check if letter is in alphabet
-        # (we have checked the space before so there is no problem with it)
         elif letter not in alphabet:
 
-            # if not that sign is invalid
             raise PlugboardInvalidSignError
 
-        # check if letter is in check table
-        # (was there the same letter before?)
         elif letter in check_table:
 
-            # if yes letter is duplicated
             raise PlugboardDuplicatedLetterError
 
         else:

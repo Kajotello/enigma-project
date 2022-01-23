@@ -7,7 +7,6 @@ from enigma_classes.plugboard_class import PlugboardInvalidSignError
 from enigma_classes.rotor_class import RotorIndentationDuplicatedLetterError
 from enigma_classes.rotor_class import RotorIndentationInvalidSignError
 from enigma_classes.rotor_class import RotorInvalidIndentationFormatError
-from enigma_classes.rotor_class import RotorInvalidWiringFormatError
 from enigma_classes.rotor_class import RotorWiringInvalidSignEroor
 from enigma_classes.rotor_class import RotorEmptyNameError
 from enigma_classes.rotor_class import RotorWiringNotAllLettersError
@@ -388,8 +387,6 @@ class EnigmaWindow(QMainWindow):
                 error.current_use_error()
         except NameInUseError:
             error.name_in_use()
-        except RotorInvalidWiringFormatError:
-            error.invalid_rotor_wiring()
         except RotorWiringInvalidSignEroor:
             error.invalid_sign()
         except RotorWiringDuplicatedLetterError:
@@ -424,8 +421,6 @@ class EnigmaWindow(QMainWindow):
             self.ui.rotor_indentation.clear()
         except NameInUseError:
             error.name_in_use()
-        except RotorInvalidWiringFormatError:
-            error.invalid_rotor_wiring()
         except RotorWiringInvalidSignEroor:
             error.invalid_sign()
         except RotorWiringDuplicatedLetterError:

@@ -138,6 +138,9 @@ class Rotor:
 
         """Simulate rotation of rotor"""
 
+        if number_of_rotation < 0:
+            raise NegativeRotationError
+
         if number_of_rotation != 0 and count is True:
             self._position = (self._position+number_of_rotation) % 26
 
@@ -150,6 +153,9 @@ class Rotor:
         """Simulate reversed rotation of rotor - not possible in normal
         usage of machine, but helpful to implement ring functionality
         """
+
+        if number_of_rotation < 0:
+            raise NegativeRotationError
 
         for i in range(number_of_rotation):
             last_to_first(self.code_table_in)
@@ -173,19 +179,19 @@ class Rotor:
         self.reverse_rotate(new_ring)
         self.set_ring(new_ring)
 
-    def code_in(self, ASCII_letter):
+    def code_in(self, letter_to_num: int) -> int:
 
         """Code leter in 'in' direction"""
 
-        ASCII_letter += self.code_table_in[ASCII_letter]
-        return ASCII_letter % 26
+        letter_to_num += self.code_table_in[letter_to_num]
+        return letter_to_num % 26
 
-    def code_out(self, ASCII_letter):
+    def code_out(self, letter_to_num: int) -> int:
 
         """Code leter in 'out' direction"""
 
-        ASCII_letter += self.code_table_out[ASCII_letter]
-        return ASCII_letter % 26
+        letter_to_num += self.code_table_out[letter_to_num]
+        return letter_to_num % 26
 
 
 def generate_in_out_tables(wiring: str):
@@ -225,16 +231,12 @@ def validate_rotor(name, wiring, indentations: str):
 
     for letter in wiring:
 
-        # check if letter is in alphabet
         if letter not in alphabet:
 
-            # if not wiring is invalid
             raise RotorWiringInvalidSignEroor
 
-        # check if letter is in check_table
         if letter in check_table:
 
-            # if yes letter is duplicated, so the wiring is invalid
             raise RotorWiringDuplicatedLetterError
         else:
 
@@ -244,39 +246,26 @@ def validate_rotor(name, wiring, indentations: str):
     # (because we previously check that no letter is duplicated)
     if len(wiring) < 26:
 
-        # if yes not all letters are included, so the wiring is invalid
         raise RotorWiringNotAllLettersError
 
-    # check if name is empty
     if len(name) == 0:
 
-        # if yes it is invalid
         raise RotorEmptyNameError
 
     for position in indentations:
 
-        # check if position in indentations is in alphabet
         if position not in alphabet:
 
-            # if no intdentation is not valid
             raise RotorIndentationInvalidSignError
 
-    # check if length of indentaions is 1 or 2
     if len(indentations) != 1 and len(indentations) != 2:
 
-        # if not indentation is not valid
         raise RotorInvalidIndentationFormatError
 
-    # if length of indentation is 2 check is the letter different
     if len(indentations) == 2:
         if indentations[0] == indentations[1]:
 
-            # if no indentations is not valid
             raise RotorIndentationDuplicatedLetterError
-
-
-class RotorInvalidWiringFormatError(Exception):
-    pass
 
 
 class RotorWiringInvalidSignEroor(Exception):
@@ -304,4 +293,8 @@ class RotorInvalidIndentationFormatError(Exception):
 
 
 class RotorIndentationInvalidSignError(Exception):
+    pass
+
+
+class NegativeRotationError(Exception):
     pass

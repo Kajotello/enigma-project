@@ -86,19 +86,19 @@ class CustomElementsDatabase(ElementsDatabase):
 
         # check unique of rotor's names with default database
         for rotor_name in self.rotors.keys():
-            self.check_rotor_key_with_second_database(rotor_name, rotor_name)
+            self.check_rotor_key_in_second_database(rotor_name)
 
         # check unique of reflector's names with default database
         for reflector_name in self.reflectors.keys():
-            self.check_reflector_key_with_second_database(
-                reflector_name, reflector_name)
+            self.check_reflector_key_in_second_database(
+                reflector_name)
 
     @property
     def connected_database(self):
         return self._connected_database
 
     def add_rotor(self, name: str, wiring: str,
-                  indentations: str, allowed_name=None) -> None:
+                  indentations: str) -> None:
 
         """Add new rotor model to custom database"""
 
@@ -106,21 +106,18 @@ class CustomElementsDatabase(ElementsDatabase):
         # allowed name is needed, because function is used
         # when modifing rotor -  allowed name make it possible
         # to make exception for leaving the same name
-        self.check_rotor_key_with_second_database(name, allowed_name)
+        self.check_rotor_key_with_second_database(name)
 
         # if yes create rotor and add to database
         new_element = Rotor(name, wiring, indentations)
         self.rotors[name] = new_element
 
-    def add_reflector(self, name: str, wiring: str, allowed_name=None):
+    def add_reflector(self, name: str, wiring: str):
 
         """Add new reflector model to custom database"""
 
         # check if the name is unique
-        # allowed name is needed, because function is used
-        # when modifing reflector - allowed name make it possible
-        # to make exception for leaving the same name
-        self.check_reflector_key_with_second_database(name, allowed_name)
+        self.check_reflector_key_with_second_database(name)
 
         # if yes create reflector and add to database
         new_element = Reflector(name, wiring)
@@ -148,12 +145,12 @@ class CustomElementsDatabase(ElementsDatabase):
         """Modify one or more parameters of exisiting reflector model"""
 
         # check if new name is unique (but it can be the same as old_name)
-        self.check_reflector_key_with_second_database(name, old_name)
-
-        # if yes remove previous version of reflector model and add new version
-        self.add_reflector(name, wiring, old_name)
+        # so if it, we don't have to check
         if old_name != name:
-            self.remove_reflector(old_name)
+            self.check_reflector_key_with_second_database(name)
+
+        self.remove_reflector(old_name)
+        self.add_reflector(name, wiring)
 
     def modify_rotor(self, old_name: str, name: str, wiring: str,
                      indentations: str):
@@ -161,31 +158,43 @@ class CustomElementsDatabase(ElementsDatabase):
         """Modify one or more parameters of exisiting rotor model"""
 
         # check if new name is unique (but it can be the same as old_name)
-        self.check_rotor_key_with_second_database(name, old_name)
-
-        # if yes remove previous version of rotor model and add new version
-        self.add_rotor(name, wiring, indentations, old_name)
+        # so if it, we don't have to check
         if old_name != name:
-            self.remove_rotor(old_name)
+            self.check_rotor_key_with_second_database(name)
 
-    def check_rotor_key_with_second_database(self, key, old_key=None):
+        self.remove_rotor(old_name)
+        self.add_rotor(name, wiring, indentations)
+
+    def check_rotor_key_with_second_database(self, key):
 
         """Check unique of rotor name in this
         database and in connected database"""
 
-        if key in self.rotors.keys() and key != old_key:
+        if key in self.rotors.keys():
             raise NameInUseError
+        self.check_rotor_key_in_second_database(key)
+
+    def check_rotor_key_in_second_database(self, key):
+
+        """Check unique of rotor name in connected database"""
+
         if (self.connected_database is not None and
                 key in self.connected_database.rotors.keys()):
             raise NameInUseError
 
-    def check_reflector_key_with_second_database(self, key, old_key=None):
+    def check_reflector_key_with_second_database(self, key):
 
         """Check unique of reflector name in this
         database and in connected database"""
 
-        if key in self.reflectors.keys() and key != old_key:
+        if key in self.reflectors.keys():
             raise NameInUseError
+        self.check_reflector_key_in_second_database(key)
+
+    def check_reflector_key_in_second_database(self, key):
+
+        """Check unique of reflector name in connected database"""
+
         if (self.connected_database is not None and
                 key in self.connected_database.reflectors.keys()):
             raise NameInUseError

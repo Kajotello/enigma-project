@@ -81,7 +81,6 @@ def validate_reflector(name: str, wiring: str) -> None:
 
     for position, letter in enumerate(wiring, 1):
 
-        # check if letter is a space
         if letter == " ":
 
             # check, if space apear after group of two signs
@@ -99,18 +98,12 @@ def validate_reflector(name: str, wiring: str) -> None:
         elif position == len(wiring) and letters_in_group != 1:
             raise ReflectorInvalidWiringError
 
-        # check if letter is in alphabet
-        # (we have checked the space before so there is no problem with it)
         elif letter not in alphabet:
 
-            # if not that sign is invalid
             raise ReflectorInvalidSignError
 
-        # check if letter is in check table
-        # (was there the same letter before?)
         elif letter in check_table:
 
-            # if yes letter is duplicated
             raise ReflectorDuplicatedLetterError
 
         else:
@@ -126,10 +119,8 @@ def validate_reflector(name: str, wiring: str) -> None:
 
         raise ReflectorNotAllLettersError
 
-    # check if reflector name is empty
     if len(name) == 0:
 
-        # if yes, that name is not valid
         raise ReflectorEmptyNameError
 
 

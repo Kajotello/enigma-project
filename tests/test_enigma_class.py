@@ -1382,23 +1382,386 @@ def test_code_letter_basic_positions_and_rings():
     assert cipher_letter[0] == 'J'
     assert cipher_letter[1] == ['D', 'D', 'H', 'Q', 'Q', 'X', 'M', 'C', 'P',
                                 'T', 'J', 'J', 'J']
+    assert enigma.rotors[0].position == 0
+    assert enigma.rotors[1].position == 0
+    assert enigma.rotors[2].position == 0
 
 
-def test_code_letter_with_rotation():
-    assert 0 == 1
-    # @TODO
+def test_code_letter_with_rotation_and_rings():
+    conf_data = {
+        "machine": {
+            "rotors": [
+                "rotorI",
+                "rotorII",
+                "rotorIII",
+            ],
+            "rings": "OPT",
+            "start_positions": "WAR",
+            "reflector": "reflectorUKWB",
+            "plugboard": "",
+        },
+        "settings": {
+            "double_step": True,
+            "space_dist": 2
+        }
+    }
+
+    database = {
+        "rotors": [
+            {
+                "name": "rotorI",
+                "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+                "indentations": "Q"
+            },
+
+            {
+                "name": "rotorII",
+                "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
+                "indentations": "E"
+            },
+
+            {
+                "name": "rotorIII",
+                "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
+                "indentations": "V"
+            },
+                ],
+
+        "reflectors": [
+
+            {
+                "name": "reflectorUKWB",
+                "wiring": "AY BR CU DH EQ FS GL IP JX KN MO TZ VW"
+            },
+
+            {
+                "name": "reflectorUKWC",
+                "wiring": "AF BV CP DJ EI GO HY KR LZ MX NW QT SU"
+            }
+        ]
+    }
+    elemnts_database = ElementsDatabase(database)
+    enigma = Enigma(conf_data, elemnts_database)
+    cipher_letter = enigma.code_letter('B')
+    assert cipher_letter[0] == 'J'
+    assert cipher_letter[1] == ['B', 'B', 'C', 'I', 'P', 'I', 'Z', 'S',
+                                'J', 'J', 'J']
+    assert enigma.rotors[0].position == 22
+    assert enigma.rotors[1].position == 0
+    assert enigma.rotors[2].position == 18
+
+
+def test_code_letter_with_plugboard():
+    conf_data = {
+        "machine": {
+            "rotors": [
+                "rotorI",
+                "rotorII",
+                "rotorIII",
+            ],
+            "rings": "XQP",
+            "start_positions": "NNN",
+            "reflector": "reflectorUKWB",
+            "plugboard": "AF QW",
+        },
+        "settings": {
+            "double_step": True,
+            "space_dist": 2
+        }
+    }
+
+    database = {
+        "rotors": [
+            {
+                "name": "rotorI",
+                "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+                "indentations": "Q"
+            },
+
+            {
+                "name": "rotorII",
+                "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
+                "indentations": "E"
+            },
+
+            {
+                "name": "rotorIII",
+                "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
+                "indentations": "V"
+            },
+                ],
+
+        "reflectors": [
+
+            {
+                "name": "reflectorUKWB",
+                "wiring": "AY BR CU DH EQ FS GL IP JX KN MO TZ VW"
+            },
+
+            {
+                "name": "reflectorUKWC",
+                "wiring": "AF BV CP DJ EI GO HY KR LZ MX NW QT SU"
+            }
+        ]
+    }
+    elemnts_database = ElementsDatabase(database)
+    enigma = Enigma(conf_data, elemnts_database)
+    cipher_letter = enigma.code_letter('A')
+    assert cipher_letter[0] == 'W'
+    assert cipher_letter[1] == ['A', 'F', 'K', 'X', 'G', 'L', 'G', 'F',
+                                'Q', 'W', 'W']
+    assert enigma.rotors[0].position == 13
+    assert enigma.rotors[1].position == 13
+    assert enigma.rotors[2].position == 14
+
+
+def test_code_letter_with_rotation_of_2st_rotor():
+    conf_data = {
+        "machine": {
+            "rotors": [
+                "rotorI",
+                "rotorII",
+                "rotorIII",
+            ],
+            "rings": "XQP",
+            "start_positions": "NNV",
+            "reflector": "reflectorUKWB",
+            "plugboard": "AF QW",
+        },
+        "settings": {
+            "double_step": True,
+            "space_dist": 2
+        }
+    }
+
+    database = {
+        "rotors": [
+            {
+                "name": "rotorI",
+                "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+                "indentations": "Q"
+            },
+
+            {
+                "name": "rotorII",
+                "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
+                "indentations": "E"
+            },
+
+            {
+                "name": "rotorIII",
+                "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
+                "indentations": "V"
+            },
+                ],
+
+        "reflectors": [
+
+            {
+                "name": "reflectorUKWB",
+                "wiring": "AY BR CU DH EQ FS GL IP JX KN MO TZ VW"
+            },
+
+            {
+                "name": "reflectorUKWC",
+                "wiring": "AF BV CP DJ EI GO HY KR LZ MX NW QT SU"
+            }
+        ]
+    }
+    elemnts_database = ElementsDatabase(database)
+    enigma = Enigma(conf_data, elemnts_database)
+    cipher_letter = enigma.code_letter('A')
+    assert cipher_letter[0] == 'Y'
+    assert cipher_letter[1] == ['A', 'F', 'S', 'S', 'F', 'S', 'F', 'E',
+                                'Y', 'Y', 'Y']
+    assert enigma.rotors[0].position == 13
+    assert enigma.rotors[1].position == 14
+    assert enigma.rotors[2].position == 22
 
 
 def test_code_letter_with_double_step():
-    assert 0 == 1
-    # @TODO
+    conf_data = {
+        "machine": {
+            "rotors": [
+                "rotorI",
+                "rotorII",
+                "rotorIII",
+            ],
+            "rings": "XQP",
+            "start_positions": "NDV",
+            "reflector": "reflectorUKWB",
+            "plugboard": "AF QW",
+        },
+        "settings": {
+            "double_step": True,
+            "space_dist": 2
+        }
+    }
+
+    database = {
+        "rotors": [
+            {
+                "name": "rotorI",
+                "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+                "indentations": "Q"
+            },
+
+            {
+                "name": "rotorII",
+                "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
+                "indentations": "E"
+            },
+
+            {
+                "name": "rotorIII",
+                "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
+                "indentations": "V"
+            },
+                ],
+
+        "reflectors": [
+
+            {
+                "name": "reflectorUKWB",
+                "wiring": "AY BR CU DH EQ FS GL IP JX KN MO TZ VW"
+            },
+
+            {
+                "name": "reflectorUKWC",
+                "wiring": "AF BV CP DJ EI GO HY KR LZ MX NW QT SU"
+            }
+        ]
+    }
+    elemnts_database = ElementsDatabase(database)
+    enigma = Enigma(conf_data, elemnts_database)
+    cipher_letter = enigma.code_letter('A')[0]
+    cipher_letter += enigma.code_letter('A')[0]
+    assert cipher_letter == "TV"
+    assert enigma.rotors[0].position == 14
+    assert enigma.rotors[1].position == 5
+    assert enigma.rotors[2].position == 23
 
 
 def test_code_letter_with_pottencial_double_step():
-    assert 0 == 1
-    # @TODO
+    conf_data = {
+        "machine": {
+            "rotors": [
+                "rotorI",
+                "rotorII",
+                "rotorIII",
+            ],
+            "rings": "XQP",
+            "start_positions": "NDV",
+            "reflector": "reflectorUKWB",
+            "plugboard": "AF QW",
+        },
+        "settings": {
+            "double_step": False,
+            "space_dist": 2
+        }
+    }
+
+    database = {
+        "rotors": [
+            {
+                "name": "rotorI",
+                "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+                "indentations": "Q"
+            },
+
+            {
+                "name": "rotorII",
+                "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
+                "indentations": "E"
+            },
+
+            {
+                "name": "rotorIII",
+                "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
+                "indentations": "V"
+            },
+                ],
+
+        "reflectors": [
+
+            {
+                "name": "reflectorUKWB",
+                "wiring": "AY BR CU DH EQ FS GL IP JX KN MO TZ VW"
+            },
+
+            {
+                "name": "reflectorUKWC",
+                "wiring": "AF BV CP DJ EI GO HY KR LZ MX NW QT SU"
+            }
+        ]
+    }
+    elemnts_database = ElementsDatabase(database)
+    enigma = Enigma(conf_data, elemnts_database)
+    cipher_letter = enigma.code_letter('A')[0]
+    cipher_letter += enigma.code_letter('A')[0]
+    # assert cipher_letter == "TV"
+    assert enigma.rotors[0].position == 13
+    assert enigma.rotors[1].position == 4
+    assert enigma.rotors[2].position == 23
 
 
-def test_code_file():
-    assert 0 == 1
-    # @TODO
+def test_code_letter_with_space():
+    conf_data = {
+        "machine": {
+            "rotors": [
+                "rotorI",
+                "rotorII",
+                "rotorIII",
+            ],
+            "rings": "XQP",
+            "start_positions": "NNV",
+            "reflector": "reflectorUKWB",
+            "plugboard": "AF QW",
+        },
+        "settings": {
+            "double_step": True,
+            "space_dist": 2
+        }
+    }
+
+    database = {
+        "rotors": [
+            {
+                "name": "rotorI",
+                "wiring": "EKMFLGDQVZNTOWYHXUSPAIBRCJ",
+                "indentations": "Q"
+            },
+
+            {
+                "name": "rotorII",
+                "wiring": "AJDKSIRUXBLHWTMCQGZNPYFVOE",
+                "indentations": "E"
+            },
+
+            {
+                "name": "rotorIII",
+                "wiring": "BDFHJLCPRTXVZNYEIWGAKMUSQO",
+                "indentations": "V"
+            },
+                ],
+
+        "reflectors": [
+
+            {
+                "name": "reflectorUKWB",
+                "wiring": "AY BR CU DH EQ FS GL IP JX KN MO TZ VW"
+            },
+
+            {
+                "name": "reflectorUKWC",
+                "wiring": "AF BV CP DJ EI GO HY KR LZ MX NW QT SU"
+            }
+        ]
+    }
+    elemnts_database = ElementsDatabase(database)
+    enigma = Enigma(conf_data, elemnts_database)
+    cipher_letter = ""
+    cipher_letter += enigma.code_letter('A')[0]
+    cipher_letter += enigma.code_letter('A')[0]
+    cipher_letter += enigma.code_letter('A')[0]
+    assert cipher_letter == 'YG J'
