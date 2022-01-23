@@ -7,9 +7,7 @@
 - usuwanie rotora/reflektora gdy nie wybrany /SOLVED
 - POWIĄZANE - zapamiętywanie indexu po zmiane kart - można usuńąc wczesniej wybrany element, chociaż nie jest podświetlony /SOLVED
 - brak aktualizacji komponentów własnych w self.elements /SOLVED
-- problem z rotacja przy duzej liczbie rotorów
+- problem z rotacja przy duzej liczbie rotorów /SOLVED
 - usuwanie bez zaznaczonego obiektu rzuca Type Error - bez efektu w GUI /SOLVED
 - ustawinie space_dist na 0 nie daje tekstu bez spacji /SOLVED
--
-
 - usuwanie modelu bez zanzczonego obiektu woła wyjątki / SOLVED

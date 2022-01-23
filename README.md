@@ -6,8 +6,8 @@ Enigma to niemiecka przenośna elektromechaniczna maszyna szyfrująca, oparta na
 ## Cel Projektu
 Celem projektu było napisanie programu komputerowego który swym działaniem symulowałby maszynę szyfrującą Enigma. Nie chodziło jednak o odwzorowywanie konkretnego modelu urządzenia, a o uogólnioną implementację maszyny wirnikowej, z niezdefiniowaną odgórnie liczbą wirników (w przeciwieństwie do fizycznych urządzeń). Stworzony program miał mieć możliwość kodowania tekstu litera po literze (jak w oryginalnej maszynie) oraz kodowania tekstu z pliku. Dodatkową wartością symulatora miał być element edukacyjno-poznawczy, pozwalający prześledzić „drogę” kodowanej litery w celu lepszego zrozumienia działania maszyny.
 
-## Zastosowane rozwiązania
-Projekt zrealizowano w języku programowania Python, wersja 3.8.10. Interfejs graficzny napisano z wykorzystaniem biblioteki Qt i Pyside. Do edycji kodu wykorzytsano program Visual Studio Code.
+## Wykorzystane narzędzia
+Projekt zrealizowano w języku programowania Python, wersja 3.8.10. Interfejs graficzny napisano z wykorzystaniem biblioteki Qt i Pyside. Do edycji kodu wykorzytsano program Visual Studio Code. Program testowano z użyciem frameworka pytest w wersji 6.2.5
 
 ## Struktura Projektu
 
@@ -38,8 +38,11 @@ Projekt zrealizowano w języku programowania Python, wersja 3.8.10. Interfejs gr
     |	|_ test_reflector_class.py
     |	|_ test_enigma_class.py
     |	|_ test_functions.py
+    |	|_ test_rsc_manager.py
+    |	|_ test_elements_database.py
     |
     |_ rsc_manager.py
+    |_ elements_database.py
     |_ enigma.py
     |_ README.md
 
@@ -61,30 +64,87 @@ Na strukturę projektu składają się cztery podkatalogi:
      - errors.py - definicje informacji o błędach wyświetlanych w ramach interfejsu
 
 - rsc - zawierający pliki z zasobami i zapisaną konfigurację:
-     - config.json - konfiguracja maszyny szyfrującej podczas uruchamiania programu
+     - config.json - domyślna konfiguracja maszyny szyfrującej
      - default.json - baza domyślnych elementów (wirników i bębnów odbijających) pochodzących z oryginalnej Enigmy
      - custom.json - baza elementów zdefiniowanych przez użytkownika
+
 - tests - zawierający testy jednostkowe do projektu
 
-oraz trzy pliki w katalogu głównym:
+oraz cztery pliki w katalogu głównym:
 
-- rsc_manager.py - odpowiadający za zarządzanie plikami w katalogu rsc
-- enigma.py - główny program, wywoływany z konsoli z odpowiednimi flagami
+- rsc_manager.py - odpowiadający za zarządzanie plikami (zapis i odczyt oraz podstawowa obróbka) znajdującymi się w katalogu w katalogu rsc
+- elements_database.py - zawi
+- enigma.py - główny program, wywoływany z konsoli z odpowiednimi parametrami
 - README.md - plik z dokumentacją
 
 
 ## Format plików konfiguracyjncyh
 
 - conf.json
+      - machine
+          - rotors
+          - rings
+          - start_position
+          - reflector
+          - plugboard
+      - settings
+          - double_step
+          - space_dist
+
+    {
+        "machine": {
+            "rotors": [
+            ],
+            "rings": "QAA",
+            "start_positions": "TAA",
+            "reflector": "reflectorUKWC",
+            "plugboard": "AS DF RY"
+        },
+        "settings": {
+            "double_step": # if true double step is enabled, if false disabled
+            "space_dist": # distance between
+        }
+    }
+
+- custom.json and default.json
+      - rotors
+          - [
+          - name
+          - wiring
+          - indentation
+          - ]
+
+      - reflectors
+          - [
+          - name
+          - wiring
+          - ]
+    {
+        "rotors": [
+            {
+                "name": "ROTOE1",
+                "wiring": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                "indentations": "AF"
+            }
+        ],
+        "reflectors": [
+
+            {
+                "name": "reflectorUKWB",
+                "wiring": "AY BR CU DH EQ FS GL IP JX KN MO TZ VW"
+            }
+        ]
+    }
+
 
 Nie jest zalecane samodzielne modyfikowanie plików konfiguracyjnych!!!
 ## Instrukcja użytkownika
-Uruchomienia programu należy dokonać poprzez jego wywołanie z konsoli z odpowiednimi flagami:
+Uruchomienia programu należy dokonać poprzez jego wywołanie z konsoli z odpowiednimi parametrami:
 
     usage: enigma.py [-h] [-m] [-i] [-o] [-c]
-    
+
     Simulate Enigma machine.
-    
+
     optional arguments:
     -h, --help           show this help message and exit
     -m , --mode          define the mode in wich programme should be run (default: gui)
@@ -96,9 +156,9 @@ Domyślnie (bez podania żadnych parametrów) program uruchomi się w postaci in
 
 ### Tryb interfejsu graficznego
 Funkcje:
-- związane stricte z maszyną
+- związane stricte z maszyną szyfrującą
     - kodowanie tekstu litera po literze wraz z wyświetleniem poszczególnych kroków
-    - kodowanie tekstu z pliku do pliku wynikowego
+    - kodowanie tekstu z pliku wejściowego do pliku wynikowego
     - zmiana obecnej konfiguracji maszyny
 - związane ogólnie z działaniem symulatora
     - dodanie/usunięcie/modyfikacja spersonalizowanych wirników
@@ -108,8 +168,7 @@ Funkcje:
 Każdej z funkcji odpowiada jedno okno programu, do którego przenieść się można dzięki rozwijanemu górnemu menu
 
 ## Podsumowanie
-
-
+Podsumowując efekty pracy uważam, że
 
 
 

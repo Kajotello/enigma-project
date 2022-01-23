@@ -165,6 +165,7 @@ class EnigmaWindow(QMainWindow):
         self.ui.plugboard_connections.setText(plugboard_text)
 
         #   page 1 - encrypt from file
+        self.ui.input_file_name.setText(self.input)
         self.ui.output_file_name.setText(self.output)
 
         #   page 2 - settings

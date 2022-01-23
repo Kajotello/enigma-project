@@ -12,7 +12,7 @@ def main():
 
     parser.add_argument('-m', '--mode', default="gui",
                         help='define the mode in wich programme should be run\
-                        (default: %(default)s)',
+                        [gui/cmd] (default: %(default)s)',
                         choices=["gui", "cmd"],
                         metavar="")
     parser.add_argument('-i', '--input_file', default=None,
@@ -29,8 +29,8 @@ def main():
     args = parser.parse_args()
     mode = args.mode
     if mode == "cmd":
-        configuration = rsc.initialize_enigma(args.config)
-        configuration.code_file(args.input_file, args.output_file)
+        enigma = rsc.initailze_enigma_with_file(args.config)
+        enigma.code_file(args.input_file, args.output_file)
     elif mode == "gui":
         gui_main(args)
 
