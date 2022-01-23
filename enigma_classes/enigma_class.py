@@ -271,6 +271,7 @@ class Enigma():
 
         """Code file from given input file to output file"""
 
+        letter_counter_holder = self.letter_counter
         self._letter_counter = 0
         result = ""
 
@@ -283,6 +284,8 @@ class Enigma():
         # write cipher text to output file
         with open(output_file, "w") as file_handle:
             file_handle.write(result)
+
+        self._letter_counter = letter_counter_holder
 
 
 class InvalidSpaceDistError(Exception):
