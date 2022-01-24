@@ -77,7 +77,7 @@ Na strukturę projektu składają się cztery podkatalogi:
 
 oraz cztery pliki w katalogu głównym:
 
-- rsc_manager.py - odpowiadający za zarządzanie plikami (zapis i odczyt oraz podstawowa obróbka) znajdującymi się w katalogu w katalogu rsc
+- rsc_manager.py - odpowiadający za zarządzanie plikami (zapis i odczyt oraz podstawowa obróbka) znajdującymi się w katalogu rsc
 - elements_database.py - zawierająca obiekt bazy danych dostępnych obiektów
 - enigma.py - główny program, wywoływany z konsoli z odpowiednimi parametrami
 - README.md - plik z dokumentacją
@@ -265,7 +265,7 @@ Każdej z funkcji odpowiada jedno okno programu, do którego przenieść się mo
 W trybie konsolowym program dla pliku wejściowego (do którego ścieżka podana jest jako parametr -i albo --input_file) generuje plik wynikowy (w lokalizacji podanej jako parametr -o albo --output_file lub jako result.txt). Jeśli podana została ścieżka do pliku konfiguracyjnego (jako paramater -c albo --config) to plik zakodowany zostanie dla podanej konfiguracji początkowej (format musi być zgodny z formatem dla pliku config.json). Jeśli ścieżka taka nie została podana, plik kodowany jest z konfiguracją zapisaną w ./rsc/config.json. Jeśli ścieżka do pliku wejściowego nie została podana wykonanie programu nie powiedzie się.
 
 ## Podsumowanie
-Projekt w ostatecznym kształcie posiada pełną założoną funkcjonalność. Podczas jego tworzenia udało się dodać pewne nieplanowane wcześniej usprawnienia/ułatwienia, które nie były skomplikowane w implementacji a znacząco ułatwiły korzystanie z niektórych funkcji - np. pasek z podświetleniem wykorzystanych liter przy polach tekstowych, czy użycie QFileDialog do przeglądania plików. Dzięki nim korzytsanie z symulatora przy użyciu GUI jest wygodne i intuicyjne. Wpływ na to ma również rozbudowany system obsługi wyjątków, które wyświatlane są użytkownikowi w postacji jasnych komunikatów. Oczywiście projekt posiada potencjał do dalszego ewentualnego rozwoju - w przyszłości rozważyć możnaby było dodanie polskiej wersji językowej, przestawienie połączeń łacznicy kablowej w postacji graficznej, czy możliwość dodania historii zakodownych plkików.
+Projekt w ostatecznym kształcie posiada pełną założoną funkcjonalność. Podczas jego tworzenia udało się dodać pewne nieplanowane wcześniej usprawnienia/ułatwienia, które nie były skomplikowane w implementacji a znacząco ułatwiły korzystanie z niektórych funkcji - np. pasek z podświetleniem wykorzystanych liter przy polach tekstowych, czy użycie QFileDialog do przeglądania plików. Dzięki nim korzytsanie z symulatora przy użyciu GUI jest wygodne i intuicyjne. Wpływ na to ma również rozbudowany system obsługi wyjątków, które wyświatlane są użytkownikowi w postaci jasnych komunikatów. Oczywiście projekt posiada potencjał do dalszego ewentualnego rozwoju - w przyszłości rozważyć możnaby było dodanie polskiej wersji językowej, przedstawienie połączeń łacznicy kablowej w postaci graficznej, czy możliwość dodania historii zakodownych plkików.
 
 
 
