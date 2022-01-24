@@ -120,12 +120,12 @@ oraz cztery pliki w katalogu głównym:
 - custom.json and default.json:
     - rotors - lista _(list)_ wirników _(dict)_ z najstepującymi kluczami:
         - name - unikalna nazwa własna wirnika _(str)_
-        - wiring - okablowanie wirnika składające się ze wszystkich wielkich liter alfabetu angielskiego _(str)_ bez spacji (np. 'DF...Q' oznacza, że w podstawowej pozycji wirnika A odpowiada D, B-F, a Z - Q ) 
+        - wiring - okablowanie wirnika składające się ze wszystkich wielkich liter alfabetu angielskiego _(str)_ bez spacji (np. 'DF...Q' oznacza, że w podstawowej pozycji wirnika A odpowiada D, B-F, a Z - Q )
         - indentation - pozycja lub pozycje (max 2) z wcięciami - jedna lub dwie różne wielkie litery angielksiego alfabetu _(str)_
 
     - reflectors - lista _(list)_ bębnów odbijających _(dict)_ z najstepującymi kluczami:
         - name - unikalna nazwa własna bębna odbijającego _(str)_
-        - wiring - okablowanie bębna odbijajacego składające się ze wszystkich wielkich liter alfabetu angielskiego _(str)_  pogrupowanych w pary rozdzielone spacją (np. 'DF AS ...' oznacza, że D jest kodowane na F, a A na S i odwrotnie) 
+        - wiring - okablowanie bębna odbijajacego składające się ze wszystkich wielkich liter alfabetu angielskiego _(str)_  pogrupowanych w pary rozdzielone spacją (np. 'DF AS ...' oznacza, że D jest kodowane na F, a A na S i odwrotnie)
 
 <details><summary>Rozwiń przykład</summary>
 
@@ -156,7 +156,7 @@ oraz cztery pliki w katalogu głównym:
 ```
 </details>
 
-**Nie jest zalecane samodzielne modyfikowanie plików konfiguracyjnych!!!**
+**Nie jest zalecane samodzielne modyfikowanie plików konfiguracyjnych!!**
 
 ## Instrukcja użytkownika
 Uruchomienia programu należy dokonać poprzez jego wywołanie z konsoli z odpowiednimi parametrami:
@@ -217,7 +217,7 @@ Domyślna konfoguracja jest zmieniana tylko po kliknięciu w przycisk _Save as d
  - _Ring_ -  możliwość ustawienia pierścienia wirnika
 
 #### Dodanie/usunięcie/modyfikacja spersonalizowanych wirników
-- Przycisk _+_ - 
+- Przycisk _+_ -
     - _Name_ -  nazwa nowego wirnika - nie może być pusta i musi być unikatowa
     - _Wiring_ - okabblowanie nowego wirnika - wszytskie wielkie litery angielskiego alfabetu bez spacji np. 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     - _Indentation(s)_ - wcięcie nowego wirnika - jedna lub dwie wielkie litery angielskiego alfabaetu bez spacji np. 'AF'
@@ -233,7 +233,7 @@ Po wybraniu wirnika:
 - _Modify_ - modyfikuje wirnik zgodnie z powyższymi polami jeśli wszytskie pola spełniają wymagania
 
 #### Dodanie/usunięcie/modyfikacja spersonalizowanych bębnów odbijających
-- Przycisk _+_ - 
+- Przycisk _+_ -
     - _Name_ - nazwa nowego bębna - nie może być pusta i musi być unikatowa
     - _Wiring_ - okablowanie bebna - wsyztskie wielkie litery angielskiego alfabaetu pogrupowane w pary rozdzielone spacją np. 'AB CD EF GH IJ KL MN OP QR ST UV WX YZ'
     - _Cancel_ - anuluje dodwanie bębna

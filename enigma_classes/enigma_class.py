@@ -1,5 +1,4 @@
 from typing import List, Tuple
-
 from enigma_classes.reflector_class import Reflector
 from enigma_classes.rotor_class import Rotor
 from enigma_classes.functions import to_number, to_letter, swap
@@ -38,8 +37,16 @@ class Enigma():
             except KeyError:
                 raise RotorNotInDatabaseError(
                     f'Rotor name {rotor} cannot be solved from database')
-            rotor.change_position(positions[i])
-            rotor.change_ring(rings[i])
+
+            try:
+                rotor.change_position(positions[i])
+            except LetterCodeOutOfRange:
+                raise InvalidPositionError
+
+            try:
+                rotor.change_ring(rings[i])
+            except LetterCodeOutOfRange:
+                raise InvalidRingErrror
             self._rotors.append(rotor)
 
         # choosing reflector from database
@@ -54,12 +61,16 @@ class Enigma():
 
         # if there are more or less than 3 rotors in the machin double step is
         # automatically disabled. Otherwise is set according to data
+        if isinstance(double_step, bool) is False:
+            raise InvalidDoubleStepError('Double step have to be a bool')
         if len(self.rotors) == 3:
             self._double_step = double_step
         else:
             self._double_step = False
 
         # set the space distance in cipher text
+        if space_dist < 0:
+            raise InvalidSpaceDistError('Space distance cannot be negative')
         self._space_dist = space_dist
 
         # set the counter of cipher letters to 0
@@ -209,24 +220,21 @@ class Enigma():
         except LetterCodeOutOfRange:
             raise InvalidSignToCode
 
-        # check if further rotors (other then last one) should rotate
-        for i, rotor in enumerate(reversed(self.rotors), start=1):
-            if i > 1:
-                if (self.rotors[-i+1].position not in
-                   [((indentation + 1) % 26) for indentation
-                   in self.rotors[-i+1].indentations]):
-                    break
-            if(rotor.position in rotor.indentations) and \
-              (i != len(self.rotors)):
-                if self.double_step is True and i == 2:
-                    self.rotors[-i].rotate()
-                    self.rotors[-i-1].rotate()
-                    break
-                else:
-                    self.rotors[-i-1].rotate()
-
         # rotation of last rotor which take place every time
         self.rotors[-1].rotate()
+
+        # check if it is a moment to apply double step
+        if (self.double_step is True and
+                self.rotors[1].position in self.rotors[1].indentations):
+            self.rotors[1].rotate()
+            self.rotors[0].rotate()
+
+        # check if further rotors (other then last one) should rotate
+        for i, rotor in enumerate(reversed(self.rotors), start=1):
+            if (rotor.position-1) % 26 in rotor.indentations:
+                self.rotors[-i-1].rotate()
+            else:
+                break
 
         # check if space should be placed in cipher text
         if self.letter_counter < self.space_dist or self._space_dist == 0:
@@ -309,4 +317,12 @@ class InvalidConfData(Exception):
 
 
 class InvalidSignToCode(Exception):
+    pass
+
+
+class InvalidRingErrror(Exception):
+    pass
+
+
+class InvalidPositionError(Exception):
     pass

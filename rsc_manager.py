@@ -114,7 +114,7 @@ class ResourcesManager():
         # actualize conf property to actual content of config.json file
         self._conf = conf_data
 
-    def get_settings_from_enigma(self, enigma_machine: Enigma):
+    def get_settings_from_enigma(self, enigma_machine: Enigma) -> dict:
 
         conf_data = self.conf
         settings = {}
@@ -125,7 +125,7 @@ class ResourcesManager():
 
         return conf_data
 
-    def get_conf_from_enigma(self, enigma_machine: Enigma):
+    def get_conf_from_enigma(self, enigma_machine: Enigma) -> dict:
 
         conf_data = self.conf
         machine = {}
@@ -181,6 +181,8 @@ class ResourcesManager():
             self.set_custom_database()
         except InvalidElementsDataError:
             raise InvalidDatabaseJSONFileFormat
+        except Exception:
+            raise
 
 
 def read_from_json(path: str):
@@ -189,18 +191,11 @@ def read_from_json(path: str):
             return json.load(file)
     except json.decoder.JSONDecodeError:
         raise NotAJSONError
-    except FileNotFoundError:
-        raise WrongPathError
-    except IsADirectoryError:
-        raise WrongPathError
 
 
 def write_to_json(path: str, data) -> None:
-    try:
-        with open(path, "w") as file:
-            json.dump(data, file, indent=4)
-    except IsADirectoryError:
-        raise WrongPathError
+    with open(path, "w") as file:
+        json.dump(data, file, indent=4)
 
 
 class InvalidConfJSONFileFormat(Exception):
@@ -208,10 +203,6 @@ class InvalidConfJSONFileFormat(Exception):
 
 
 class InvalidDatabaseJSONFileFormat(Exception):
-    pass
-
-
-class WrongPathError(Exception):
     pass
 
 

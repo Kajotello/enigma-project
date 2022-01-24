@@ -789,7 +789,7 @@ def test_change_position():
             "plugboard": "AY"
         },
         "settings": {
-            "double_step": 1,
+            "double_step": True,
             "space_dist": 2
         }
     }
@@ -1699,7 +1699,7 @@ def test_code_letter_with_pottencial_double_step():
     enigma = Enigma(conf_data, elemnts_database)
     cipher_letter = enigma.code_letter('A')[0]
     cipher_letter += enigma.code_letter('A')[0]
-    # assert cipher_letter == "TV"
+    assert cipher_letter == "TF"
     assert enigma.rotors[0].position == 13
     assert enigma.rotors[1].position == 4
     assert enigma.rotors[2].position == 23
