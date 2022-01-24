@@ -231,7 +231,8 @@ class Enigma():
 
         # check if further rotors (other then last one) should rotate
         for i, rotor in enumerate(reversed(self.rotors), start=1):
-            if (rotor.position-1) % 26 in rotor.indentations:
+            if ((rotor.position-1) % 26 in rotor.indentations and
+                    i != len(self.rotors)):
                 self.rotors[-i-1].rotate()
             else:
                 break
@@ -287,7 +288,11 @@ class Enigma():
         with open(input_file, "r") as file_handle:
             for line in file_handle:
                 for letter in line:
-                    result += self.code_letter(letter)[0]
+                    if letter == '\n':
+                        result += '\n'
+                        self._letter_counter = 0
+                    else:
+                        result += self.code_letter(letter)[0]
 
         # write cipher text to output file
         with open(output_file, "w") as file_handle:

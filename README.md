@@ -159,7 +159,7 @@ oraz cztery pliki w katalogu głównym:
 **Nie jest zalecane samodzielne modyfikowanie plików konfiguracyjnych!!**
 
 ## Instrukcja użytkownika
-Uruchomienia programu należy dokonać poprzez jego wywołanie z konsoli z odpowiednimi parametrami:
+Uruchomienia programu należy dokonać poprzez wywołanie pliku enigma.py z konsoli z odpowiednimi parametrami:
 
     usage: enigma.py [-h] [-m] [-i] [-o] [-c]
 

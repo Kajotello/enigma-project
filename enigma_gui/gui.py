@@ -1,4 +1,3 @@
-
 from PySide2.QtWidgets import QApplication
 from PySide2.QtWidgets import QMainWindow, QListWidgetItem
 from enigma_classes.plugboard_class import PlugboardDuplicatedLetterError
@@ -203,6 +202,7 @@ class EnigmaWindow(QMainWindow):
 
         # read data and clear input line
         letter = self.ui.letter_input.text()
+        letter = letter.strip()
         self.ui.letter_input.clear()
         cipher_text = self.ui.cipher_text.text()
 
@@ -368,9 +368,9 @@ class EnigmaWindow(QMainWindow):
 
     #   page 4 - manage custom rotors
     def modify_rotor_model(self):
-        name = self.ui.rotor_name_2.text()
-        wiring = self.ui.rotor_wiring_2.text()
-        indentations = self.ui.rotor_indentation_2.text()
+        name = self.ui.rotor_name_2.text().strip()
+        wiring = self.ui.rotor_wiring_2.text().strip()
+        indentations = self.ui.rotor_indentation_2.text().strip()
         old_name = self.selected_id
         try:
             if (self.selected_id not in
@@ -408,9 +408,9 @@ class EnigmaWindow(QMainWindow):
         self.ui.stack3.setCurrentIndex(2)
 
     def add_rotor_model(self):
-        name = self.ui.rotor_name.text()
-        wiring = self.ui.rotor_wiring.text()
-        indentations = self.ui.rotor_indentation.text()
+        name = self.ui.rotor_name.text().strip()
+        wiring = self.ui.rotor_wiring.text().strip()
+        indentations = self.ui.rotor_indentation.text().strip()
         try:
             self.rsc.custom.add_rotor(name, wiring, indentations)
             self.rsc.set_custom_database()
@@ -493,8 +493,8 @@ class EnigmaWindow(QMainWindow):
 
     #   page 5 - manage custom reflectors
     def modify_ref(self):
-        name = self.ui.reflector_mod_name.text()
-        wiring = self.ui.reflector_mod_wiring.text()
+        name = self.ui.reflector_mod_name.text().strip()
+        wiring = self.ui.reflector_mod_wiring.text().strip()
         old_name = self.selected_id
         try:
             if (self.selected_id != self.enigma.reflector.name and
@@ -525,8 +525,8 @@ class EnigmaWindow(QMainWindow):
         self.ui.stack4.setCurrentIndex(2)
 
     def add_ref_model(self):
-        name = self.ui.reflector_mod_name_2.text()
-        wiring = self.ui.reflector_mod_wiring_2.text()
+        name = self.ui.reflector_mod_name_2.text().strip()
+        wiring = self.ui.reflector_mod_wiring_2.text().strip()
         try:
             self.rsc.custom.add_reflector(name, wiring)
             self.ui.stack4.setCurrentIndex(0)
