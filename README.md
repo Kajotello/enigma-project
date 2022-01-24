@@ -158,6 +158,9 @@ oraz cztery pliki w katalogu głównym:
 
 **Nie jest zalecane samodzielne modyfikowanie plików konfiguracyjnych!!**
 
+## Format pliku wejściowego
+Plik wejściowy z tekstem do zakodowania nie ma sprecyzowanego formatu. Może jednak zawierać tylko wielkie litery angielskiego alfabetu (niedopuszczalne są m. in. spacje). Tekst może być zapisany w wielu liniach
+
 ## Instrukcja użytkownika
 Uruchomienia programu należy dokonać poprzez wywołanie pliku enigma.py z konsoli z odpowiednimi parametrami:
 
