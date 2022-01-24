@@ -2,6 +2,9 @@ from PySide2.QtWidgets import QMessageBox
 
 
 def error_message(text, title):
+
+    """Show error dialog"""
+
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Critical)
 

@@ -30,6 +30,9 @@ import os
 
 
 class EnigmaWindow(QMainWindow):
+
+    """Main window with GUI"""
+
     def __init__(self, args, parent=None) -> None:
         super().__init__(parent)
 
@@ -124,7 +127,7 @@ class EnigmaWindow(QMainWindow):
         self.ui.rem_ref_mod_button.clicked.connect(self.remove_ref_model)
         self.ui.add_from_file_ref_butt.clicked.connect(
             self.load_models_from_file)
-        # line edit
+        #       line edit
         self.ui.reflector_mod_wiring.textChanged.connect(
             self.show_colored_alphabet_mod_ref)
         self.ui.reflector_mod_wiring_2.textChanged.connect(
@@ -266,7 +269,6 @@ class EnigmaWindow(QMainWindow):
         self.clear_rotors()
         self.setup_rotors()
 
-        # probably it wil be good idea to connect it with display_rotors_info
         if self.selected_id != 0:
             self.ui.rotors_list.setCurrentRow(self.selected_id-1)
             self.selected_id -= 1
@@ -294,7 +296,7 @@ class EnigmaWindow(QMainWindow):
             self.setup_rotors()
 
     def add_rotor(self):
-        rotor_pos = dialog.add_rotor(self.rsc.elements)
+        rotor_pos = dialog.add_rotor_dialog(self.rsc.elements)
         if rotor_pos == -1:
             return None
         rotor_name = list(self.rsc.elements.rotors.keys())[rotor_pos]

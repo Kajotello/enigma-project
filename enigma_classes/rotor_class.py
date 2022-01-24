@@ -100,7 +100,7 @@ class Rotor:
 
     def set_wiring(self, new_wiring: str) -> None:
 
-        """Set new rotor wiring with generated in/out tables"""
+        """Set new rotor wiring with generating in/out tables"""
 
         validate_rotor(self.name, new_wiring, self.indentations_str)
 

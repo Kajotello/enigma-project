@@ -45,6 +45,9 @@ class CustomDialog(QDialog):
 
 
 def information_dialog(text, title):
+
+    """Show information dialog to user with set text and title"""
+
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Information)
 
@@ -76,7 +79,7 @@ def default_setting_change():
     )
 
 
-def add_rotor(data):
+def add_rotor_dialog(data):
     msg = CustomDialog(data)
     msg.setWindowTitle("Add rotor")
 

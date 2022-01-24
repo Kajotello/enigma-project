@@ -2,6 +2,9 @@ from typing import List
 
 
 def to_number(char: str) -> int:
+
+    """Change English Alphabet letter to number from 0 to 25"""
+
     if len(char) != 1:
         raise InvalidLengthError('Char should be a str with length of 1')
     result = ord(char) - 65
@@ -12,12 +15,18 @@ def to_number(char: str) -> int:
 
 
 def to_letter(int: int) -> str:
+
+    """Change number from 0 to 25 to English Alphabet letter"""
+
     if int < 0 or int > 25:
         raise LetterCodeOutOfRange('This number cannot be changed into letter')
     return chr(int+65)
 
 
 def first_to_last(list: List) -> List:
+
+    """Switch element on first position on list to last"""
+
     if len(list) == 0:
         raise EmptyListError('List to transform cannot be empty')
     element = list.pop(0)
@@ -25,6 +34,9 @@ def first_to_last(list: List) -> List:
 
 
 def last_to_first(list: List) -> List:
+
+    """Switch element on last position on list to first"""
+
     if len(list) == 0:
         raise EmptyListError('List to transform cannot be empty')
     element = list.pop()
